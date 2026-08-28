@@ -99,6 +99,11 @@
   --spacing-control-md: var(--sd-size-control-md);
   --spacing-control-lg: var(--sd-size-control-lg);
   --spacing-touch-min: var(--sd-size-touch-min);
+  --spacing-avatar-xs: var(--sd-size-avatar-xs);
+  --spacing-avatar-sm: var(--sd-size-avatar-sm);
+  --spacing-avatar-md: var(--sd-size-avatar-md);
+  --spacing-avatar-lg: var(--sd-size-avatar-lg);
+  --spacing-avatar-xl: var(--sd-size-avatar-xl);
   --spacing-icon-sm: var(--sd-size-icon-sm);
   --spacing-icon-md: var(--sd-size-icon-md);
   --spacing-icon-lg: var(--sd-size-icon-lg);

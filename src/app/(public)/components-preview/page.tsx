@@ -3,6 +3,15 @@ import type { ReactNode } from "react";
 
 import { AlertCircle, Bookmark, CheckCircle, MessageCircle, Phone, Search } from "@/components/icons";
 import { Container, Grid, Inline, Section, Stack } from "@/components/layout";
+import {
+  BusinessCard,
+  CategoryChip,
+  EmptyState,
+  FilterGroup,
+  FilterSheet,
+  OfflineBanner,
+} from "@/components/patterns";
+import type { NegocioResumen } from "@/components/patterns";
 import { Badge, Button, ButtonLink, Input, Media, Surface, Text } from "@/components/ui";
 
 export const metadata: Metadata = { title: "Vista de componentes" };
@@ -94,6 +103,43 @@ function Campos({ sufijo }: { sufijo: string }) {
   );
 }
 
+/**
+ * Datos de muestra locales a esta página. Los de verdad llegan en la Fase 2, en
+ * src/data — y los patrones seguirán sin importarlos: las dependencias apuntan
+ * hacia abajo, así que una tarjeta nunca sabe de dónde salió su negocio.
+ */
+const NEGOCIOS: NegocioResumen[] = [
+  {
+    nombre: "Artesanías Delia Quintero",
+    persona: "Delia Quintero",
+    categoria: "Artesanía",
+    zona: "Santa Fe, Veraguas",
+    href: "#",
+    estado: "Abierto ahora",
+    estadoAbierto: true,
+    confianza: "verificado",
+    confianzaTexto: "Datos confirmados hace 3 días",
+    guardado: true,
+  },
+  {
+    nombre: "Hamacas de El Carmen",
+    persona: "Odilia Sánchez",
+    categoria: "Artesanía",
+    zona: "Santa Fe, Veraguas",
+    href: "#-2",
+    estado: "Cierra a las 4:00 p.m.",
+    confianza: "desactualizado",
+    confianzaTexto: "Horario sin confirmar",
+  },
+  {
+    nombre: "Fonda La Ensenada",
+    persona: "Rita Domínguez",
+    categoria: "Comida",
+    zona: "Pedasí, Los Santos",
+    href: "#-3",
+  },
+];
+
 export default function ComponentsPreviewPage() {
   return (
     <Container ancho="xl" as="main">
@@ -107,7 +153,7 @@ export default function ComponentsPreviewPage() {
               Vista de componentes
             </Text>
             <Text size="body-lg" tone="secondary" className="max-w-prose">
-              Los cinco layouts y los seis primitivos, en sus estados. Todo lo que se ve aquí es
+              Los cinco layouts, los seis primitivos y los cinco patrones, en sus estados. Todo lo que se ve aquí es
               Server Component: en esta ruta no hay un solo kilobyte de JavaScript propio.
             </Text>
           </Stack>
@@ -349,6 +395,102 @@ export default function ComponentsPreviewPage() {
                 </Stack>
               </Surface>
             </DosDensidades>
+          </Bloque>
+
+          <Bloque
+            titulo="BusinessCard"
+            nota="El patrón más repetido del portal: Descubrir, Zona, Resultados y Guardados. Toda la fila es el enlace, no un texto de 14 px."
+          >
+            <Grid cols={2} gap="stack">
+              <Surface relleno="lg">
+                <Stack>
+                  {NEGOCIOS.map((n) => (
+                    <BusinessCard key={n.href} negocio={n} />
+                  ))}
+                </Stack>
+              </Surface>
+              <Surface relleno="lg">
+                <Grid cols={2} gap="md">
+                  {NEGOCIOS.slice(0, 2).map((n) => (
+                    <BusinessCard key={n.href} negocio={n} orientacion="vertical" />
+                  ))}
+                </Grid>
+              </Surface>
+            </Grid>
+          </Bloque>
+
+          <Bloque titulo="CategoryChip" nota="Es un enlace, no un botón: filtrar cambia la URL, así que el resultado se puede compartir y volver atrás. 44 px de alto en el portal.">
+            <DosDensidades>
+              <Surface relleno="lg">
+                <Inline gap="sm">
+                  <CategoryChip href="#" activo>
+                    Artesanía
+                  </CategoryChip>
+                  <CategoryChip href="#">Comida</CategoryChip>
+                  <CategoryChip href="#">Hospedaje</CategoryChip>
+                  <CategoryChip href="#">Experiencias</CategoryChip>
+                </Inline>
+              </Surface>
+            </DosDensidades>
+          </Bloque>
+
+          <Bloque titulo="EmptyState" nota="Nunca un texto gris centrado: dice qué pasó, por qué, y cuál es el siguiente paso.">
+            <Grid cols={2} gap="stack">
+              <Surface relleno="none">
+                <EmptyState
+                  icono={Bookmark}
+                  titulo="Guarda antes de perder la señal"
+                  descripcion="En la montaña y en las islas casi no hay datos. Lo que guardes se queda en el teléfono, con teléfono y dirección."
+                  accion={<ButtonLink href="/">Explorar zonas</ButtonLink>}
+                />
+              </Surface>
+              <Surface relleno="none">
+                <EmptyState
+                  icono={Search}
+                  titulo="Todavía no hay hospedajes en Guna Yala"
+                  descripcion="Es una zona nueva en Sendero. Hay 11 negocios de otras categorías."
+                  accion={
+                    <ButtonLink href="/" variante="secondary">
+                      Ver artesanía en Guna Yala
+                    </ButtonLink>
+                  }
+                />
+              </Surface>
+            </Grid>
+          </Bloque>
+
+          <Bloque titulo="OfflineBanner" nota="No dice «error»: dice qué se puede seguir haciendo. La detección real de red llegará como componente cliente, y se pagará en kilobytes cuando toque.">
+            <Surface relleno="none" className="overflow-hidden">
+              <OfflineBanner />
+            </Surface>
+          </Bloque>
+
+          <Bloque
+            titulo="FilterSheet"
+            nota="Sobre <details> nativo. Sin Radix, sin JavaScript y sin dependencia: un panel de filtros no necesita ser modal, y en cuanto deja de serlo desaparece la razón de tener trampa de foco."
+          >
+            <Grid cols={2} gap="stack">
+              <FilterSheet activos={2} resumen="6 negocios en Santa Fe" abiertoPorDefecto>
+                <FilterGroup etiqueta="Zona">
+                  <CategoryChip href="#">Todas</CategoryChip>
+                  <CategoryChip href="#" activo>
+                    Santa Fe
+                  </CategoryChip>
+                  <CategoryChip href="#">Pedasí</CategoryChip>
+                </FilterGroup>
+                <FilterGroup etiqueta="Categoría">
+                  <CategoryChip href="#" activo>
+                    Artesanía
+                  </CategoryChip>
+                  <CategoryChip href="#">Comida</CategoryChip>
+                </FilterGroup>
+              </FilterSheet>
+              <FilterSheet activos={0} resumen="Cerrado, como llega la pantalla">
+                <FilterGroup etiqueta="Zona">
+                  <CategoryChip href="#">Todas</CategoryChip>
+                </FilterGroup>
+              </FilterSheet>
+            </Grid>
           </Bloque>
         </Stack>
       </Section>

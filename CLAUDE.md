@@ -50,7 +50,9 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
 - **Server Components por defecto.** `"use client"` solo con estado o evento, y cuando
   se añada, justificarlo en una línea.
 - **Cero librerías nuevas sin pedir permiso.** Cada dependencia es peso en un Moto G Power.
-  Ya están Next, Tailwind, Lucide y Radix; casi nada más hace falta.
+  Están Next, Tailwind y Lucide. **Radix no está y no hizo falta**: la hoja de filtros
+  se resolvió con `<details>` nativo, que ya es accesible por teclado y cuesta 0 KB.
+  Antes de instalar un diálogo, pregúntate si de verdad necesitas que sea modal.
 - **Sin mapas interactivos JS.** Imagen estática + enlace que abre la app de mapas nativa.
 - Sin librerías de animación, sin carruseles con autoplay, sin parallax, sin animación al scroll.
 - Toda imagen con `next/image` y proporción declarada. Cero saltos de layout.
