@@ -44,7 +44,9 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
 
 ### Rendimiento
 
-- Presupuesto: **≤ 170 KB de JS** por ruta pública, **LCP < 2.5 s en 4G**.
+- Presupuesto: **≤ 170 KB de JS transferido en brotli** por ruta pública, **LCP < 2.5 s en 4G**.
+  Línea base medida en la Fase 0, con cero componentes propios: **115,3 KB**. Quedan
+  **54,7 KB** para todo el producto. Cada `"use client"` se descuenta de ahí.
 - **Server Components por defecto.** `"use client"` solo con estado o evento, y cuando
   se añada, justificarlo en una línea.
 - **Cero librerías nuevas sin pedir permiso.** Cada dependencia es peso en un Moto G Power.

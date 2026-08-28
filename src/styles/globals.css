@@ -37,6 +37,7 @@
   --color-action-primary-hover: var(--sd-color-action-primary-hover);
   --color-action-primary-active: var(--sd-color-action-primary-active);
   --color-action-primary-content: var(--sd-color-action-primary-content);
+  --color-action-primary-disabled: var(--sd-color-action-primary-disabled);
   --color-action-secondary: var(--sd-color-action-secondary);
   --color-action-secondary-hover: var(--sd-color-action-secondary-hover);
   --color-action-secondary-content: var(--sd-color-action-secondary-content);
@@ -103,6 +104,12 @@
   --spacing-icon-lg: var(--sd-size-icon-lg);
   --spacing-icon-xl: var(--sd-size-icon-xl);
 
+  /* Proporciones de imagen — un conjunto cerrado y nombrado por su uso, para
+     que ninguna pantalla escriba aspect-[4/3] a mano. */
+  --aspect-photo: 4 / 3;
+  --aspect-portrait: 3 / 4;
+  --aspect-wide: 16 / 9;
+
   /* Radios */
   --radius-control: var(--sd-radius-control);
   --radius-surface: var(--sd-radius-surface);
@@ -150,8 +157,15 @@
   --text-overline--line-height: var(--sd-line-height-overline);
   --text-overline--letter-spacing: var(--sd-letter-spacing-overline);
 
-  /* Medidas de lectura */
+  /* Medidas de lectura y anchos de página.
+     `page-*` en vez de pisar --container-sm/md/lg de Tailwind, que significan
+     otra cosa y confundirían a quien venga de otro proyecto. */
   --container-prose: var(--sd-container-prose);
+  --container-page-sm: var(--sd-container-sm);
+  --container-page-md: var(--sd-container-md);
+  --container-page-lg: var(--sd-container-lg);
+  --container-page-xl: var(--sd-container-xl);
+  --container-page-2xl: var(--sd-container-2xl);
 
   /* Elevación — sombra en claro; en oscuro los tokens la vuelven transparente
      y el trabajo lo hace la superficie más clara. */
