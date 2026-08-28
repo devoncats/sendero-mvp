@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+  <style>
+    .fgrp { display: flex; flex-direction: column; gap: var(--sd-space-inset-sm); }
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="operational" data-theme="{{theme}}">
+
+  <div class="rw" style="gap: var(--sd-space-inset-lg); height: var(--sd-size-control-lg); padding: 0 var(--sd-space-inset-xl); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle); flex: none;">
+    <div class="rw" style="gap: var(--sd-space-icon-gap);">
+      <svg class="ic" style="color: var(--sd-color-brand);"><use href="#i-compass"/></svg>
+      <span style="font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-sm); font-weight: var(--sd-font-weight-semibold);">Sendero</span>
+    </div>
+    <span style="flex-grow: 1; font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Artesanías Delia Quintero</span>
+    <div class="rw" style="gap: var(--sd-space-inset-sm);">
+      <div style="width: var(--sd-size-avatar-sm); height: var(--sd-size-avatar-sm); border-radius: var(--sd-radius-full); background: var(--sd-color-brand-surface); color: var(--sd-color-brand-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-caption); font-weight: var(--sd-font-weight-semibold);">DQ</div>
+      <svg class="ic"><use href="#i-menu"/></svg>
+    </div>
+  </div>
+
+  <div class="col" style="flex-grow: 1; align-items: center; padding: var(--sd-space-inset-xl) var(--sd-space-inset-xl) 96px;">
+    <div class="col" style="width: 100%; max-width: 720px; gap: var(--sd-space-stack-loose);">
+
+      <div class="col" style="gap: var(--sd-space-stack);">
+        <a href="#" class="rw" style="gap: var(--sd-space-icon-gap); font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg>Volver al panel</a>
+        <div class="col" style="gap: var(--sd-space-stack-tight);">
+          <h1 style="margin: 0; font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Mi negocio</h1>
+          <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary);">Esto es lo que ven los visitantes. Se guarda solo cada vez que cambias algo.</p>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="col card" style="padding: var(--sd-space-inset-xl); gap: var(--sd-space-stack-loose);">
+
+        <div class="fgrp">
+          <span class="lbl">Nombre del negocio</span>
+          <div class="fld" style="height: var(--sd-size-control-lg); color: var(--sd-color-content-primary);">Artesanías Delia Quintero</div>
+          <span class="hlp">Así aparece en la lista y en el título de tu ficha.</span>
+        </div>
+
+        <div class="fgrp">
+          <span class="lbl">Quién atiende</span>
+          <div class="fld" style="height: var(--sd-size-control-lg); color: var(--sd-color-content-primary);">Delia Quintero</div>
+          <span class="hlp">Tu nombre va arriba de todo. La gente le escribe a una persona, no a un negocio.</span>
+        </div>
+
+        <div class="fgrp">
+          <span class="lbl">Qué vendes</span>
+          <div style="min-height: 96px; padding: var(--sd-space-inset-md); border-radius: var(--sd-radius-control); border: 1px solid var(--sd-color-border-default); background: var(--sd-color-surface); font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md);">Tejo sombreros pintaos en El Higo desde hace treinta y dos años. Preparo yo misma la fibra de bellota y la pita, y vendo directo en el taller de mi casa.</div>
+          <div class="rw" style="justify-content: space-between;">
+            <span class="hlp">Cuéntalo como se lo contarías a un vecino.</span>
+            <span class="hlp" style="font-variant-numeric: tabular-nums;">186 / 400</span>
+          </div>
+        </div>
+
+        <div class="rw" style="gap: var(--sd-space-inset-lg);">
+          <div class="fgrp" style="flex-grow: 1;">
+            <span class="lbl">Categoría</span>
+            <div class="fld" style="height: var(--sd-size-control-lg); color: var(--sd-color-content-primary);"><span style="flex-grow: 1;">Artesanía</span><svg class="ic ic-sm"><use href="#i-chevron-down"/></svg></div>
+          </div>
+          <div class="fgrp" style="flex-grow: 1;">
+            <span class="lbl">Zona</span>
+            <div class="fld" style="height: var(--sd-size-control-lg); color: var(--sd-color-content-primary);"><span style="flex-grow: 1;">Santa Fe, Veraguas</span><svg class="ic ic-sm"><use href="#i-chevron-down"/></svg></div>
+          </div>
+        </div>
+
+        <div class="fgrp">
+          <span class="lbl">Teléfono de WhatsApp</span>
+          <div class="fld fld-on" style="height: var(--sd-size-control-lg);"><svg class="ic"><use href="#i-message"/></svg><span style="flex-grow: 1; color: var(--sd-color-content-primary);">+507 6412-8890</span><svg class="ic ic-sm" style="color: var(--sd-color-feedback-success);"><use href="#i-check-circle"/></svg></div>
+          <span class="hlp">Es el número al que te van a escribir. Verificado el 22 de agosto.</span>
+        </div>
+
+      </div>
+
+      <!-- Confirmación de datos -->
+      <div class="rw card" style="gap: var(--sd-space-inset-lg); padding: var(--sd-space-inset-lg); background: var(--sd-color-trust-verified-surface); border-color: var(--sd-color-feedback-success-border); align-items: center;">
+        <svg class="ic" style="color: var(--sd-color-feedback-success);"><use href="#i-check-circle"/></svg>
+        <div class="col" style="gap: var(--sd-space-0-5); flex-grow: 1;">
+          <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-medium); color: var(--sd-color-feedback-success-content);">Confirmaste tus datos hace 3 días</span>
+          <span style="font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Cada 30 días te preguntamos si todo sigue igual. Los visitantes ven cuándo fue la última vez.</span>
+        </div>
+        <div class="btn btn-2">Confirmar de nuevo</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Guardado automático -->
+  <div class="rw" style="position: sticky; bottom: 0; gap: var(--sd-space-inset-lg); padding: var(--sd-space-inset-md) var(--sd-space-inset-xl); background: var(--sd-color-surface); border-top: 1px solid var(--sd-color-border-subtle); box-shadow: 0 -1px 3px var(--sd-color-shadow-tight);">
+    <div class="rw" style="gap: var(--sd-space-icon-gap); flex-grow: 1; color: var(--sd-color-feedback-success-content);">
+      <svg class="ic ic-sm"><use href="#i-check"/></svg>
+      <span style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);">Guardado hace un momento</span>
+      <span style="font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-tertiary);">— no tienes que hacer nada más</span>
+    </div>
+    <div class="btn btn-2">Ver mi ficha<svg class="ic ic-sm"><use href="#i-external"/></svg></div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

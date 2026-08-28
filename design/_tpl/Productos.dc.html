@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+  <style>
+    .prow { display: flex; align-items: center; gap: var(--sd-space-inset-lg); padding: var(--sd-space-inset-md) var(--sd-space-inset-lg); border-bottom: 1px solid var(--sd-color-border-subtle); }
+    .fgrp { display: flex; flex-direction: column; gap: var(--sd-space-inset-sm); }
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="operational" data-theme="{{theme}}">
+
+  <div class="rw" style="gap: var(--sd-space-inset-lg); height: var(--sd-size-control-lg); padding: 0 var(--sd-space-inset-xl); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle); flex: none;">
+    <div class="rw" style="gap: var(--sd-space-icon-gap);">
+      <svg class="ic" style="color: var(--sd-color-brand);"><use href="#i-compass"/></svg>
+      <span style="font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-sm); font-weight: var(--sd-font-weight-semibold);">Sendero</span>
+    </div>
+    <span style="flex-grow: 1; font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Artesanías Delia Quintero</span>
+    <div class="rw" style="gap: var(--sd-space-inset-sm);">
+      <div style="width: var(--sd-size-avatar-sm); height: var(--sd-size-avatar-sm); border-radius: var(--sd-radius-full); background: var(--sd-color-brand-surface); color: var(--sd-color-brand-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-caption); font-weight: var(--sd-font-weight-semibold);">DQ</div>
+      <svg class="ic"><use href="#i-menu"/></svg>
+    </div>
+  </div>
+
+  <div class="col" style="flex-grow: 1; align-items: center; padding: var(--sd-space-inset-xl);">
+    <div class="col" style="width: 100%; max-width: 860px; gap: var(--sd-space-stack-loose);">
+
+      <div class="col" style="gap: var(--sd-space-stack);">
+        <a href="#" class="rw" style="gap: var(--sd-space-icon-gap); font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg>Volver al panel</a>
+        <div class="col" style="gap: var(--sd-space-stack-tight);">
+          <h1 style="margin: 0; font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Lo que vendes</h1>
+          <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary);">Poner el precio no obliga a nada. Sirve para que la gente sepa si le alcanza antes de escribirte.</p>
+        </div>
+      </div>
+
+      <!-- Lista -->
+      <div class="col card" style="overflow: hidden;">
+        <div class="prow">
+          <div class="ph" style="width: 56px; height: 56px; border-radius: var(--sd-radius-media); flex: none;"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+          <div class="col" style="gap: var(--sd-space-0-5); flex-grow: 1;">
+            <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-medium);">Sombrero pintao, 11 vueltas</span>
+            <span style="font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Dos meses de trabajo. Fibra de bellota preparada a mano.</span>
+          </div>
+          <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-semibold); font-variant-numeric: tabular-nums;">desde B/. 180</span>
+          <div class="rw" style="gap: var(--sd-space-inset-sm);">
+            <div class="rw btn btn-2 btn-ico"><svg class="ic ic-sm"><use href="#i-pencil"/></svg></div>
+            <div class="rw btn btn-2 btn-ico"><svg class="ic ic-sm"><use href="#i-trash"/></svg></div>
+          </div>
+        </div>
+        <div class="prow">
+          <div class="ph" style="width: 56px; height: 56px; border-radius: var(--sd-radius-media); flex: none;"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+          <div class="col" style="gap: var(--sd-space-0-5); flex-grow: 1;">
+            <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-medium);">Batea de totuma tallada</span>
+            <span style="font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Tamaño mediano, para servir.</span>
+          </div>
+          <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-semibold); font-variant-numeric: tabular-nums;">B/. 25</span>
+          <div class="rw" style="gap: var(--sd-space-inset-sm);">
+            <div class="rw btn btn-2 btn-ico"><svg class="ic ic-sm"><use href="#i-pencil"/></svg></div>
+            <div class="rw btn btn-2 btn-ico"><svg class="ic ic-sm"><use href="#i-trash"/></svg></div>
+          </div>
+        </div>
+        <div class="prow" style="border-bottom: none;">
+          <div style="width: 56px; height: 56px; border-radius: var(--sd-radius-media); flex: none; background: var(--sd-color-surface-sunken); display: flex; align-items: center; justify-content: center; color: var(--sd-color-content-disabled);"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+          <div class="col" style="gap: var(--sd-space-0-5); flex-grow: 1;">
+            <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-medium);">Hamaca de pita</span>
+            <span class="rw" style="gap: var(--sd-space-0-5); font-size: var(--sd-font-size-body-md); color: var(--sd-color-trust-stale);"><svg class="ic ic-sm"><use href="#i-alert-circle"/></svg>Sin foto — casi nadie pregunta por productos sin foto</span>
+          </div>
+          <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-semibold); font-variant-numeric: tabular-nums;">B/. 95</span>
+          <div class="rw" style="gap: var(--sd-space-inset-sm);">
+            <div class="rw btn btn-2 btn-ico"><svg class="ic ic-sm"><use href="#i-pencil"/></svg></div>
+            <div class="rw btn btn-2 btn-ico"><svg class="ic ic-sm"><use href="#i-trash"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alta -->
+      <div class="col card" style="padding: var(--sd-space-inset-xl); gap: var(--sd-space-stack); border-color: var(--sd-color-brand-border);">
+        <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Agregar otro</h2>
+        <div class="rw" style="gap: var(--sd-space-inset-lg); align-items: flex-start;">
+          <div class="col" style="gap: var(--sd-space-inset-sm); flex: none;">
+            <span class="lbl">Foto</span>
+            <div style="width: 120px; height: 120px; border-radius: var(--sd-radius-media); border: 2px dashed var(--sd-color-border-default); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sd-space-inset-xs); color: var(--sd-color-content-tertiary);">
+              <svg class="ic ic-lg"><use href="#i-plus"/></svg>
+              <span class="hlp">Subir</span>
+            </div>
+          </div>
+          <div class="col" style="gap: var(--sd-space-stack); flex-grow: 1;">
+            <div class="fgrp">
+              <span class="lbl">Qué es</span>
+              <div class="fld fld-on" style="height: var(--sd-size-control-lg);">Bolso de pita teñida</div>
+            </div>
+            <div class="rw" style="gap: var(--sd-space-inset-lg);">
+              <div class="fgrp" style="width: 200px;">
+                <span class="lbl">Precio</span>
+                <div class="fld" style="height: var(--sd-size-control-lg); color: var(--sd-color-content-primary);">B/. 40</div>
+              </div>
+              <div class="fgrp" style="flex-grow: 1;">
+                <span class="lbl">Detalle <span style="color: var(--sd-color-content-tertiary); font-weight: var(--sd-font-weight-regular);">— opcional</span></span>
+                <div class="fld" style="height: var(--sd-size-control-lg);">Tamaño, color, tiempo de trabajo…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rw" style="gap: var(--sd-space-inset-sm); justify-content: flex-end; border-top: 1px solid var(--sd-color-border-subtle); padding-top: var(--sd-space-inset-lg);">
+          <div class="btn btn-2">Cancelar</div>
+          <div class="btn btn-1">Agregar producto</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+  <style>
+    .cap { font-size: var(--sd-font-size-overline); letter-spacing: var(--sd-letter-spacing-overline); text-transform: uppercase; font-weight: var(--sd-font-weight-semibold); color: var(--sd-color-content-tertiary); }
+    .dig { width: 56px; height: 64px; border-radius: var(--sd-radius-control); border: 1px solid var(--sd-color-border-default); background: var(--sd-color-surface); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-heading-md); font-weight: var(--sd-font-weight-semibold); font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="operational" data-theme="{{theme}}">
+
+  <div class="rw" style="gap: var(--sd-space-icon-gap); height: var(--sd-size-control-lg); padding: 0 var(--sd-space-inset-xl); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle); flex: none;">
+    <svg class="ic" style="color: var(--sd-color-brand);"><use href="#i-compass"/></svg>
+    <span style="font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-sm); font-weight: var(--sd-font-weight-semibold);">Sendero</span>
+  </div>
+
+  <div class="rw" style="flex-grow: 1; align-items: center; justify-content: center; gap: var(--sd-space-section); padding: var(--sd-space-inset-xl);">
+
+    <!-- Paso 1 -->
+    <div class="col" style="gap: var(--sd-space-inset-md); width: 400px;">
+      <span class="cap">Paso 1</span>
+      <div class="col card" style="padding: var(--sd-space-inset-xl); gap: var(--sd-space-stack);">
+        <div class="col" style="gap: var(--sd-space-stack-tight);">
+          <h1 style="margin: 0; font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Entra a tu negocio</h1>
+          <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary);">Sin contraseñas. Te mandamos un código por mensaje.</p>
+        </div>
+        <div class="col" style="gap: var(--sd-space-inset-sm);">
+          <span class="lbl">Tu número de teléfono</span>
+          <div class="fld fld-on" style="height: var(--sd-size-control-lg);">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span style="flex-grow: 1;">6412-8890</span>
+          </div>
+          <span class="hlp">El mismo donde recibes WhatsApp.</span>
+        </div>
+        <div class="btn btn-1 btn-lg" style="width: 100%;">Enviarme el código</div>
+      </div>
+      <p style="margin: 0; font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary); text-align: center;">¿Tu negocio no está en Sendero todavía?<br><a href="#" style="font-weight: var(--sd-font-weight-medium);">Ponlo aquí, es gratis</a></p>
+    </div>
+
+    <svg class="ic ic-lg" style="color: var(--sd-color-border-default);"><use href="#i-chevron-right"/></svg>
+
+    <!-- Paso 2 -->
+    <div class="col" style="gap: var(--sd-space-inset-md); width: 400px;">
+      <span class="cap">Paso 2</span>
+      <div class="col card" style="padding: var(--sd-space-inset-xl); gap: var(--sd-space-stack);">
+        <div class="col" style="gap: var(--sd-space-stack-tight);">
+          <h1 style="margin: 0; font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Escribe el código</h1>
+          <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary);">Lo mandamos al 6412-8890 hace un momento.</p>
+        </div>
+        <div class="rw" style="gap: var(--sd-space-inset-sm); justify-content: space-between;">
+          <div class="dig">4</div><div class="dig">7</div><div class="dig">1</div>
+          <div class="dig" style="border-color: var(--sd-color-focus); box-shadow: 0 0 0 3px var(--sd-color-brand-surface); color: var(--sd-color-content-disabled);">|</div>
+        </div>
+        <div class="rw" style="justify-content: space-between; align-items: center;">
+          <span class="hlp">Reenviar el código en 0:42</span>
+          <a href="#" style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);">Cambiar número</a>
+        </div>
+      </div>
+      <div class="rw card" style="gap: var(--sd-space-inset-md); padding: var(--sd-space-inset-lg); background: var(--sd-color-feedback-info-surface); border-color: var(--sd-color-feedback-info-border); align-items: flex-start;">
+        <svg class="ic ic-sm" style="color: var(--sd-color-feedback-info);"><use href="#i-info"/></svg>
+        <span style="font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-feedback-info-content);">Si el mensaje no llega en un minuto, llámanos y lo hacemos por teléfono.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

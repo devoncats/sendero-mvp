@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+  <style>
+    .tile { position: relative; aspect-ratio: 4 / 3; border-radius: var(--sd-radius-media); overflow: hidden; }
+    .badge { position: absolute; top: var(--sd-space-inset-sm); left: var(--sd-space-inset-sm); background: var(--sd-color-surface); border-radius: var(--sd-radius-full); padding: var(--sd-space-0-5) var(--sd-space-inset-sm); font-size: var(--sd-font-size-caption); font-weight: var(--sd-font-weight-semibold); }
+    .tool { position: absolute; top: var(--sd-space-inset-sm); right: var(--sd-space-inset-sm); width: var(--sd-size-control-md); height: var(--sd-size-control-md); border-radius: var(--sd-radius-full); background: var(--sd-color-surface); display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px var(--sd-color-shadow-ambient); }
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="operational" data-theme="{{theme}}">
+
+  <div class="rw" style="gap: var(--sd-space-inset-lg); height: var(--sd-size-control-lg); padding: 0 var(--sd-space-inset-xl); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle); flex: none;">
+    <div class="rw" style="gap: var(--sd-space-icon-gap);">
+      <svg class="ic" style="color: var(--sd-color-brand);"><use href="#i-compass"/></svg>
+      <span style="font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-sm); font-weight: var(--sd-font-weight-semibold);">Sendero</span>
+    </div>
+    <span style="flex-grow: 1; font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Artesanías Delia Quintero</span>
+    <div class="rw" style="gap: var(--sd-space-inset-sm);">
+      <div style="width: var(--sd-size-avatar-sm); height: var(--sd-size-avatar-sm); border-radius: var(--sd-radius-full); background: var(--sd-color-brand-surface); color: var(--sd-color-brand-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-caption); font-weight: var(--sd-font-weight-semibold);">DQ</div>
+      <svg class="ic"><use href="#i-menu"/></svg>
+    </div>
+  </div>
+
+  <div class="col" style="flex-grow: 1; align-items: center; padding: var(--sd-space-inset-xl);">
+    <div class="col" style="width: 100%; max-width: 900px; gap: var(--sd-space-stack-loose);">
+
+      <div class="col" style="gap: var(--sd-space-stack);">
+        <a href="#" class="rw" style="gap: var(--sd-space-icon-gap); font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg>Volver al panel</a>
+        <div class="rw" style="gap: var(--sd-space-inset-lg); align-items: flex-end;">
+          <div class="col" style="gap: var(--sd-space-stack-tight); flex-grow: 1;">
+            <h1 style="margin: 0; font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Fotos</h1>
+            <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary);">Arrastra para cambiar el orden. La primera es la portada de tu ficha.</p>
+          </div>
+          <div class="btn btn-1 btn-lg"><svg class="ic"><use href="#i-upload"/></svg>Subir fotos</div>
+        </div>
+      </div>
+
+      <!-- Aviso de conexión lenta -->
+      <div class="rw card" style="gap: var(--sd-space-inset-lg); padding: var(--sd-space-inset-lg); background: var(--sd-color-feedback-warning-surface); border-color: var(--sd-color-feedback-warning-border); align-items: center;">
+        <svg class="ic" style="color: var(--sd-color-feedback-warning);"><use href="#i-wifi-off"/></svg>
+        <span style="flex-grow: 1; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-feedback-warning-content);">Tu conexión va lenta. Puedes cerrar esta página: las fotos siguen subiendo y las encuentras aquí cuando vuelvas.</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sd-space-inset-lg);">
+
+        <!-- Subida completa, portada -->
+        <div class="col" style="gap: var(--sd-space-inset-sm);">
+          <div class="tile ph"><svg class="ic ic-lg"><use href="#i-image"/></svg><span>Delia tejiendo</span>
+            <span class="badge">Portada</span>
+            <div class="tool"><svg class="ic ic-sm"><use href="#i-trash"/></svg></div>
+          </div>
+          <span class="hlp">Subida el 22 de agosto</span>
+        </div>
+
+        <!-- Subiendo -->
+        <div class="col" style="gap: var(--sd-space-inset-sm);">
+          <div class="tile" style="background: var(--sd-color-surface-sunken); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sd-space-inset-md); padding: var(--sd-space-inset-lg);">
+            <svg class="ic ic-lg" style="color: var(--sd-color-brand);"><use href="#i-spinner"/></svg>
+            <div style="width: 100%; height: 6px; border-radius: var(--sd-radius-full); background: var(--sd-color-surface); overflow: hidden;">
+              <div style="width: 38%; height: 100%; background: var(--sd-color-brand);"></div>
+            </div>
+            <span style="font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Subiendo… 38 %</span>
+          </div>
+          <span class="hlp">sombrero-11-vueltas.jpg · 2,4 MB</span>
+        </div>
+
+        <!-- Falló -->
+        <div class="col" style="gap: var(--sd-space-inset-sm);">
+          <div class="tile" style="background: var(--sd-color-feedback-danger-surface); border: 1px solid var(--sd-color-feedback-danger-border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sd-space-inset-md); padding: var(--sd-space-inset-lg); text-align: center;">
+            <svg class="ic ic-lg" style="color: var(--sd-color-feedback-danger);"><use href="#i-alert-triangle"/></svg>
+            <span style="font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-feedback-danger-content);">Se cortó la subida. La foto no se perdió.</span>
+            <div class="btn btn-2">Reintentar</div>
+          </div>
+          <span class="hlp">batea-totuma.jpg · 1,8 MB</span>
+        </div>
+
+        <!-- Subida completa -->
+        <div class="col" style="gap: var(--sd-space-inset-sm);">
+          <div class="tile ph"><svg class="ic ic-lg"><use href="#i-image"/></svg><span>El taller</span>
+            <div class="tool"><svg class="ic ic-sm"><use href="#i-trash"/></svg></div>
+          </div>
+          <span class="hlp">Subida el 19 de agosto</span>
+        </div>
+
+        <!-- Agregar -->
+        <div class="col" style="gap: var(--sd-space-inset-sm);">
+          <div class="tile" style="border: 2px dashed var(--sd-color-border-default); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sd-space-inset-sm); color: var(--sd-color-content-tertiary); text-align: center; padding: var(--sd-space-inset-lg);">
+            <svg class="ic ic-lg"><use href="#i-plus"/></svg>
+            <span style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);">Agregar foto</span>
+            <span class="hlp">o arrástrala aquí</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="rw card" style="gap: var(--sd-space-inset-lg); padding: var(--sd-space-inset-lg); align-items: flex-start;">
+        <svg class="ic" style="color: var(--sd-color-content-tertiary);"><use href="#i-info"/></svg>
+        <div class="col" style="gap: var(--sd-space-0-5);">
+          <span style="font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-medium);">Con tres fotos basta</span>
+          <span style="font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-content-secondary);">Una del producto, una de ti trabajando y una del local. Tomadas con el teléfono están bien — no hace falta fotógrafo.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

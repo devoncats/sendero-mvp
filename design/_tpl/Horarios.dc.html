@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+  <style>
+    .day { display: flex; align-items: center; gap: var(--sd-space-inset-lg); padding: var(--sd-space-inset-md) var(--sd-space-inset-lg); border-bottom: 1px solid var(--sd-color-border-subtle); }
+    .day > .dn { width: 110px; flex: none; font-size: var(--sd-font-size-body-lg); font-weight: var(--sd-font-weight-medium); }
+    .sw { width: 44px; height: 26px; border-radius: var(--sd-radius-full); display: flex; align-items: center; padding: 3px; flex: none; }
+    .sw > i { width: 20px; height: 20px; border-radius: var(--sd-radius-full); background: var(--sd-color-surface); display: block; }
+    .sw-on { background: var(--sd-color-brand); justify-content: flex-end; }
+    .sw-off { background: var(--sd-color-border-default); justify-content: flex-start; }
+    .fgrp { display: flex; flex-direction: column; gap: var(--sd-space-inset-sm); }
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="operational" data-theme="{{theme}}">
+
+  <div class="rw" style="gap: var(--sd-space-inset-lg); height: var(--sd-size-control-lg); padding: 0 var(--sd-space-inset-xl); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle); flex: none;">
+    <div class="rw" style="gap: var(--sd-space-icon-gap);">
+      <svg class="ic" style="color: var(--sd-color-brand);"><use href="#i-compass"/></svg>
+      <span style="font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-sm); font-weight: var(--sd-font-weight-semibold);">Sendero</span>
+    </div>
+    <span style="flex-grow: 1; font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Artesanías Delia Quintero</span>
+    <div class="rw" style="gap: var(--sd-space-inset-sm);">
+      <div style="width: var(--sd-size-avatar-sm); height: var(--sd-size-avatar-sm); border-radius: var(--sd-radius-full); background: var(--sd-color-brand-surface); color: var(--sd-color-brand-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-caption); font-weight: var(--sd-font-weight-semibold);">DQ</div>
+      <svg class="ic"><use href="#i-menu"/></svg>
+    </div>
+  </div>
+
+  <div class="col" style="flex-grow: 1; align-items: center; padding: var(--sd-space-inset-xl) var(--sd-space-inset-xl) 96px;">
+    <div class="rw" style="width: 100%; max-width: 1060px; gap: var(--sd-space-section); align-items: flex-start;">
+
+      <!-- Horario -->
+      <div class="col" style="flex-grow: 1; gap: var(--sd-space-stack-loose);">
+        <div class="col" style="gap: var(--sd-space-stack);">
+          <a href="#" class="rw" style="gap: var(--sd-space-icon-gap); font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg>Volver al panel</a>
+          <div class="col" style="gap: var(--sd-space-stack-tight);">
+            <h1 style="margin: 0; font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Horario y ubicación</h1>
+            <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary);">Con esto los visitantes ven si estás abierto ahora mismo.</p>
+          </div>
+        </div>
+
+        <div class="col card" style="overflow: hidden;">
+          <div class="day"><span class="dn">Lunes</span><div class="sw sw-on"><i></i></div><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">7:00 a.m.</div><span style="color: var(--sd-color-content-tertiary);">a</span><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">5:00 p.m.</div></div>
+          <div class="day"><span class="dn">Martes</span><div class="sw sw-on"><i></i></div><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">7:00 a.m.</div><span style="color: var(--sd-color-content-tertiary);">a</span><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">5:00 p.m.</div></div>
+          <div class="day"><span class="dn">Miércoles</span><div class="sw sw-on"><i></i></div><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">7:00 a.m.</div><span style="color: var(--sd-color-content-tertiary);">a</span><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">5:00 p.m.</div></div>
+          <div class="day"><span class="dn">Jueves</span><div class="sw sw-on"><i></i></div><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">7:00 a.m.</div><span style="color: var(--sd-color-content-tertiary);">a</span><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">5:00 p.m.</div></div>
+          <div class="day"><span class="dn">Viernes</span><div class="sw sw-on"><i></i></div><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">7:00 a.m.</div><span style="color: var(--sd-color-content-tertiary);">a</span><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">5:00 p.m.</div></div>
+          <div class="day"><span class="dn">Sábado</span><div class="sw sw-on"><i></i></div><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">7:00 a.m.</div><span style="color: var(--sd-color-content-tertiary);">a</span><div class="fld" style="width: 120px; color: var(--sd-color-content-primary);">2:00 p.m.</div></div>
+          <div class="day" style="border-bottom: none; background: var(--sd-color-feedback-warning-surface);">
+            <span class="dn">Domingo</span>
+            <div class="sw sw-off"><i></i></div>
+            <span class="rw" style="gap: var(--sd-space-icon-gap); flex-grow: 1; font-size: var(--sd-font-size-body-lg); color: var(--sd-color-feedback-warning-content); font-weight: var(--sd-font-weight-medium);"><svg class="ic ic-sm"><use href="#i-alert-circle"/></svg>Falta decir si abres o no</span>
+            <div class="btn btn-2">Cerrado</div>
+            <div class="btn btn-1">Abro</div>
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="col" style="gap: var(--sd-space-stack);">
+          <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Cómo llegar</h2>
+          <div class="fgrp">
+            <span class="lbl">Explícalo con palabras</span>
+            <div style="min-height: 80px; padding: var(--sd-space-inset-md); border-radius: var(--sd-radius-control); border: 1px solid var(--sd-color-border-default); background: var(--sd-color-surface); font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg);">El Higo, Santa Fe. A 200 metros de la iglesia, subiendo por el camino al Salto. Casa de zinc verde a mano derecha.</div>
+            <span class="hlp">Una referencia del pueblo sirve más que un punto en el mapa. Escríbelo como se lo dirías a alguien por teléfono.</span>
+          </div>
+          <div class="rw" style="gap: var(--sd-space-inset-lg); align-items: flex-start;">
+            <div class="ph" style="height: 150px; flex-grow: 1; border-radius: var(--sd-radius-media);"><svg class="ic ic-lg"><use href="#i-map-pin"/></svg><span>Mapa estático</span></div>
+            <div class="col" style="gap: var(--sd-space-inset-sm); width: 260px;">
+              <span class="lbl">Punto en el mapa <span style="color: var(--sd-color-content-tertiary); font-weight: var(--sd-font-weight-regular);">— opcional</span></span>
+              <div class="btn btn-2" style="width: 100%;"><svg class="ic ic-sm"><use href="#i-map-pin"/></svg>Marcar en el mapa</div>
+              <span class="hlp">Si no sabes marcarlo, déjalo. La referencia escrita basta.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista previa -->
+      <div class="col" style="width: 300px; flex: none; gap: var(--sd-space-inset-md); position: sticky; top: var(--sd-space-inset-xl);">
+        <span style="font-size: var(--sd-font-size-overline); letter-spacing: var(--sd-letter-spacing-overline); text-transform: uppercase; font-weight: var(--sd-font-weight-semibold); color: var(--sd-color-content-tertiary);">Así lo ven los visitantes</span>
+        <div class="col card" data-density="editorial" style="padding: var(--sd-space-inset-lg); gap: var(--sd-space-inset-md);">
+          <div class="rw" style="gap: var(--sd-space-icon-gap);">
+            <span class="chip chip-ok">Abierto ahora</span>
+            <span style="font-size: var(--sd-font-size-body-sm); color: var(--sd-color-content-tertiary);">cierra 5:00 p.m.</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sd-space-inset-xs) var(--sd-space-inset-md); font-size: var(--sd-font-size-body-md);">
+            <span style="color: var(--sd-color-content-secondary);">Lun a vie</span><span style="text-align: right;">7:00 – 17:00</span>
+            <span style="color: var(--sd-color-content-secondary);">Sábado</span><span style="text-align: right;">7:00 – 14:00</span>
+            <span style="color: var(--sd-color-content-secondary);">Domingo</span><span style="text-align: right; color: var(--sd-color-trust-stale);">sin confirmar</span>
+          </div>
+          <div class="rw" style="gap: var(--sd-space-icon-gap); border-top: 1px solid var(--sd-color-border-subtle); padding-top: var(--sd-space-inset-md); align-items: flex-start;">
+            <svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary); margin-top: 2px;"><use href="#i-map-pin"/></svg>
+            <span style="font-size: var(--sd-font-size-body-sm); line-height: var(--sd-line-height-body-sm); color: var(--sd-color-content-secondary);">El Higo, Santa Fe. A 200 m de la iglesia, camino al Salto.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="rw" style="position: sticky; bottom: 0; gap: var(--sd-space-inset-lg); padding: var(--sd-space-inset-md) var(--sd-space-inset-xl); background: var(--sd-color-surface); border-top: 1px solid var(--sd-color-border-subtle); box-shadow: 0 -1px 3px var(--sd-color-shadow-tight);">
+    <div class="rw" style="gap: var(--sd-space-icon-gap); flex-grow: 1; color: var(--sd-color-feedback-success-content);">
+      <svg class="ic ic-sm"><use href="#i-check"/></svg>
+      <span style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);">Guardado hace un momento</span>
+    </div>
+    <div class="btn btn-2">Ver mi ficha<svg class="ic ic-sm"><use href="#i-external"/></svg></div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

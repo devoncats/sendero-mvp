@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@source "../";
+
+/* ============================================================================
+ * Puente tokens -> Tailwind.
+ *
+ * `inline` es deliberado: la utilidad emite var(--sd-…) directo, sin una capa
+ * intermedia en :root. Eso es lo que permite que `p-inset-md` mida distinto
+ * bajo data-density="editorial" y bajo "operational", y que `bg-surface`
+ * cambie bajo data-theme="dark" — sin un solo prop ni una línea de JS.
+ *
+ * Solo se exponen tokens SEMÁNTICOS. Los primitivos (--sd-space-4) no entran
+ * a propósito: usarlos rompe el mecanismo de densidad.
+ * ========================================================================== */
+@theme inline {
+  /* Superficies y contenido */
+  --color-background: var(--sd-color-background);
+  --color-surface: var(--sd-color-surface);
+  --color-surface-raised: var(--sd-color-surface-raised);
+  --color-surface-overlay: var(--sd-color-surface-overlay);
+  --color-surface-sunken: var(--sd-color-surface-sunken);
+
+  --color-content-primary: var(--sd-color-content-primary);
+  --color-content-secondary: var(--sd-color-content-secondary);
+  --color-content-tertiary: var(--sd-color-content-tertiary);
+  --color-content-inverse: var(--sd-color-content-inverse);
+  --color-content-disabled: var(--sd-color-content-disabled);
+
+  --color-border-subtle: var(--sd-color-border-subtle);
+  --color-border-default: var(--sd-color-border-default);
+  --color-border-strong: var(--sd-color-border-strong);
+
+  /* Acciones */
+  --color-action-primary: var(--sd-color-action-primary);
+  --color-action-primary-hover: var(--sd-color-action-primary-hover);
+  --color-action-primary-active: var(--sd-color-action-primary-active);
+  --color-action-primary-content: var(--sd-color-action-primary-content);
+  --color-action-secondary: var(--sd-color-action-secondary);
+  --color-action-secondary-hover: var(--sd-color-action-secondary-hover);
+  --color-action-secondary-content: var(--sd-color-action-secondary-content);
+  --color-action-danger: var(--sd-color-action-danger);
+  --color-action-danger-content: var(--sd-color-action-danger-content);
+  --color-focus: var(--sd-color-focus);
+
+  /* Marca y acento */
+  --color-brand: var(--sd-color-brand);
+  --color-brand-surface: var(--sd-color-brand-surface);
+  --color-brand-content: var(--sd-color-brand-content);
+  --color-brand-border: var(--sd-color-brand-border);
+  --color-accent: var(--sd-color-accent);
+  --color-accent-surface: var(--sd-color-accent-surface);
+  --color-accent-content: var(--sd-color-accent-content);
+  --color-accent-border: var(--sd-color-accent-border);
+
+  /* Retroalimentación */
+  --color-success: var(--sd-color-feedback-success);
+  --color-success-surface: var(--sd-color-feedback-success-surface);
+  --color-success-content: var(--sd-color-feedback-success-content);
+  --color-success-border: var(--sd-color-feedback-success-border);
+  --color-warning: var(--sd-color-feedback-warning);
+  --color-warning-surface: var(--sd-color-feedback-warning-surface);
+  --color-warning-content: var(--sd-color-feedback-warning-content);
+  --color-warning-border: var(--sd-color-feedback-warning-border);
+  --color-danger: var(--sd-color-feedback-danger);
+  --color-danger-surface: var(--sd-color-feedback-danger-surface);
+  --color-danger-content: var(--sd-color-feedback-danger-content);
+  --color-danger-border: var(--sd-color-feedback-danger-border);
+  --color-info: var(--sd-color-feedback-info);
+  --color-info-surface: var(--sd-color-feedback-info-surface);
+  --color-info-content: var(--sd-color-feedback-info-content);
+  --color-info-border: var(--sd-color-feedback-info-border);
+
+  /* Confianza — el dato del negocio está confirmado, viejo o sin confirmar */
+  --color-trust-verified: var(--sd-color-trust-verified);
+  --color-trust-verified-surface: var(--sd-color-trust-verified-surface);
+  --color-trust-stale: var(--sd-color-trust-stale);
+  --color-trust-stale-surface: var(--sd-color-trust-stale-surface);
+  --color-trust-unconfirmed: var(--sd-color-trust-unconfirmed);
+  --color-trust-unconfirmed-surface: var(--sd-color-trust-unconfirmed-surface);
+
+  /* Espaciado semántico — cambia con la densidad */
+  --spacing-inset-xs: var(--sd-space-inset-xs);
+  --spacing-inset-sm: var(--sd-space-inset-sm);
+  --spacing-inset-md: var(--sd-space-inset-md);
+  --spacing-inset-lg: var(--sd-space-inset-lg);
+  --spacing-inset-xl: var(--sd-space-inset-xl);
+  --spacing-stack-tight: var(--sd-space-stack-tight);
+  --spacing-stack: var(--sd-space-stack);
+  --spacing-stack-loose: var(--sd-space-stack-loose);
+  --spacing-section: var(--sd-space-section);
+  --spacing-gutter: var(--sd-space-gutter);
+  --spacing-icon-gap: var(--sd-space-icon-gap);
+
+  /* Alturas de control — 48 px en el portal, 36 px en el dashboard */
+  --spacing-control-sm: var(--sd-size-control-sm);
+  --spacing-control-md: var(--sd-size-control-md);
+  --spacing-control-lg: var(--sd-size-control-lg);
+  --spacing-touch-min: var(--sd-size-touch-min);
+  --spacing-icon-sm: var(--sd-size-icon-sm);
+  --spacing-icon-md: var(--sd-size-icon-md);
+  --spacing-icon-lg: var(--sd-size-icon-lg);
+  --spacing-icon-xl: var(--sd-size-icon-xl);
+
+  /* Radios */
+  --radius-control: var(--sd-radius-control);
+  --radius-surface: var(--sd-radius-surface);
+  --radius-overlay: var(--sd-radius-overlay);
+  --radius-media: var(--sd-radius-media);
+
+  /* Tipografía */
+  --font-sans: var(--sd-font-family-sans);
+  --font-serif: var(--sd-font-family-serif);
+  --font-mono: var(--sd-font-family-mono);
+
+  --text-display-lg: var(--sd-font-size-display-lg);
+  --text-display-lg--line-height: var(--sd-line-height-display-lg);
+  --text-display-lg--letter-spacing: var(--sd-letter-spacing-display-lg);
+  --text-display-md: var(--sd-font-size-display-md);
+  --text-display-md--line-height: var(--sd-line-height-display-md);
+  --text-display-md--letter-spacing: var(--sd-letter-spacing-display-md);
+  --text-display-sm: var(--sd-font-size-display-sm);
+  --text-display-sm--line-height: var(--sd-line-height-display-sm);
+  --text-display-sm--letter-spacing: var(--sd-letter-spacing-display-sm);
+
+  --text-heading-lg: var(--sd-font-size-heading-lg);
+  --text-heading-lg--line-height: var(--sd-line-height-heading-lg);
+  --text-heading-lg--letter-spacing: var(--sd-letter-spacing-heading-lg);
+  --text-heading-md: var(--sd-font-size-heading-md);
+  --text-heading-md--line-height: var(--sd-line-height-heading-md);
+  --text-heading-md--letter-spacing: var(--sd-letter-spacing-heading-md);
+  --text-heading-sm: var(--sd-font-size-heading-sm);
+  --text-heading-sm--line-height: var(--sd-line-height-heading-sm);
+  --text-heading-sm--letter-spacing: var(--sd-letter-spacing-heading-sm);
+  --text-heading-xs: var(--sd-font-size-heading-xs);
+  --text-heading-xs--line-height: var(--sd-line-height-heading-xs);
+
+  --text-body-lg: var(--sd-font-size-body-lg);
+  --text-body-lg--line-height: var(--sd-line-height-body-lg);
+  --text-body-md: var(--sd-font-size-body-md);
+  --text-body-md--line-height: var(--sd-line-height-body-md);
+  --text-body-sm: var(--sd-font-size-body-sm);
+  --text-body-sm--line-height: var(--sd-line-height-body-sm);
+  --text-label: var(--sd-font-size-label);
+  --text-label--line-height: var(--sd-line-height-label);
+  --text-caption: var(--sd-font-size-caption);
+  --text-caption--line-height: var(--sd-line-height-caption);
+  --text-overline: var(--sd-font-size-overline);
+  --text-overline--line-height: var(--sd-line-height-overline);
+  --text-overline--letter-spacing: var(--sd-letter-spacing-overline);
+
+  /* Medidas de lectura */
+  --container-prose: var(--sd-container-prose);
+
+  /* Elevación — sombra en claro; en oscuro los tokens la vuelven transparente
+     y el trabajo lo hace la superficie más clara. */
+  --shadow-raised: 0 1px 3px var(--sd-color-shadow-ambient);
+  --shadow-sticky: 0 -1px 3px var(--sd-color-shadow-tight);
+
+  /* Movimiento */
+  --animate-duration-feedback: var(--sd-duration-feedback);
+  --ease-standard: var(--sd-easing-standard);
+}
+
+/* ============================================================================
+ * Reglas globales
+ * ========================================================================== */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--sd-color-background);
+    color: var(--sd-color-content-primary);
+    font-family: var(--sd-font-family-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* El foco siempre se ve. No se negocia. */
+  :focus-visible {
+    outline: var(--sd-border-width-medium) solid var(--sd-color-focus);
+    outline-offset: var(--sd-space-0-5);
+  }
+
+  /* Las imágenes nunca desbordan ni deforman */
+  img,
+  picture,
+  video,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Quien pidió menos movimiento, recibe menos movimiento */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

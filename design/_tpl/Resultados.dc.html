@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="editorial" data-theme="{{theme}}">
+
+  <!-- Cabecera -->
+  <div class="rw" style="gap: var(--sd-space-inset-sm); height: var(--sd-size-control-md); padding: 0 var(--sd-space-gutter); background: var(--sd-color-surface);">
+    <svg class="ic"><use href="#i-arrow-left"/></svg>
+    <span style="flex-grow: 1; font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold);">Artesanía en Veraguas</span>
+  </div>
+
+  <!-- Filtros aplicados -->
+  <div class="rw" style="gap: var(--sd-space-inset-sm); padding: 0 var(--sd-space-gutter) var(--sd-space-inset-md); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle); overflow: hidden;">
+    <div class="tag" style="flex: none; background: var(--sd-color-action-primary); border-color: var(--sd-color-action-primary); color: var(--sd-color-action-primary-content); font-weight: var(--sd-font-weight-semibold);"><svg class="ic ic-sm"><use href="#i-filter"/></svg>Filtros<span style="background: var(--sd-color-action-primary-content); color: var(--sd-color-action-primary); border-radius: var(--sd-radius-full); width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-caption);">2</span></div>
+    <div class="tag tag-on" style="flex: none;">Santa Fe<svg class="ic ic-sm"><use href="#i-x"/></svg></div>
+    <div class="tag tag-on" style="flex: none;">Artesanía<svg class="ic ic-sm"><use href="#i-x"/></svg></div>
+  </div>
+
+  <div class="col" style="padding: var(--sd-space-inset-md) var(--sd-space-gutter) 560px; gap: var(--sd-space-stack);">
+
+    <span class="bc-m">6 negocios · ordenados por cercanía</span>
+
+    <div class="bc">
+      <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+      <div class="bc-b">
+        <span class="bc-n">Artesanías Delia Quintero</span>
+        <span class="bc-p">Delia Quintero · sombreros pintaos</span>
+        <span class="bc-m">Santa Fe · desde B/. 25</span>
+        <span class="rw" style="gap: var(--sd-space-0-5); font-size: var(--sd-font-size-body-sm); color: var(--sd-color-feedback-success-content); font-weight: var(--sd-font-weight-medium);">Abierto ahora</span>
+      </div>
+      <svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary); margin-top: var(--sd-space-inset-xs);"><use href="#i-bookmark"/></svg>
+    </div>
+
+    <div class="bc">
+      <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+      <div class="bc-b">
+        <span class="bc-n">Taller de Totumas Ríos</span>
+        <span class="bc-p">Eustacio Ríos · bateas y cucharas</span>
+        <span class="bc-m">Santa Fe · desde B/. 8</span>
+        <span class="rw" style="gap: var(--sd-space-0-5); font-size: var(--sd-font-size-body-sm); color: var(--sd-color-content-tertiary);">Cierra a las 4:00 p.m.</span>
+      </div>
+      <svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary); margin-top: var(--sd-space-inset-xs);"><use href="#i-bookmark"/></svg>
+    </div>
+
+    <div class="bc">
+      <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+      <div class="bc-b">
+        <span class="bc-n">Hamacas de El Carmen</span>
+        <span class="bc-p">Odilia Sánchez · pita teñida a mano</span>
+        <span class="bc-m">Santa Fe · desde B/. 60</span>
+        <span class="rw" style="gap: var(--sd-space-0-5); font-size: var(--sd-font-size-body-sm); color: var(--sd-color-trust-stale);"><svg class="ic ic-sm"><use href="#i-alert-circle"/></svg>Horario sin confirmar</span>
+      </div>
+      <svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary); margin-top: var(--sd-space-inset-xs);"><use href="#i-bookmark"/></svg>
+    </div>
+
+    <div class="bc">
+      <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+      <div class="bc-b">
+        <span class="bc-n">Orquídeas del Alto</span>
+        <span class="bc-p">Miriam Castrellón · vivero</span>
+        <span class="bc-m">Santa Fe · desde B/. 12</span>
+        <span class="rw" style="gap: var(--sd-space-0-5); font-size: var(--sd-font-size-body-sm); color: var(--sd-color-feedback-success-content); font-weight: var(--sd-font-weight-medium);">Abierto ahora</span>
+      </div>
+      <svg class="ic ic-sm" style="color: var(--sd-color-brand);"><use href="#i-bookmark"/></svg>
+    </div>
+
+  </div>
+
+  <!-- Hoja de filtros abierta sobre la lista -->
+  <div style="position: sticky; bottom: 0; margin-top: -560px;">
+    <div style="height: 96px; background: linear-gradient(to bottom, transparent, var(--sd-color-scrim));"></div>
+    <div class="col" style="background: var(--sd-color-surface-overlay); border-top-left-radius: var(--sd-radius-overlay); border-top-right-radius: var(--sd-radius-overlay); padding: var(--sd-space-inset-sm) var(--sd-space-gutter) var(--sd-space-inset-md); gap: var(--sd-space-stack);">
+      <div style="width: 36px; height: 4px; border-radius: var(--sd-radius-full); background: var(--sd-color-border-default); align-self: center;"></div>
+      <div class="rw" style="justify-content: space-between;">
+        <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Filtros</h2>
+        <div class="rw btn-ico" style="justify-content: center;"><svg class="ic"><use href="#i-x"/></svg></div>
+      </div>
+
+      <div class="col" style="gap: var(--sd-space-inset-md);">
+        <span class="lbl">Zona</span>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--sd-space-inset-sm);">
+          <span class="tag">Todas</span><span class="tag tag-on">Santa Fe<svg class="ic ic-sm"><use href="#i-check"/></svg></span><span class="tag">Pedasí</span><span class="tag">Portobelo</span>
+        </div>
+      </div>
+
+      <div class="col" style="gap: var(--sd-space-inset-md);">
+        <span class="lbl">Categoría</span>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--sd-space-inset-sm);">
+          <span class="tag tag-on">Artesanía<svg class="ic ic-sm"><use href="#i-check"/></svg></span><span class="tag">Comida</span><span class="tag">Hospedaje</span><span class="tag">Experiencias</span>
+        </div>
+      </div>
+
+      <div class="rw" style="justify-content: space-between; min-height: var(--sd-size-touch-min);">
+        <div class="col" style="gap: var(--sd-space-0-5);">
+          <span class="lbl">Solo abiertos ahora</span>
+          <span class="hlp">Son las 2:14 p.m. del martes</span>
+        </div>
+        <div style="width: 52px; height: 32px; border-radius: var(--sd-radius-full); background: var(--sd-color-brand); display: flex; align-items: center; justify-content: flex-end; padding: 3px;">
+          <div style="width: 26px; height: 26px; border-radius: var(--sd-radius-full); background: var(--sd-color-surface);"></div>
+        </div>
+      </div>
+
+      <div class="rw" style="gap: var(--sd-space-inset-sm); border-top: 1px solid var(--sd-color-border-subtle); padding-top: var(--sd-space-inset-md);">
+        <div class="btn btn-2">Limpiar</div>
+        <div class="btn btn-1" style="flex-grow: 1;">Ver 6 negocios</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

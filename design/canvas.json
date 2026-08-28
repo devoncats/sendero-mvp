@@ -1,0 +1,79 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "MVP" },
+    { "id": "page-2", "name": "Descartadas" }
+  ],
+  "artboards": [
+    { "file": "Descubrir.dc.html",     "title": "Portal · Descubrir",        "page": "page-1", "x": 0,    "y": 0,    "w": 390,  "h": 1780 },
+    { "file": "Zona.dc.html",          "title": "Portal · Zona",             "page": "page-1", "x": 490,  "y": 0,    "w": 390,  "h": 1600 },
+    { "file": "Resultados.dc.html",    "title": "Portal · Resultados y filtros", "page": "page-1", "x": 980, "y": 0, "w": 390,  "h": 1320 },
+    { "file": "Main.dc.html",          "title": "Portal · Ficha de negocio",  "page": "page-1", "x": 1470, "y": 0,    "w": 390,  "h": 1640 },
+    { "file": "Buscar.dc.html",        "title": "Portal · Buscar",           "page": "page-1", "x": 1960, "y": 0,    "w": 390,  "h": 900 },
+    { "file": "Guardados.dc.html",     "title": "Portal · Guardados",        "page": "page-1", "x": 2450, "y": 0,    "w": 390,  "h": 940 },
+    { "file": "ParaTuNegocio.dc.html", "title": "Portal · Para tu negocio",  "page": "page-1", "x": 2940, "y": 0,    "w": 390,  "h": 1900 },
+    { "file": "Estados.dc.html",       "title": "Portal · Estados del sistema", "page": "page-1", "x": 3430, "y": 0, "w": 900, "h": 1680 },
+
+    { "file": "Acceso.dc.html",        "title": "Dashboard · Acceso",        "page": "page-1", "x": 0,    "y": 2150, "w": 1280, "h": 900 },
+    { "file": "Panel.dc.html",         "title": "Dashboard · Panel",         "page": "page-1", "x": 1400, "y": 2150, "w": 1280, "h": 900 },
+    { "file": "MiNegocio.dc.html",     "title": "Dashboard · Mi negocio",    "page": "page-1", "x": 2800, "y": 2150, "w": 1280, "h": 1180 },
+    { "file": "Fotos.dc.html",         "title": "Dashboard · Fotos",         "page": "page-1", "x": 4200, "y": 2150, "w": 1280, "h": 1040 },
+    { "file": "Productos.dc.html",     "title": "Dashboard · Productos",     "page": "page-1", "x": 5600, "y": 2150, "w": 1280, "h": 940 },
+    { "file": "Horarios.dc.html",      "title": "Dashboard · Horario y ubicación", "page": "page-1", "x": 7000, "y": 2150, "w": 1280, "h": 1240 },
+
+    { "file": "FichaA.dc.html", "title": "Ficha A · Editorial reposado",     "page": "page-2", "x": 0,    "y": 0, "w": 390,  "h": 1560 },
+    { "file": "FichaB.dc.html", "title": "Ficha B · Decide rápido",          "page": "page-2", "x": 490,  "y": 0, "w": 390,  "h": 1460 },
+    { "file": "PanelA.dc.html", "title": "Panel A · Lista de pendientes",    "page": "page-2", "x": 980,  "y": 0, "w": 1280, "h": 900 },
+    { "file": "PanelB.dc.html", "title": "Panel B · Métricas y completitud", "page": "page-2", "x": 2380, "y": 0, "w": 1280, "h": 900 }
+  ],
+  "annotations": [
+    {
+      "id": "portal-intro",
+      "page": "page-1",
+      "x": 0, "y": -340, "w": 880,
+      "text": "PORTAL — 8 pantallas, densidad editorial, 390 px\n\nDirección aprobada: la persona antes que el negocio. La ficha lidera; Descubrir, Zona y Resultados alimentan hacia ella; Buscar y Guardados son las otras dos pestañas.\n\nGuardados existe por una razón concreta: en la montaña y en las islas no hay datos. Lo guardado conserva teléfono y dirección sin conexión.\n\nTodo sale de los tokens reales. El chip «theme» de cada artboard cambia claro y oscuro."
+    },
+    {
+      "id": "dash-intro",
+      "page": "page-1",
+      "x": 0, "y": 1940, "w": 880,
+      "text": "DASHBOARD — 6 pantallas, densidad operacional, 1280 px\n\nSin barra lateral en ninguna, como decidió el Panel C: barra superior y «Volver al panel». Un dueño que nunca usó un panel no tiene que aprender un menú.\n\nTres cosas se repiten a propósito: se guarda solo (nunca un botón «Guardar» que se pueda olvidar), cada campo dice para qué sirve, y los estados de conexión lenta están diseñados, no supuestos."
+    },
+    {
+      "id": "pendiente-panel",
+      "page": "page-1",
+      "x": 1400, "y": 1940, "w": 420,
+      "text": "Pendiente\n\nEl panel resuelve «me falta algo». Falta el estado de la ficha completa: qué ve Delia el día que no tiene nada que arreglar."
+    },
+    {
+      "id": "pendiente-mobile",
+      "page": "page-1",
+      "x": 4200, "y": 1940, "w": 420,
+      "text": "Pendiente\n\nEl dashboard está a 1280 px. Falta la versión de 390 px de Panel y Fotos — el dueño va a entrar desde el teléfono más que desde una computadora."
+    },
+    {
+      "id": "nota-ficha-a",
+      "page": "page-2",
+      "x": 0, "y": -180, "w": 390,
+      "text": "Ficha A · Editorial reposado — descartada\n\nPortada grande, serif, mucho aire. El ritmo de Airbnb.\n\nSe descartó la composición, pero su sección «Qué encuentras» sobrevivió y pasó a la ficha final."
+    },
+    {
+      "id": "nota-ficha-b",
+      "page": "page-2",
+      "x": 490, "y": -180, "w": 390,
+      "text": "Ficha B · Decide rápido — descartada\n\nDatos duros arriba y WhatsApp sin bajar. La más rápida de leer.\n\nSe descartó por tono: se siente utilitaria y pierde el descubrimiento. Vale la pena releerla si en pruebas la gente no llega al botón de contacto."
+    },
+    {
+      "id": "nota-panel-a",
+      "page": "page-2",
+      "x": 980, "y": -180, "w": 420,
+      "text": "Panel A · Lista de pendientes — descartado\n\nBarra lateral y lista priorizada, cada cosa con su porqué.\n\nSe descartó por la barra lateral: vocabulario nuevo para quien nunca usó un panel. Es el candidato natural si el dueño resulta más capaz de lo que asumimos."
+    },
+    {
+      "id": "nota-panel-b",
+      "page": "page-2",
+      "x": 2380, "y": -180, "w": 420,
+      "text": "Panel B · Métricas y completitud — descartado\n\nCuatro cifras, checklist y tabla de contactos.\n\nSe descartó por ser justo la pantalla que paraliza a quien nunca usó un panel. Su tabla de contactos puede volver más adelante como pantalla propia."
+    }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

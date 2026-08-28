@@ -1,0 +1,59 @@
+/* Base compartida por todos los artboards. Se inyecta en build. */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { font-family: var(--sd-font-family-sans); -webkit-font-smoothing: antialiased; }
+a { color: var(--sd-color-brand); text-decoration: none; }
+a:hover { color: var(--sd-color-action-primary-hover); }
+
+.app { min-height: 100%; background: var(--sd-color-background); color: var(--sd-color-content-primary); }
+.col { display: flex; flex-direction: column; }
+.rw { display: flex; align-items: center; }
+
+.ic { flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: var(--sd-size-icon-md); height: var(--sd-size-icon-md); }
+.ic-sm { width: var(--sd-size-icon-sm); height: var(--sd-size-icon-sm); }
+.ic-lg { width: var(--sd-size-icon-lg); height: var(--sd-size-icon-lg); }
+.ic-xl { width: var(--sd-size-icon-xl); height: var(--sd-size-icon-xl); stroke-width: 1.5; }
+
+/* Marcador de foto: rayado a propósito, para que nunca se lea como foto real */
+.ph { background-color: var(--sd-color-surface-sunken); background-image: repeating-linear-gradient(45deg, transparent, transparent 11px, var(--sd-color-border-subtle) 11px, var(--sd-color-border-subtle) 12px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sd-space-inset-xs); color: var(--sd-color-content-tertiary); }
+.ph span { font-size: var(--sd-font-size-caption); text-align: center; padding: 0 var(--sd-space-inset-xs); }
+
+.card { background: var(--sd-color-surface); border: 1px solid var(--sd-color-border-subtle); border-radius: var(--sd-radius-surface); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--sd-space-icon-gap); height: var(--sd-size-control-md); padding: 0 var(--sd-space-inset-lg); border-radius: var(--sd-radius-control); font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold); flex: none; }
+.btn-1 { background: var(--sd-color-action-primary); color: var(--sd-color-action-primary-content); }
+.btn-2 { background: var(--sd-color-action-secondary); color: var(--sd-color-action-secondary-content); border: 1px solid var(--sd-color-border-default); }
+.btn-lg { height: var(--sd-size-control-lg); padding: 0 var(--sd-space-inset-xl); font-size: var(--sd-font-size-body-lg); }
+.btn-ico { width: var(--sd-size-control-md); height: var(--sd-size-control-md); padding: 0; }
+
+.chip { display: inline-flex; align-items: center; gap: var(--sd-space-icon-gap); border-radius: var(--sd-radius-full); padding: var(--sd-space-0-5) var(--sd-space-inset-sm); font-size: var(--sd-font-size-overline); letter-spacing: var(--sd-letter-spacing-overline); text-transform: uppercase; font-weight: var(--sd-font-weight-semibold); }
+.chip-acc { background: var(--sd-color-accent-surface); color: var(--sd-color-accent-content); border: 1px solid var(--sd-color-accent-border); }
+.chip-ok { background: var(--sd-color-feedback-success-surface); color: var(--sd-color-feedback-success-content); }
+
+/* Chip de filtro / categoría, tamaño táctil */
+.tag { display: inline-flex; align-items: center; gap: var(--sd-space-icon-gap); height: var(--sd-size-control-sm); padding: 0 var(--sd-space-inset-md); border-radius: var(--sd-radius-full); border: 1px solid var(--sd-color-border-default); background: var(--sd-color-surface); font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary); }
+.tag-on { background: var(--sd-color-brand-surface); border-color: var(--sd-color-brand-border); color: var(--sd-color-brand-content); font-weight: var(--sd-font-weight-medium); }
+
+/* Campo de formulario */
+.fld { display: flex; align-items: center; gap: var(--sd-space-icon-gap); height: var(--sd-size-control-md); padding: 0 var(--sd-space-inset-md); border-radius: var(--sd-radius-control); border: 1px solid var(--sd-color-border-default); background: var(--sd-color-surface); font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-tertiary); }
+.fld-on { border-color: var(--sd-color-focus); box-shadow: 0 0 0 3px var(--sd-color-brand-surface); color: var(--sd-color-content-primary); }
+.lbl { font-size: var(--sd-font-size-label); font-weight: var(--sd-font-weight-medium); }
+.hlp { font-size: var(--sd-font-size-caption); color: var(--sd-color-content-tertiary); }
+
+/* Barra de pestañas del portal */
+.tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sd-space-0-5); flex-grow: 1; height: var(--sd-size-control-md); color: var(--sd-color-content-tertiary); font-size: var(--sd-font-size-caption); }
+.tab-on { color: var(--sd-color-brand); font-weight: var(--sd-font-weight-semibold); }
+
+/* Esqueleto de carga */
+.sk { background: var(--sd-color-surface-sunken); border-radius: var(--sd-radius-sm); }
+
+/* Tarjeta de negocio, el patrón más repetido del portal */
+.bc { display: flex; gap: var(--sd-space-inset-md); align-items: flex-start; }
+.bc > .ph { width: 96px; height: 96px; border-radius: var(--sd-radius-media); flex: none; }
+.bc-b { display: flex; flex-direction: column; gap: var(--sd-space-0-5); flex-grow: 1; min-width: 0; }
+.bc-n { font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold); }
+.bc-p { font-size: var(--sd-font-size-body-sm); color: var(--sd-color-content-secondary); }
+.bc-m { font-size: var(--sd-font-size-body-sm); color: var(--sd-color-content-tertiary); }
+
+/* Fila de zona / lista genérica con chevron */
+.li { display: flex; align-items: center; gap: var(--sd-space-inset-md); min-height: var(--sd-size-touch-min); padding: var(--sd-space-inset-sm) 0; border-bottom: 1px solid var(--sd-color-border-subtle); }

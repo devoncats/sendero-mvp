@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+  <style>
+    .frame { width: 390px; height: 420px; overflow: hidden; border: 1px solid var(--sd-color-border-default); border-radius: var(--sd-radius-surface); background: var(--sd-color-surface); display: flex; flex-direction: column; }
+    .cap { font-size: var(--sd-font-size-overline); letter-spacing: var(--sd-letter-spacing-overline); text-transform: uppercase; font-weight: var(--sd-font-weight-semibold); color: var(--sd-color-content-tertiary); }
+    .cell { display: flex; flex-direction: column; gap: var(--sd-space-inset-sm); }
+    .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: var(--sd-space-inset-md); padding: var(--sd-space-inset-xl); flex-grow: 1; }
+    .empty h3 { margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold); }
+    .empty p { margin: 0; font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-content-secondary); max-width: 32ch; }
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="editorial" data-theme="{{theme}}" style="padding: var(--sd-space-inset-xl); gap: var(--sd-space-stack-loose);">
+
+  <div class="col" style="gap: var(--sd-space-stack-tight);">
+    <h1 style="margin: 0; font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Estados del sistema</h1>
+    <p style="margin: 0; font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary); max-width: 60ch;">Se diseña asumiendo 3G, no wifi. Ninguno de estos estados es un texto gris centrado: cada uno dice qué pasó, si se puede seguir usando la app, y qué hacer.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, 390px); gap: var(--sd-space-stack-loose) var(--sd-space-stack);">
+
+    <!-- Sin conexión -->
+    <div class="cell">
+      <span class="cap">Sin conexión</span>
+      <div class="frame">
+        <div class="rw" style="gap: var(--sd-space-icon-gap); padding: var(--sd-space-inset-sm) var(--sd-space-gutter); background: var(--sd-color-feedback-warning-surface); color: var(--sd-color-feedback-warning-content); border-bottom: 1px solid var(--sd-color-feedback-warning-border);">
+          <svg class="ic ic-sm"><use href="#i-wifi-off"/></svg>
+          <span style="font-size: var(--sd-font-size-body-sm); font-weight: var(--sd-font-weight-medium);">Sin señal. Ves lo que guardaste.</span>
+        </div>
+        <div class="col" style="padding: var(--sd-space-gutter); gap: var(--sd-space-stack);">
+          <div class="bc">
+            <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+            <div class="bc-b"><span class="bc-n">Artesanías Delia Quintero</span><span class="bc-p">Delia Quintero</span><span class="bc-m">+507 6412-8890</span></div>
+          </div>
+          <div class="bc">
+            <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+            <div class="bc-b"><span class="bc-n">Fonda La Ensenada</span><span class="bc-p">Rita Domínguez</span><span class="bc-m">+507 6771-2043</span></div>
+          </div>
+          <span class="hlp">El teléfono y la dirección siguen disponibles sin conexión.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cargando -->
+    <div class="cell">
+      <span class="cap">Cargando</span>
+      <div class="frame">
+        <div class="col" style="padding: var(--sd-space-gutter); gap: var(--sd-space-stack);">
+          <div class="sk" style="height: 20px; width: 45%;"></div>
+          <div class="bc">
+            <div class="sk" style="width: 96px; height: 96px; border-radius: var(--sd-radius-media); flex: none;"></div>
+            <div class="bc-b" style="gap: var(--sd-space-inset-xs); padding-top: var(--sd-space-0-5);">
+              <div class="sk" style="height: 16px; width: 80%;"></div>
+              <div class="sk" style="height: 14px; width: 60%;"></div>
+              <div class="sk" style="height: 14px; width: 40%;"></div>
+            </div>
+          </div>
+          <div class="bc">
+            <div class="sk" style="width: 96px; height: 96px; border-radius: var(--sd-radius-media); flex: none;"></div>
+            <div class="bc-b" style="gap: var(--sd-space-inset-xs); padding-top: var(--sd-space-0-5);">
+              <div class="sk" style="height: 16px; width: 70%;"></div>
+              <div class="sk" style="height: 14px; width: 55%;"></div>
+              <div class="sk" style="height: 14px; width: 35%;"></div>
+            </div>
+          </div>
+          <span class="hlp">Esqueleto con la forma real del contenido, no un spinner en el centro: así la página no salta cuando llega.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sin resultados -->
+    <div class="cell">
+      <span class="cap">Sin resultados</span>
+      <div class="frame">
+        <div class="rw" style="gap: var(--sd-space-inset-sm); padding: var(--sd-space-inset-md) var(--sd-space-gutter); border-bottom: 1px solid var(--sd-color-border-subtle);">
+          <div class="tag tag-on" style="flex: none;">Guna Yala<svg class="ic ic-sm"><use href="#i-x"/></svg></div>
+          <div class="tag tag-on" style="flex: none;">Hospedaje<svg class="ic ic-sm"><use href="#i-x"/></svg></div>
+        </div>
+        <div class="empty">
+          <svg class="ic ic-xl" style="color: var(--sd-color-content-tertiary);"><use href="#i-search"/></svg>
+          <h3>Todavía no hay hospedajes en Guna Yala</h3>
+          <p>Es una zona nueva en Sendero. Hay 11 negocios de otras categorías.</p>
+          <div class="btn btn-2">Ver artesanía en Guna Yala</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error de carga -->
+    <div class="cell">
+      <span class="cap">Error de carga</span>
+      <div class="frame">
+        <div class="empty">
+          <svg class="ic ic-xl" style="color: var(--sd-color-feedback-danger);"><use href="#i-alert-triangle"/></svg>
+          <h3>No pudimos cargar esta zona</h3>
+          <p>Puede ser tu conexión. Los negocios que guardaste siguen disponibles.</p>
+          <div class="rw" style="gap: var(--sd-space-inset-sm);">
+            <div class="btn btn-1">Reintentar</div>
+            <div class="btn btn-2">Ver guardados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guardados vacío -->
+    <div class="cell">
+      <span class="cap">Guardados, vacío</span>
+      <div class="frame">
+        <div class="col" style="padding: var(--sd-space-stack) var(--sd-space-gutter) 0;">
+          <h1 style="margin: 0; font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Guardados</h1>
+        </div>
+        <div class="empty">
+          <svg class="ic ic-xl" style="color: var(--sd-color-content-tertiary);"><use href="#i-bookmark"/></svg>
+          <h3>Guarda antes de perder la señal</h3>
+          <p>En la montaña y en las islas casi no hay datos. Lo que guardes se queda en el teléfono, con teléfono y dirección.</p>
+          <div class="btn btn-1">Explorar zonas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Imagen que no cargó -->
+    <div class="cell">
+      <span class="cap">Imagen que no cargó</span>
+      <div class="frame">
+        <div class="col" style="padding: var(--sd-space-gutter); gap: var(--sd-space-stack);">
+          <div class="rw" style="gap: var(--sd-space-inset-md); align-items: flex-start;">
+            <div style="width: 96px; height: 96px; border-radius: var(--sd-radius-media); flex: none; background: var(--sd-color-surface-sunken); display: flex; align-items: center; justify-content: center; color: var(--sd-color-content-disabled);">
+              <svg class="ic ic-lg"><use href="#i-image"/></svg>
+            </div>
+            <div class="bc-b"><span class="bc-n">Taller de Totumas Ríos</span><span class="bc-p">Eustacio Ríos</span><span class="bc-m">Santa Fe, Veraguas</span></div>
+          </div>
+          <span class="hlp">El hueco conserva la proporción declarada, así que nada salta cuando la imagen sí carga. El nombre y el contacto nunca dependen de la foto.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="editorial" data-theme="{{theme}}">
+
+  <!-- Campo de búsqueda enfocado -->
+  <div class="rw" style="gap: var(--sd-space-inset-sm); padding: var(--sd-space-inset-md) var(--sd-space-gutter); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle);">
+    <div class="fld fld-on" style="flex-grow: 1; height: var(--sd-size-control-md);">
+      <svg class="ic"><use href="#i-search"/></svg>
+      <span style="flex-grow: 1;">Buscar zona, negocio o producto</span>
+      <svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary);"><use href="#i-x"/></svg>
+    </div>
+  </div>
+
+  <div class="col" style="padding: var(--sd-space-stack) var(--sd-space-gutter); gap: var(--sd-space-stack-loose);">
+
+    <div class="col" style="gap: var(--sd-space-inset-sm);">
+      <div class="rw" style="justify-content: space-between;">
+        <h2 style="margin: 0; font-size: var(--sd-font-size-heading-xs); font-weight: var(--sd-font-weight-semibold);">Lo que buscaste antes</h2>
+        <span style="font-size: var(--sd-font-size-body-sm); color: var(--sd-color-brand); font-weight: var(--sd-font-weight-medium);">Borrar</span>
+      </div>
+      <div class="col">
+        <div class="li"><svg class="ic" style="color: var(--sd-color-content-tertiary);"><use href="#i-clock"/></svg><span style="flex-grow: 1; font-size: var(--sd-font-size-body-md);">sombrero pintao</span><svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary);"><use href="#i-x"/></svg></div>
+        <div class="li"><svg class="ic" style="color: var(--sd-color-content-tertiary);"><use href="#i-clock"/></svg><span style="flex-grow: 1; font-size: var(--sd-font-size-body-md);">dónde comer en Pedasí</span><svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary);"><use href="#i-x"/></svg></div>
+        <div class="li" style="border-bottom: none;"><svg class="ic" style="color: var(--sd-color-content-tertiary);"><use href="#i-clock"/></svg><span style="flex-grow: 1; font-size: var(--sd-font-size-body-md);">café de Boquete</span><svg class="ic ic-sm" style="color: var(--sd-color-content-tertiary);"><use href="#i-x"/></svg></div>
+      </div>
+    </div>
+
+    <div class="col" style="gap: var(--sd-space-inset-md);">
+      <h2 style="margin: 0; font-size: var(--sd-font-size-heading-xs); font-weight: var(--sd-font-weight-semibold);">Zonas</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--sd-space-inset-sm);">
+        <span class="tag">Pedasí</span><span class="tag">Santa Fe</span><span class="tag">Portobelo</span><span class="tag">Guna Yala</span><span class="tag">Boquete</span><span class="tag">Volcán</span><span class="tag">Isla Taboga</span><span class="tag">El Valle de Antón</span><span class="tag">Bastimentos</span>
+      </div>
+    </div>
+
+    <div class="col" style="gap: var(--sd-space-inset-md);">
+      <h2 style="margin: 0; font-size: var(--sd-font-size-heading-xs); font-weight: var(--sd-font-weight-semibold);">Categorías</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--sd-space-inset-sm);">
+        <span class="tag">Artesanía</span><span class="tag">Comida</span><span class="tag">Hospedaje</span><span class="tag">Experiencias</span><span class="tag">Transporte local</span><span class="tag">Productos del campo</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="flex-grow: 1;"></div>
+
+  <div class="rw" style="position: sticky; bottom: 0; background: var(--sd-color-surface); border-top: 1px solid var(--sd-color-border-subtle); padding: var(--sd-space-inset-xs) 0;">
+    <div class="tab"><svg class="ic"><use href="#i-compass"/></svg>Descubrir</div>
+    <div class="tab tab-on"><svg class="ic"><use href="#i-search"/></svg>Buscar</div>
+    <div class="tab"><svg class="ic"><use href="#i-bookmark"/></svg>Guardados</div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

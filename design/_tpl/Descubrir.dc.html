@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="editorial" data-theme="{{theme}}">
+
+  <!-- Cabecera -->
+  <div class="rw" style="gap: var(--sd-space-inset-sm); height: var(--sd-size-control-md); padding: 0 var(--sd-space-gutter); background: var(--sd-color-surface); border-bottom: 1px solid var(--sd-color-border-subtle);">
+    <svg class="ic" style="color: var(--sd-color-brand);"><use href="#i-compass"/></svg>
+    <span style="flex-grow: 1; font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-sm); font-weight: var(--sd-font-weight-semibold);">Sendero</span>
+    <span style="font-size: var(--sd-font-size-body-sm); color: var(--sd-color-content-tertiary);"><strong style="color: var(--sd-color-content-primary);">ES</strong> · EN</span>
+  </div>
+
+  <div class="col" style="padding: var(--sd-space-stack-loose) var(--sd-space-gutter) var(--sd-space-section); gap: var(--sd-space-stack-loose);">
+
+    <!-- Promesa -->
+    <div class="col" style="gap: var(--sd-space-stack);">
+      <div class="col" style="gap: var(--sd-space-stack-tight);">
+        <h1 style="margin: 0; font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-display-sm); line-height: var(--sd-line-height-display-sm); letter-spacing: var(--sd-letter-spacing-display-sm); font-weight: var(--sd-font-weight-semibold); text-wrap: pretty;">El Panamá que no sale en el folleto</h1>
+        <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary); text-wrap: pretty;">Artesanos, fondas y hospedajes familiares en zonas donde no llegan los tours. Les escribes directo.</p>
+      </div>
+      <div class="fld" style="height: var(--sd-size-control-lg);">
+        <svg class="ic"><use href="#i-search"/></svg>
+        <span style="flex-grow: 1;">¿A qué zona vas?</span>
+      </div>
+    </div>
+
+    <!-- Zonas -->
+    <div class="col" style="gap: var(--sd-space-inset-md);">
+      <div class="rw" style="justify-content: space-between;">
+        <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Zonas</h2>
+        <span class="rw" style="gap: var(--sd-space-0-5); font-size: var(--sd-font-size-body-sm); color: var(--sd-color-brand); font-weight: var(--sd-font-weight-medium);">Ver las 9<svg class="ic ic-sm"><use href="#i-chevron-right"/></svg></span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sd-space-inset-md);">
+        <div class="col" style="gap: var(--sd-space-inset-xs);">
+          <div class="ph" style="aspect-ratio: 4 / 3; border-radius: var(--sd-radius-media);"><svg class="ic ic-lg"><use href="#i-image"/></svg><span>Santa Fe</span></div>
+          <span style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold);">Santa Fe</span>
+          <span class="bc-m">Veraguas · 14 negocios</span>
+        </div>
+        <div class="col" style="gap: var(--sd-space-inset-xs);">
+          <div class="ph" style="aspect-ratio: 4 / 3; border-radius: var(--sd-radius-media);"><svg class="ic ic-lg"><use href="#i-image"/></svg><span>Pedasí</span></div>
+          <span style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold);">Pedasí</span>
+          <span class="bc-m">Los Santos · 21 negocios</span>
+        </div>
+        <div class="col" style="gap: var(--sd-space-inset-xs);">
+          <div class="ph" style="aspect-ratio: 4 / 3; border-radius: var(--sd-radius-media);"><svg class="ic ic-lg"><use href="#i-image"/></svg><span>Portobelo</span></div>
+          <span style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold);">Portobelo</span>
+          <span class="bc-m">Colón · 9 negocios</span>
+        </div>
+        <div class="col" style="gap: var(--sd-space-inset-xs);">
+          <div class="ph" style="aspect-ratio: 4 / 3; border-radius: var(--sd-radius-media);"><svg class="ic ic-lg"><use href="#i-image"/></svg><span>Guna Yala</span></div>
+          <span style="font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold);">Guna Yala</span>
+          <span class="bc-m">Comarca · 11 negocios</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categorías -->
+    <div class="col" style="gap: var(--sd-space-inset-md);">
+      <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Qué buscas</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--sd-space-inset-sm);">
+        <span class="tag">Artesanía</span>
+        <span class="tag">Comida</span>
+        <span class="tag">Hospedaje</span>
+        <span class="tag">Experiencias</span>
+        <span class="tag">Transporte local</span>
+        <span class="tag">Productos del campo</span>
+      </div>
+    </div>
+
+    <!-- Cómo funciona -->
+    <div class="col" style="gap: var(--sd-space-inset-lg); background: var(--sd-color-brand-surface); border-radius: var(--sd-radius-surface); padding: var(--sd-space-inset-lg);">
+      <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold); color: var(--sd-color-brand-content);">Cómo funciona</h2>
+      <div class="rw" style="gap: var(--sd-space-inset-md); align-items: flex-start;">
+        <span style="width: var(--sd-size-avatar-xs); height: var(--sd-size-avatar-xs); border-radius: var(--sd-radius-full); background: var(--sd-color-brand); color: var(--sd-color-action-primary-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-body-sm); font-weight: var(--sd-font-weight-semibold); flex: none;">1</span>
+        <span style="font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-brand-content);">Eliges una zona o una categoría.</span>
+      </div>
+      <div class="rw" style="gap: var(--sd-space-inset-md); align-items: flex-start;">
+        <span style="width: var(--sd-size-avatar-xs); height: var(--sd-size-avatar-xs); border-radius: var(--sd-radius-full); background: var(--sd-color-brand); color: var(--sd-color-action-primary-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-body-sm); font-weight: var(--sd-font-weight-semibold); flex: none;">2</span>
+        <span style="font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-brand-content);">Ves quién está detrás, qué vende y cuándo abre.</span>
+      </div>
+      <div class="rw" style="gap: var(--sd-space-inset-md); align-items: flex-start;">
+        <span style="width: var(--sd-size-avatar-xs); height: var(--sd-size-avatar-xs); border-radius: var(--sd-radius-full); background: var(--sd-color-brand); color: var(--sd-color-action-primary-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-body-sm); font-weight: var(--sd-font-weight-semibold); flex: none;">3</span>
+        <span style="font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-brand-content);">Le escribes por WhatsApp. Sin reservas ni comisiones.</span>
+      </div>
+    </div>
+
+    <!-- Recién llegados -->
+    <div class="col" style="gap: var(--sd-space-inset-md);">
+      <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Nuevos en Sendero</h2>
+      <div class="col" style="gap: var(--sd-space-inset-lg);">
+        <div class="bc">
+          <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+          <div class="bc-b">
+            <span class="bc-n">Artesanías Delia Quintero</span>
+            <span class="bc-p">Delia Quintero · Artesanía</span>
+            <span class="bc-m">Santa Fe, Veraguas</span>
+          </div>
+        </div>
+        <div class="bc">
+          <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+          <div class="bc-b">
+            <span class="bc-n">Fonda La Ensenada</span>
+            <span class="bc-p">Rita Domínguez · Comida</span>
+            <span class="bc-m">Pedasí, Los Santos</span>
+          </div>
+        </div>
+        <div class="bc">
+          <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+          <div class="bc-b">
+            <span class="bc-n">Finca Café La Neblina</span>
+            <span class="bc-p">Aurelio Pitti · Productos del campo</span>
+            <span class="bc-m">Volcán, Chiriquí</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Pestañas -->
+  <div class="rw" style="position: sticky; bottom: 0; background: var(--sd-color-surface); border-top: 1px solid var(--sd-color-border-subtle); padding: var(--sd-space-inset-xs) 0;">
+    <div class="tab tab-on"><svg class="ic"><use href="#i-compass"/></svg>Descubrir</div>
+    <div class="tab"><svg class="ic"><use href="#i-search"/></svg>Buscar</div>
+    <div class="tab"><svg class="ic"><use href="#i-bookmark"/></svg>Guardados</div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

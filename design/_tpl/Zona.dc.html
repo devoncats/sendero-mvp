@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+/*__BASE__*/
+  </style>
+</helmet>
+<!--__SPRITE__-->
+
+<div class="app col" data-density="editorial" data-theme="{{theme}}">
+
+  <!-- Portada de la zona -->
+  <div style="position: relative;">
+    <div class="ph" style="height: 240px;"><svg class="ic ic-xl"><use href="#i-image"/></svg><span>El valle de Santa Fe desde el camino al Salto</span></div>
+    <div class="rw" style="position: absolute; top: var(--sd-space-inset-md); left: var(--sd-space-inset-md); right: var(--sd-space-inset-md); justify-content: space-between;">
+      <div class="rw btn-ico" style="border-radius: var(--sd-radius-full); background: var(--sd-color-surface); box-shadow: 0 1px 3px var(--sd-color-shadow-ambient); justify-content: center;"><svg class="ic"><use href="#i-arrow-left"/></svg></div>
+      <div class="rw btn-ico" style="border-radius: var(--sd-radius-full); background: var(--sd-color-surface); box-shadow: 0 1px 3px var(--sd-color-shadow-ambient); justify-content: center;"><svg class="ic"><use href="#i-share"/></svg></div>
+    </div>
+  </div>
+
+  <div class="col" style="padding: var(--sd-space-gutter) var(--sd-space-gutter) var(--sd-space-section); gap: var(--sd-space-stack-loose);">
+
+    <div class="col" style="gap: var(--sd-space-stack-tight);">
+      <span class="bc-m" style="letter-spacing: var(--sd-letter-spacing-overline); text-transform: uppercase; font-weight: var(--sd-font-weight-semibold); font-size: var(--sd-font-size-overline);">Veraguas</span>
+      <h1 style="margin: 0; font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-display-sm); line-height: var(--sd-line-height-display-sm); letter-spacing: var(--sd-letter-spacing-display-sm); font-weight: var(--sd-font-weight-semibold);">Santa Fe</h1>
+      <p style="margin: 0; font-size: var(--sd-font-size-body-lg); line-height: var(--sd-line-height-body-lg); color: var(--sd-color-content-secondary); text-wrap: pretty;">Montaña, río y neblina a tres horas de la capital. Se viene por el café, las orquídeas y los sombreros pintaos — y se come donde cocinan las señoras del pueblo, no en un restaurante.</p>
+    </div>
+
+    <!-- Cómo llegar -->
+    <div class="col" style="gap: var(--sd-space-inset-md);">
+      <div class="rw" style="gap: var(--sd-space-icon-gap);">
+        <svg class="ic"><use href="#i-map-pin"/></svg>
+        <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Cómo llegar</h2>
+      </div>
+      <p style="margin: 0; font-size: var(--sd-font-size-body-md); line-height: var(--sd-line-height-body-md); color: var(--sd-color-content-secondary);">Desde Santiago, 55 km por la carretera a Santa Fe. Bus cada hora desde la terminal, 2 h. En carro, 1 h 15.</p>
+      <div class="ph" style="height: 140px; border-radius: var(--sd-radius-media);"><svg class="ic ic-xl"><use href="#i-map-pin"/></svg><span>Mapa estático — sin JavaScript</span></div>
+      <a href="#" class="rw" style="gap: var(--sd-space-icon-gap); font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-medium);">Abrir en la app de mapas<svg class="ic ic-sm"><use href="#i-external"/></svg></a>
+    </div>
+
+    <!-- Negocios por categoría -->
+    <div class="col" style="gap: var(--sd-space-inset-md);">
+      <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">14 negocios en Santa Fe</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--sd-space-inset-sm);">
+        <span class="tag tag-on">Todos</span>
+        <span class="tag">Artesanía</span>
+        <span class="tag">Comida</span>
+        <span class="tag">Hospedaje</span>
+        <span class="tag">Experiencias</span>
+      </div>
+    </div>
+
+    <div class="col" style="gap: var(--sd-space-stack);">
+      <div class="bc">
+        <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+        <div class="bc-b">
+          <span class="chip chip-acc" style="align-self: flex-start;">Artesanía</span>
+          <span class="bc-n">Artesanías Delia Quintero</span>
+          <span class="bc-p">Delia Quintero · sombreros pintaos</span>
+          <span class="bc-m rw" style="gap: var(--sd-space-0-5);"><svg class="ic ic-sm" style="color: var(--sd-color-feedback-success);"><use href="#i-check-circle"/></svg>Datos confirmados</span>
+        </div>
+      </div>
+      <div class="bc">
+        <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+        <div class="bc-b">
+          <span class="chip chip-acc" style="align-self: flex-start;">Comida</span>
+          <span class="bc-n">Comedor Doña Chela</span>
+          <span class="bc-p">Graciela Ríos · almuerzo corriente</span>
+          <span class="bc-m rw" style="gap: var(--sd-space-0-5);"><svg class="ic ic-sm" style="color: var(--sd-color-feedback-success);"><use href="#i-check-circle"/></svg>Datos confirmados</span>
+        </div>
+      </div>
+      <div class="bc">
+        <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+        <div class="bc-b">
+          <span class="chip chip-acc" style="align-self: flex-start;">Experiencias</span>
+          <span class="bc-n">Caminatas Alto de Piedra</span>
+          <span class="bc-p">Nicolás Barría · guía de montaña</span>
+          <span class="bc-m rw" style="gap: var(--sd-space-0-5);"><svg class="ic ic-sm" style="color: var(--sd-color-trust-stale);"><use href="#i-alert-circle"/></svg>Horario sin confirmar</span>
+        </div>
+      </div>
+      <div class="bc">
+        <div class="ph"><svg class="ic ic-sm"><use href="#i-image"/></svg></div>
+        <div class="bc-b">
+          <span class="chip chip-acc" style="align-self: flex-start;">Hospedaje</span>
+          <span class="bc-n">Cabañas El Pantano</span>
+          <span class="bc-p">Familia Concepción · 4 cabañas</span>
+          <span class="bc-m rw" style="gap: var(--sd-space-0-5);"><svg class="ic ic-sm" style="color: var(--sd-color-feedback-success);"><use href="#i-check-circle"/></svg>Datos confirmados</span>
+        </div>
+      </div>
+      <div class="rw btn btn-2" style="width: 100%;">Ver los 14 negocios<svg class="ic ic-sm"><use href="#i-chevron-right"/></svg></div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() { return { theme: this.props.theme ?? 'light' }; }
+}
+</script>
+</body>
+</html>

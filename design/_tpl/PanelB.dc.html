@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/*__TOKENS__*/
+  </style>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { font-family: var(--sd-font-family-sans); -webkit-font-smoothing: antialiased; }
+    a { color: var(--sd-color-brand); text-decoration: none; }
+    a:hover { color: var(--sd-color-action-primary-hover); }
+    .ic { flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: var(--sd-size-icon-md); height: var(--sd-size-icon-md); }
+    .ic-sm { width: var(--sd-size-icon-sm); height: var(--sd-size-icon-sm); }
+    .nav { display: flex; align-items: center; gap: var(--sd-space-icon-gap); height: var(--sd-size-control-md); padding: 0 var(--sd-space-inset-md); border-radius: var(--sd-radius-control); font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary); }
+    .nav-on { background: var(--sd-color-brand-surface); color: var(--sd-color-brand-content); font-weight: var(--sd-font-weight-semibold); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--sd-space-icon-gap); height: var(--sd-size-control-md); padding: 0 var(--sd-space-inset-lg); border-radius: var(--sd-radius-control); font-size: var(--sd-font-size-body-md); font-weight: var(--sd-font-weight-semibold); flex: none; }
+    .btn-2 { background: var(--sd-color-action-secondary); color: var(--sd-color-action-secondary-content); border: 1px solid var(--sd-color-border-default); }
+    .tile { display: flex; flex-direction: column; gap: var(--sd-space-stack-tight); background: var(--sd-color-surface); border: 1px solid var(--sd-color-border-subtle); border-radius: var(--sd-radius-surface); padding: var(--sd-space-inset-lg); }
+    .cifra { font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold); font-variant-numeric: tabular-nums; }
+    .et { font-size: var(--sd-font-size-label); color: var(--sd-color-content-secondary); }
+    th { text-align: left; font-size: var(--sd-font-size-overline); letter-spacing: var(--sd-letter-spacing-overline); text-transform: uppercase; color: var(--sd-color-content-tertiary); font-weight: var(--sd-font-weight-semibold); padding: 0 0 var(--sd-space-inset-sm); border-bottom: 1px solid var(--sd-color-border-default); }
+    td { font-size: var(--sd-font-size-body-md); padding: var(--sd-space-inset-md) 0; border-bottom: 1px solid var(--sd-color-border-subtle); }
+    .chk { display: flex; align-items: center; gap: var(--sd-space-inset-md); font-size: var(--sd-font-size-body-md); padding: var(--sd-space-inset-sm) 0; }
+  </style>
+</helmet>
+
+<div data-density="operational" data-theme="{{theme}}" style="min-height: 100%; display: flex; background: var(--sd-color-background); color: var(--sd-color-content-primary);">
+
+  <div style="width: 240px; flex: none; display: flex; flex-direction: column; gap: var(--sd-space-stack); padding: var(--sd-space-inset-lg); background: var(--sd-color-surface); border-right: 1px solid var(--sd-color-border-subtle);">
+    <div style="display: flex; align-items: center; gap: var(--sd-space-icon-gap); padding: 0 var(--sd-space-inset-md);">
+      <svg class="ic" viewBox="0 0 24 24" style="color: var(--sd-color-brand);"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span style="font-family: var(--sd-font-family-serif); font-size: var(--sd-font-size-heading-sm); font-weight: var(--sd-font-weight-semibold);">Sendero</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--sd-space-stack-tight);">
+      <div class="nav nav-on"><svg class="ic ic-sm" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Panel</div>
+      <div class="nav"><svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M21.17 6.81a1 1 0 0 0-3.98-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.63l4.35-1.33a2 2 0 0 0 .83-.5z"/></svg>Mi negocio</div>
+      <div class="nav"><svg class="ic ic-sm" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></svg>Fotos</div>
+      <div class="nav"><svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Productos</div>
+      <div class="nav"><svg class="ic ic-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Horarios</div>
+    </div>
+    <div style="flex-grow: 1;"></div>
+    <div style="display: flex; align-items: center; gap: var(--sd-space-inset-sm); padding: var(--sd-space-inset-sm); border-top: 1px solid var(--sd-color-border-subtle);">
+      <div style="width: var(--sd-size-avatar-sm); height: var(--sd-size-avatar-sm); border-radius: var(--sd-radius-full); background: var(--sd-color-brand-surface); color: var(--sd-color-brand-content); display: flex; align-items: center; justify-content: center; font-size: var(--sd-font-size-caption); font-weight: var(--sd-font-weight-semibold);">DQ</div>
+      <span style="font-size: var(--sd-font-size-body-md);">Delia Quintero</span>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; padding: var(--sd-space-inset-xl); display: flex; flex-direction: column; gap: var(--sd-space-stack-loose);">
+
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sd-space-inset-lg);">
+      <div style="display: flex; flex-direction: column; gap: var(--sd-space-stack-tight);">
+        <h1 style="margin: 0; font-size: var(--sd-font-size-heading-lg); line-height: var(--sd-line-height-heading-lg); font-weight: var(--sd-font-weight-semibold);">Artesanías Delia Quintero</h1>
+        <span style="font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary);">Santa Fe, Veraguas · Últimos 30 días</span>
+      </div>
+      <div class="btn btn-2">Ver mi ficha pública<svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></div>
+    </div>
+
+    <!-- Cifras -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sd-space-inset-md);">
+      <div class="tile"><span class="cifra">148</span><span class="et">Vieron tu ficha</span></div>
+      <div class="tile"><span class="cifra" style="color: var(--sd-color-brand);">12</span><span class="et">Escribieron por WhatsApp</span></div>
+      <div class="tile"><span class="cifra">4</span><span class="et">Llamaron</span></div>
+      <div class="tile"><span class="cifra">9</span><span class="et">Guardaron tu negocio</span></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sd-space-inset-xl); align-items: start;">
+
+      <!-- Completitud -->
+      <div style="display: flex; flex-direction: column; gap: var(--sd-space-inset-md); background: var(--sd-color-surface); border: 1px solid var(--sd-color-border-subtle); border-radius: var(--sd-radius-surface); padding: var(--sd-space-inset-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Tu ficha</h2>
+          <span style="font-size: var(--sd-font-size-body-md); color: var(--sd-color-content-secondary); font-variant-numeric: tabular-nums;">60 % completa</span>
+        </div>
+        <div style="height: 8px; border-radius: var(--sd-radius-full); background: var(--sd-color-surface-sunken); overflow: hidden;">
+          <div style="width: 60%; height: 100%; background: var(--sd-color-brand);"></div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div class="chk"><svg class="ic ic-sm" viewBox="0 0 24 24" style="color: var(--sd-color-feedback-success);"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><span style="color: var(--sd-color-content-tertiary);">Nombre y descripción</span></div>
+          <div class="chk"><svg class="ic ic-sm" viewBox="0 0 24 24" style="color: var(--sd-color-feedback-success);"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><span style="color: var(--sd-color-content-tertiary);">Teléfono de contacto</span></div>
+          <div class="chk"><svg class="ic ic-sm" viewBox="0 0 24 24" style="color: var(--sd-color-feedback-success);"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><span style="color: var(--sd-color-content-tertiary);">Tres productos</span></div>
+          <div class="chk"><svg class="ic ic-sm" viewBox="0 0 24 24" style="color: var(--sd-color-feedback-warning);"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span style="flex-grow: 1; font-weight: var(--sd-font-weight-medium);">Solo tienes 1 foto</span><a href="#" style="font-weight: var(--sd-font-weight-semibold);">Subir</a></div>
+          <div class="chk"><svg class="ic ic-sm" viewBox="0 0 24 24" style="color: var(--sd-color-feedback-warning);"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span style="flex-grow: 1; font-weight: var(--sd-font-weight-medium);">Falta el horario del domingo</span><a href="#" style="font-weight: var(--sd-font-weight-semibold);">Completar</a></div>
+          <div class="chk"><svg class="ic ic-sm" viewBox="0 0 24 24" style="color: var(--sd-color-feedback-warning);"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span style="flex-grow: 1; font-weight: var(--sd-font-weight-medium);">Falta cómo llegar</span><a href="#" style="font-weight: var(--sd-font-weight-semibold);">Completar</a></div>
+        </div>
+      </div>
+
+      <!-- Contactos -->
+      <div style="display: flex; flex-direction: column; gap: var(--sd-space-inset-md); background: var(--sd-color-surface); border: 1px solid var(--sd-color-border-subtle); border-radius: var(--sd-radius-surface); padding: var(--sd-space-inset-lg);">
+        <h2 style="margin: 0; font-size: var(--sd-font-size-heading-sm); line-height: var(--sd-line-height-heading-sm); font-weight: var(--sd-font-weight-semibold);">Últimos contactos</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><th>Cuándo</th><th>Cómo</th><th>Estaba viendo</th></tr>
+          <tr><td style="color: var(--sd-color-content-secondary);">Hoy, 9:14 a.m.</td><td>WhatsApp</td><td>Sombrero pintao</td></tr>
+          <tr><td style="color: var(--sd-color-content-secondary);">Ayer, 4:02 p.m.</td><td>Llamada</td><td style="color: var(--sd-color-content-tertiary);">—</td></tr>
+          <tr><td style="color: var(--sd-color-content-secondary);">22 ago</td><td>WhatsApp</td><td>Hamaca de pita</td></tr>
+          <tr><td style="color: var(--sd-color-content-secondary);">21 ago</td><td>WhatsApp</td><td>Sombrero pintao</td></tr>
+          <tr><td style="color: var(--sd-color-content-secondary); border-bottom: none;">19 ago</td><td style="border-bottom: none;">WhatsApp</td><td style="border-bottom: none;">Batea de totuma</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'light' };
+  }
+}
+</script>
+</body>
+</html>
