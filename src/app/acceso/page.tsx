@@ -30,7 +30,9 @@ export default function AccesoPage() {
           <Inline wrap={false} className="h-control-lg">
             <Link href="/" className="flex min-h-control-md items-center gap-icon-gap">
               <Compass className="size-icon-md text-brand" aria-hidden />
-              <Text as="span" size="heading-sm" serif weight="semibold">
+              {/* Sin serif: es densidad operacional, y evita traer la segunda
+                  familia entera por una palabra. */}
+              <Text as="span" size="heading-sm" weight="semibold">
                 Sendero
               </Text>
             </Link>

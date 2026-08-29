@@ -35,7 +35,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 className="flex min-h-control-md shrink-0 items-center gap-icon-gap"
               >
                 <Compass className="size-icon-md text-brand" aria-hidden />
-                <Text as="span" size="heading-sm" serif weight="semibold">
+                {/* Sin serif: la densidad operacional no lo usa nunca, y esa
+                    palabra sola arrastraba 49,7 KB de Source Serif a las cinco
+                    pantallas del dashboard. */}
+                <Text as="span" size="heading-sm" weight="semibold">
                   Sendero
                 </Text>
               </Link>

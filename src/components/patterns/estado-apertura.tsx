@@ -31,14 +31,27 @@ const enElServidor = () => null;
 export function EstadoApertura({ semana }: { semana: Semana }) {
   const minuto = useSyncExternalStore(sinSuscripcion, minutoActual, enElServidor);
 
-  // Antes de hidratar se reserva la altura, para que nada salte al aparecer.
-  if (minuto === null) return <div className="min-h-icon-lg" aria-hidden />;
+  /*
+   * El hueco reservado es el mismo marcado, solo que invisible.
+   *
+   * Antes era un div con `min-h-icon-lg`, una altura adivinada a ojo: 24 px
+   * contra los 35 que mide de verdad la pastilla con su relleno. Eran 11 px de
+   * salto en las treinta fichas, cada vez que hidrataba. Adivinar la altura de
+   * algo que ya sabes dibujar no tiene sentido — se dibuja y se esconde.
+   */
+  if (minuto === null) {
+    return (
+      <Inline gap="icon" className="invisible" aria-hidden>
+        <Badge tono="success">Abierto ahora</Badge>
+      </Inline>
+    );
+  }
 
   const estado = apertura(semana, new Date(minuto * 60_000));
 
   if (estado.estado === "sinConfirmar") {
     return (
-      <Inline gap="icon" className="min-h-icon-lg">
+      <Inline gap="icon">
         <Badge tono="desactualizado">
           <AlertCircle className="size-icon-sm" aria-hidden />
           Horario sin confirmar
@@ -49,7 +62,7 @@ export function EstadoApertura({ semana }: { semana: Semana }) {
 
   if (estado.estado === "abierto") {
     return (
-      <Inline gap="icon" className="min-h-icon-lg">
+      <Inline gap="icon">
         <Badge tono="success">Abierto ahora</Badge>
         <Text size="body-sm" tone="tertiary">
           cierra a las {estado.cierraA}
@@ -58,12 +71,22 @@ export function EstadoApertura({ semana }: { semana: Semana }) {
     );
   }
 
+  /*
+   * También pastilla, y no icono suelto con texto: los cuatro estados tienen
+   * que medir lo mismo o el salto vuelve por otra puerta. Que la altura la fije
+   * la estructura, y no un número que alguien tiene que acordarse de mantener.
+   */
   return (
-    <Inline gap="icon" className="min-h-icon-lg">
-      <Clock className="size-icon-sm text-content-tertiary" aria-hidden />
-      <Text size="body-sm" tone="tertiary">
-        {estado.abreA ? `Cerrado ahora · abre a las ${estado.abreA}` : "Cerrado ahora"}
-      </Text>
+    <Inline gap="icon">
+      <Badge tono="neutral">
+        <Clock className="size-icon-sm" aria-hidden />
+        Cerrado ahora
+      </Badge>
+      {estado.abreA ? (
+        <Text size="body-sm" tone="tertiary">
+          abre a las {estado.abreA}
+        </Text>
+      ) : null}
     </Inline>
   );
 }
