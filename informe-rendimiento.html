@@ -1,0 +1,429 @@
+<title>Rendimiento de Sendero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  /* ---------------------------------------------------------------------
+     La paleta es la del propio proyecto: los tokens de Sendero, en OKLCH.
+     Un informe sobre Sendero se ve como Sendero.
+     --------------------------------------------------------------------- */
+  :root {
+    --fondo: oklch(0.98 0.002 75);
+    --superficie: oklch(1 0 0);
+    --hundido: oklch(0.96 0.003 75);
+    --texto: oklch(0.265 0.012 75);
+    --texto-2: oklch(0.445 0.011 75);
+    --texto-3: oklch(0.52 0.01 75);
+    --borde: oklch(0.935 0.004 75);
+    --borde-2: oklch(0.87 0.006 75);
+
+    --marca: oklch(0.52 0.1 182);
+    --marca-sup: oklch(0.96 0.028 182);
+    --acento: oklch(0.52 0.11 48);
+    --acento-sup: oklch(0.96 0.028 48);
+
+    --ok: oklch(0.52 0.11 145);
+    --ok-sup: oklch(0.96 0.03 145);
+    --ok-txt: oklch(0.445 0.1 145);
+    --aviso: oklch(0.52 0.09 78);
+    --aviso-sup: oklch(0.96 0.045 78);
+    --aviso-txt: oklch(0.445 0.08 78);
+    --malo: oklch(0.52 0.145 25);
+    --malo-sup: oklch(0.96 0.03 25);
+    --malo-txt: oklch(0.445 0.14 25);
+
+    --sombra: 0 1px 3px oklch(0 0 0 / 0.07);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo: oklch(0.185 0.008 75);
+      --superficie: oklch(0.225 0.01 75);
+      --hundido: oklch(0.15 0.006 75);
+      --texto: oklch(0.96 0.003 75);
+      --texto-2: oklch(0.87 0.006 75);
+      --texto-3: oklch(0.73 0.008 75);
+      --borde: oklch(0.36 0.011 75);
+      --borde-2: oklch(0.445 0.011 75);
+      --marca: oklch(0.73 0.09 182);
+      --marca-sup: oklch(0.36 0.075 182);
+      --acento: oklch(0.73 0.09 48);
+      --acento-sup: oklch(0.36 0.07 48);
+      --ok: oklch(0.73 0.095 145);
+      --ok-sup: oklch(0.36 0.07 145);
+      --ok-txt: oklch(0.825 0.08 145);
+      --aviso: oklch(0.73 0.105 78);
+      --aviso-sup: oklch(0.36 0.06 78);
+      --aviso-txt: oklch(0.87 0.08 78);
+      --malo: oklch(0.73 0.12 25);
+      --malo-sup: oklch(0.36 0.09 25);
+      --malo-txt: oklch(0.825 0.1 25);
+      --sombra: 0 1px 3px oklch(0 0 0 / 0.4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --fondo: oklch(0.185 0.008 75);
+    --superficie: oklch(0.225 0.01 75);
+    --hundido: oklch(0.15 0.006 75);
+    --texto: oklch(0.96 0.003 75);
+    --texto-2: oklch(0.87 0.006 75);
+    --texto-3: oklch(0.73 0.008 75);
+    --borde: oklch(0.36 0.011 75);
+    --borde-2: oklch(0.445 0.011 75);
+    --marca: oklch(0.73 0.09 182);
+    --marca-sup: oklch(0.36 0.075 182);
+    --acento: oklch(0.73 0.09 48);
+    --acento-sup: oklch(0.36 0.07 48);
+    --ok: oklch(0.73 0.095 145);
+    --ok-sup: oklch(0.36 0.07 145);
+    --ok-txt: oklch(0.825 0.08 145);
+    --aviso: oklch(0.73 0.105 78);
+    --aviso-sup: oklch(0.36 0.06 78);
+    --aviso-txt: oklch(0.87 0.08 78);
+    --malo: oklch(0.73 0.12 25);
+    --malo-sup: oklch(0.36 0.09 25);
+    --malo-txt: oklch(0.825 0.1 25);
+    --sombra: 0 1px 3px oklch(0 0 0 / 0.4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hoja {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  h1, h2, h3 { font-family: "Source Serif 4", ui-serif, Georgia, serif; margin: 0; text-wrap: balance; }
+  h1 { font-size: 2.75rem; line-height: 1.1; letter-spacing: -0.022em; font-weight: 600; }
+  h2 { font-size: 1.5rem; line-height: 1.3; font-weight: 600; }
+  h3 { font-size: 1.125rem; line-height: 1.4; font-weight: 600; }
+  p { margin: 0; }
+
+  .cinta {
+    font-family: Inter, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    color: var(--texto-3);
+  }
+
+  header { display: flex; flex-direction: column; gap: 0.75rem; }
+  header p.entrada { font-size: 1.125rem; color: var(--texto-2); max-width: 62ch; }
+
+  section { display: flex; flex-direction: column; gap: 1.25rem; }
+  section > p, li { max-width: 68ch; color: var(--texto-2); }
+
+  /* --- Veredicto: dos hechos, uno bueno y uno incómodo -------------------- */
+  .veredicto { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .veredicto { grid-template-columns: 1fr 1fr; } }
+
+  .tarjeta {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: var(--sombra);
+  }
+  .tarjeta.bien { border-color: color-mix(in oklch, var(--ok) 35%, var(--borde)); }
+  .tarjeta.ojo { border-color: color-mix(in oklch, var(--aviso) 45%, var(--borde)); }
+
+  .cifra {
+    font-size: 2.5rem;
+    line-height: 1;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .cifra .unidad { font-size: 1rem; font-weight: 500; color: var(--texto-3); letter-spacing: 0; }
+
+  .pastilla {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .pastilla.bien { background: var(--ok-sup); color: var(--ok-txt); }
+  .pastilla.ojo { background: var(--aviso-sup); color: var(--aviso-txt); }
+  .pastilla.nd { background: var(--hundido); color: var(--texto-3); }
+
+  /* --- Tabla ------------------------------------------------------------- */
+  .marco { overflow-x: auto; border: 1px solid var(--borde); border-radius: 0.75rem; background: var(--superficie); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+  th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--borde); white-space: nowrap; }
+  thead th {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.045em; text-transform: uppercase;
+    color: var(--texto-3); background: var(--hundido);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  td.ruta { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.875rem; }
+  .margen { color: var(--ok-txt); font-weight: 600; }
+
+  /* --- Barra de composición ---------------------------------------------- */
+  .barra { display: flex; height: 3rem; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--borde); }
+  .barra > span { display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: oklch(1 0 0); }
+  .seg-js { background: var(--marca); }
+  .seg-fu { background: var(--acento); }
+  .seg-css { background: var(--texto-3); }
+  .seg-html { background: var(--borde-2); }
+
+  .leyenda { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; font-size: 0.875rem; }
+  .leyenda > div { display: flex; align-items: center; gap: 0.5rem; }
+  .punto { width: 0.75rem; height: 0.75rem; border-radius: 0.25rem; flex: none; }
+
+  /* --- Hallazgos --------------------------------------------------------- */
+  .hallazgo {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .hallazgo .cabeza { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+  .receta {
+    background: var(--hundido);
+    border-radius: 0.5rem;
+    padding: 0.875rem 1rem;
+    font-size: 0.9375rem;
+    color: var(--texto-2);
+  }
+  .receta strong { color: var(--texto); font-weight: 600; }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.875em;
+    background: var(--hundido);
+    padding: 0.1em 0.35em;
+    border-radius: 0.25rem;
+  }
+
+  ul { margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .metodo { font-size: 0.875rem; color: var(--texto-3); border-top: 1px solid var(--borde); padding-top: 1.5rem; }
+  .metodo dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1.5rem; margin: 1rem 0 0; }
+  .metodo dt { font-weight: 600; color: var(--texto-2); }
+  .metodo dd { margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="hoja">
+
+  <header>
+    <span class="cinta">Fase 4 · diagnóstico</span>
+    <h1>Rendimiento de Sendero</h1>
+    <p class="entrada">
+      Medición del build de producción de las 14 pantallas, contra el presupuesto que define el
+      proyecto: <strong>170 KB de JavaScript por ruta pública y LCP por debajo de 2,5 s en 4G</strong>.
+      Sin optimizar todavía: esto es lo que hay.
+    </p>
+  </header>
+
+  <section>
+    <div class="veredicto">
+      <div class="tarjeta bien">
+        <span class="pastilla bien">Dentro del presupuesto</span>
+        <span class="cifra">124,8 <span class="unidad">KB de JS</span></span>
+        <p>
+          Ruta pública típica, comprimido en brotli. El presupuesto son 170 KB, así que quedan
+          <strong>45 KB de margen</strong> después de construir el producto entero.
+        </p>
+      </div>
+      <div class="tarjeta ojo">
+        <span class="pastilla ojo">Fuera de lo previsto</span>
+        <span class="cifra">235,6 <span class="unidad">KB en total</span></span>
+        <p>
+          Lo que de verdad descarga el teléfono. El presupuesto solo contaba JavaScript, y
+          <strong>las fuentes pesan 97 KB</strong> que nadie estaba mirando.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>JavaScript por ruta</h2>
+    <p>
+      Brotli, que es lo que sirve un CDN. Excluye el paquete <code>noModule</code> de 110 KB, y esa
+      exclusión está verificada: un navegador moderno no lo pide, ni siquiera el Chrome de un
+      Android 11. Era una duda abierta desde la Fase 0 y queda cerrada.
+    </p>
+    <div class="marco">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Ruta</th>
+            <th scope="col" style="text-align: right;">JS (KB)</th>
+            <th scope="col" style="text-align: right;">Margen</th>
+            <th scope="col">Cómo se sirve</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="ruta">/guardados</td><td class="n">126,1</td><td class="n margen">43,9</td><td>Estático</td></tr>
+          <tr><td class="ruta">/</td><td class="n">124,8</td><td class="n margen">45,2</td><td>Estático</td></tr>
+          <tr><td class="ruta">/negocio/[slug]</td><td class="n">124,8</td><td class="n margen">45,2</td><td>30 páginas en build</td></tr>
+          <tr><td class="ruta">/zona/[id]</td><td class="n">124,8</td><td class="n margen">45,2</td><td>9 páginas en build</td></tr>
+          <tr><td class="ruta">/para-tu-negocio</td><td class="n">124,8</td><td class="n margen">45,2</td><td>Estático</td></tr>
+          <tr><td class="ruta">/buscar</td><td class="n">124,8</td><td class="n margen">45,2</td><td>Servidor, por petición</td></tr>
+          <tr><td class="ruta">/dashboard</td><td class="n">124,1</td><td class="n margen">45,9</td><td>Estático</td></tr>
+          <tr><td class="ruta">/dashboard/fotos</td><td class="n">124,1</td><td class="n margen">45,9</td><td>Estático</td></tr>
+          <tr><td class="ruta">/acceso</td><td class="n">119,4</td><td class="n margen">50,6</td><td>Estático</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Las cifras casi no varían entre rutas porque casi todo es el mismo armazón de Next y React.
+      <strong>Los cuatro componentes cliente que escribimos suman menos de 4 KB entre todos</strong>:
+      el estado de apertura, el aviso de sin conexión, el límite de error y lo guardado.
+    </p>
+  </section>
+
+  <section>
+    <h2>De qué está hecho ese peso</h2>
+    <p>
+      Una ficha de negocio, medida en el navegador sobre el servidor de producción. Es el reparto
+      que importa, y no el que esperábamos.
+    </p>
+    <div class="barra" role="img" aria-label="JavaScript 53 por ciento, fuentes 41 por ciento, CSS 4 por ciento, HTML 2 por ciento">
+      <span class="seg-js" style="width: 53%;">JS 53 %</span>
+      <span class="seg-fu" style="width: 41%;">Fuentes 41 %</span>
+      <span class="seg-css" style="width: 3.7%;"></span>
+      <span class="seg-html" style="width: 2.3%;"></span>
+    </div>
+    <div class="leyenda">
+      <div><span class="punto" style="background: var(--marca);"></span> JavaScript · 124,8 KB</div>
+      <div><span class="punto" style="background: var(--acento);"></span> Fuentes · 97,0 KB</div>
+      <div><span class="punto" style="background: var(--texto-3);"></span> CSS · 8,6 KB</div>
+      <div><span class="punto" style="background: var(--borde-2);"></span> HTML · 5,2 KB</div>
+    </div>
+    <p>
+      Las fuentes son dos archivos woff2 de tamaño casi idéntico: <strong>Inter, 47,3 KB</strong>, que
+      se precarga, y <strong>Source Serif 4, 49,7 KB</strong>, que no se precarga pero el navegador
+      pide igual a los 23 ms porque siempre hay un titular con serif en el primer pantallazo.
+    </p>
+    <p>
+      A 1,6 Mbps —el perfil «4G lenta»— esos 235,6 KB son <strong>1,33 s de transferencia pura</strong>.
+      Es un suelo aritmético, no un LCP: el LCP real le suma establecer la conexión, parsear y la CPU
+      del teléfono.
+    </p>
+  </section>
+
+  <section>
+    <h2>Lo que no pude medir</h2>
+    <p>
+      El navegador de esta sesión no emite <code>paint timing</code>, así que
+      <strong>no hay LCP, FCP ni CLS reales</strong> en este informe. Prefiero decirlo a estimarlos y
+      que parezcan medidos.
+    </p>
+    <ul>
+      <li>
+        <strong>Lo que sí está verificado del CLS:</strong> en la pantalla de resultados hay 30
+        elementos de imagen y <strong>ninguno sin proporción declarada</strong>. La defensa contra
+        saltos de diseño está puesta en todas partes.
+      </li>
+      <li>
+        <strong>Para cerrarlo hace falta Lighthouse</strong> contra el build de producción, con CPU y
+        red estranguladas. Es una dependencia nueva, así que no la instalé sin preguntar.
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Tres hallazgos</h2>
+
+    <div class="hallazgo">
+      <div class="cabeza">
+        <h3>Un salto de 11 px en cada ficha</h3>
+        <span class="pastilla ojo">Defecto</span>
+      </div>
+      <p>
+        <code>EstadoApertura</code> reserva 24 px de alto antes de hidratarse, pero al hidratar mide
+        35: la pastilla de «Abierto ahora» lleva relleno que no conté. El comentario que escribí en
+        ese archivo afirma que nada salta. Se equivoca, y está en las 30 páginas de negocio.
+      </p>
+      <div class="receta">
+        <strong>Arreglo:</strong> que el hueco reservado sea el mismo marcado, con
+        <code>invisible</code> en vez de una altura mínima adivinada. Tres líneas, y deja de haber
+        margen para el error.
+      </div>
+    </div>
+
+    <div class="hallazgo">
+      <div class="cabeza">
+        <h3>Las fuentes son el 41 % de la página</h3>
+        <span class="pastilla ojo">Decisión pendiente</span>
+      </div>
+      <p>
+        97 KB en dos familias. Inter es innegociable: es la interfaz entera. Source Serif son 49,7 KB
+        que existen para que los titulares del portal se sientan de revista, y esa es exactamente la
+        personalidad editorial que aprobaste en el lienzo.
+      </p>
+      <div class="receta">
+        <strong>Tres salidas, de menor a mayor renuncia:</strong> recortar el subconjunto de glifos de
+        Source Serif a lo que de verdad se usa; dejarla en <code>font-display: optional</code>, de modo
+        que solo aparezca si ya estaba en caché; o quitarla y que el portal sea solo Inter. La primera
+        no cuesta identidad; la tercera cuesta la mitad del carácter del proyecto.
+      </div>
+    </div>
+
+    <div class="hallazgo">
+      <div class="cabeza">
+        <h3>El presupuesto mide una cosa y el teléfono descarga otra</h3>
+        <span class="pastilla nd">Definición</span>
+      </div>
+      <p>
+        «170 KB por ruta pública» se cumple con holgura si se cuenta JavaScript. Si se cuenta lo que
+        el teléfono descarga de verdad, son 235,6 KB y el presupuesto se pasa en 66. Ninguna de las
+        dos lecturas es incorrecta: lo que falta es elegir cuál sostienes en la sustentación.
+      </p>
+      <div class="receta">
+        <strong>Recomendación:</strong> declarar el presupuesto sobre el <strong>total transferido</strong>
+        y subirlo a 250 KB. Es más honesto, sigue siendo exigente para un directorio, y evita la
+        pregunta incómoda de por qué las fuentes no contaban.
+      </div>
+    </div>
+  </section>
+
+  <section class="metodo">
+    <span class="cinta">Método</span>
+    <dl>
+      <dt>Build</dt>
+      <dd>Next.js 16.3.3 en producción (<code>next build</code> + <code>next start</code>), no el servidor de desarrollo.</dd>
+      <dt>Compresión</dt>
+      <dd>Brotli de calidad 11 sobre los artefactos del build, que es lo que sirve un CDN. Los woff2 ya vienen comprimidos y se cuentan tal cual.</dd>
+      <dt>Perfil de red</dt>
+      <dd>4G lenta: 1,6 Mbps de bajada, 150 ms de ida y vuelta.</dd>
+      <dt>Exclusiones</dt>
+      <dd>El paquete <code>noModule</code> de 110 KB, comprobado como no descargado por navegadores con soporte de módulos.</dd>
+      <dt>Sin medir</dt>
+      <dd>LCP, FCP y CLS: requieren <code>paint timing</code>, que este entorno no expone.</dd>
+    </dl>
+  </section>
+
+</div>
