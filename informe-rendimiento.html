@@ -240,9 +240,9 @@
     <span class="cinta">Fase 4 · diagnóstico</span>
     <h1>Rendimiento de Sendero</h1>
     <p class="entrada">
-      Medición del build de producción de las 14 pantallas, contra el presupuesto que define el
-      proyecto: <strong>170 KB de JavaScript por ruta pública y LCP por debajo de 2,5 s en 4G</strong>.
-      Medido con Lighthouse sobre el build de producción, no estimado.
+      Medición del build de producción de las 14 pantallas con Lighthouse, en 4G lenta y con la CPU
+      estrangulada. Con las dos decisiones de presupuesto ya tomadas:
+      <strong>250 KB de peso total transferido</strong>, y el serif del portal se queda.
     </p>
   </header>
 
@@ -250,18 +250,18 @@
     <div class="veredicto">
       <div class="tarjeta bien">
         <span class="pastilla bien">Dentro del presupuesto</span>
-        <span class="cifra">124,8 <span class="unidad">KB de JS</span></span>
+        <span class="cifra">235,6 <span class="unidad">KB transferidos</span></span>
         <p>
-          Ruta pública típica, comprimido en brotli. El presupuesto son 170 KB, así que quedan
-          <strong>45 KB de margen</strong> después de construir el producto entero.
+          Portal completo en brotli: HTML, CSS, JavaScript y fuentes. El presupuesto se declaró
+          sobre el <strong>total transferido</strong> y se fijó en 250 KB. El dashboard va en 183,5.
         </p>
       </div>
       <div class="tarjeta ojo">
-        <span class="pastilla ojo">Se pasa por poco</span>
+        <span class="pastilla ojo">Aceptado a conciencia</span>
         <span class="cifra">2648 <span class="unidad">ms de LCP</span></span>
         <p>
-          Portal en 4G lenta con la CPU estrangulada. La meta son 2500 ms, así que se pasa por
-          <strong>unos 150</strong>. El dashboard, que descarga una fuente menos, cumple con 2344.
+          150 ms por encima de la meta, y <strong>es el precio del serif</strong> en los titulares
+          del portal. Se decidió pagarlo. El dashboard, que no lo usa, cumple con 2346.
         </p>
       </div>
     </div>
@@ -364,8 +364,8 @@
           <tr><td class="ruta">/negocio/[slug]</td><td class="n">2646 ms</td><td class="n">0</td><td class="n">20 ms</td><td class="n">96</td></tr>
           <tr><td class="ruta">/guardados</td><td class="n">2638 ms</td><td class="n">0</td><td class="n">16 ms</td><td class="n">97</td></tr>
           <tr><td class="ruta">/para-tu-negocio</td><td class="n">2645 ms</td><td class="n">0</td><td class="n">20 ms</td><td class="n">97</td></tr>
-          <tr><td class="ruta">/dashboard</td><td class="n margen">2344 ms</td><td class="n">0</td><td class="n">19 ms</td><td class="n">98</td></tr>
-          <tr><td class="ruta">/dashboard/fotos</td><td class="n margen">2349 ms</td><td class="n">0</td><td class="n">21 ms</td><td class="n">98</td></tr>
+          <tr><td class="ruta">/dashboard</td><td class="n margen">2346 ms</td><td class="n">0</td><td class="n">19 ms</td><td class="n">98</td></tr>
+          <tr><td class="ruta">/dashboard/fotos</td><td class="n margen">2348 ms</td><td class="n">0</td><td class="n">21 ms</td><td class="n">98</td></tr>
         </tbody>
       </table>
     </div>
@@ -451,18 +451,46 @@
 
     <div class="hallazgo">
       <div class="cabeza">
-        <h3>El presupuesto mide una cosa y el teléfono descarga otra</h3>
-        <span class="pastilla nd">Definición</span>
+        <h3>Precargar la fuente no arregla el LCP; empeora el resto</h3>
+        <span class="pastilla nd">Hipótesis descartada</span>
       </div>
       <p>
-        «170 KB por ruta pública» se cumple con holgura si se cuenta JavaScript. Si se cuenta lo que
-        el teléfono descarga de verdad, son 235,6 KB y el presupuesto se pasa en 66. Ninguna de las
-        dos lecturas es incorrecta: lo que falta es elegir cuál sostienes en la sustentación.
+        Source Serif no se precarga, así que el navegador la descubre tarde, al parsear el CSS. Como
+        en el portal esa fuente pinta el titular, parecía obvio que adelantarla adelantaría el LCP.
+      </p>
+      <p>
+        Se probó y <strong>no fue así</strong>. El primer pintado mejoró mucho — de 1208 a 758 ms —
+        pero el LCP no se movió, y <strong>el dashboard pasó de 2344 a 2656 ms</strong>: un
+        <code>preload</code> fuerza la descarga en las catorce rutas, incluidas las seis que no usan
+        serif. Revertido.
       </p>
       <div class="receta">
-        <strong>Recomendación:</strong> declarar el presupuesto sobre el <strong>total transferido</strong>
-        y subirlo a 250 KB. Es más honesto, sigue siendo exigente para un directorio, y evita la
-        pregunta incómoda de por qué las fuentes no contaban.
+        <strong>Lo que deja:</strong> el cuello de botella del LCP no es cuándo llega la fuente, sino
+        cuántos bytes hay que mover en total. Y una confirmación útil: sin precarga, los
+        <code>@font-face</code> con <code>unicode-range</code> solo se piden cuando algo los activa.
+      </div>
+    </div>
+
+    <div class="hallazgo">
+      <div class="cabeza">
+        <h3>Las dos decisiones, tomadas</h3>
+        <span class="pastilla bien">Cerrado</span>
+      </div>
+      <p>
+        <strong>El presupuesto se declara sobre el total transferido</strong>, no solo JavaScript, y
+        se fija en 250 KB. Contar únicamente el JS dejaba fuera 97 KB de tipografía — el 41 % de una
+        página. Portal 235,6 y dashboard 183,5: los dos dentro.
+      </p>
+      <p>
+        <strong>El serif se queda.</strong> Cuesta 150 ms de LCP en el portal y se pagan a
+        conciencia: es la identidad editorial que se aprobó en el diseño, y el proyecto trata
+        precisamente de que estos negocios se vean bien. Si algún día hay que recuperar esos
+        milisegundos, la vía es un subconjunto de glifos con <code>next/font/local</code>, no
+        renunciar al carácter.
+      </p>
+      <div class="receta">
+        Ambas quedaron escritas en <code>CLAUDE.md</code>, con sus cifras medidas, para que la
+        próxima sesión no las vuelva a discutir desde cero.
       </div>
     </div>
   </section>

@@ -44,9 +44,18 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
 
 ### Rendimiento
 
-- Presupuesto: **≤ 170 KB de JS transferido en brotli** por ruta pública, **LCP < 2.5 s en 4G**.
-  Línea base medida en la Fase 0, con cero componentes propios: **115,3 KB**. Quedan
-  **54,7 KB** para todo el producto. Cada `"use client"` se descuenta de ahí.
+- Presupuesto: **≤ 250 KB de peso total transferido** por ruta pública — HTML, CSS, JS y
+  fuentes, comprimido en brotli. No solo JavaScript: contar únicamente el JS dejaba fuera
+  97 KB de tipografía, que es el 41 % de una página del portal.
+  Medido en la Fase 4: **portal 235,6 KB · dashboard 183,5 KB**. Ambos cumplen.
+- **LCP objetivo < 2.5 s en 4G lenta; el portal está en 2,65 s y se acepta.**
+  Esos 150 ms son el precio de Source Serif en los titulares, y esa identidad editorial
+  se decidió a conciencia. El dashboard, que no la usa, cumple con 2,34 s.
+  Si algún día hay que recuperarlos, la vía es un subconjunto de glifos con
+  `next/font/local`, no quitar el serif.
+- CLS **0** y TBT por debajo de 25 ms en las ocho rutas medidas. Eso no se negocia:
+  si una sesión los empeora, se arregla en esa sesión.
+- Cada `"use client"` se descuenta del presupuesto. Los cuatro que hay suman < 4 KB.
 - **Server Components por defecto.** `"use client"` solo con estado o evento, y cuando
   se añada, justificarlo en una línea.
 - **Cero librerías nuevas sin pedir permiso.** Cada dependencia es peso en un Moto G Power.
