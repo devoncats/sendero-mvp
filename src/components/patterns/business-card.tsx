@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AlertCircle, Bookmark, CheckCircle } from "@/components/icons";
+import { AlertCircle, CheckCircle } from "@/components/icons";
 import { Inline, Stack } from "@/components/layout";
 import { Badge, Media, Text } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -33,7 +33,6 @@ export type NegocioResumen = {
   estadoAbierto?: boolean;
   confianza?: Confianza;
   confianzaTexto?: string;
-  guardado?: boolean;
 };
 
 /**
@@ -64,7 +63,6 @@ export function BusinessCard({
     estadoAbierto,
     confianza,
     confianzaTexto,
-    guardado,
   } = negocio;
 
   const IconoConfianza = confianza ? CONFIANZA_ICONO[confianza] : null;
@@ -129,12 +127,6 @@ export function BusinessCard({
         className={vertical ? "w-full" : "size-avatar-xl shrink-0"}
       />
       <div className="min-w-0 flex-1">{cuerpo}</div>
-      {!vertical ? (
-        <Bookmark
-          className={cn("size-icon-md shrink-0", guardado ? "text-brand" : "text-content-tertiary")}
-          aria-hidden
-        />
-      ) : null}
     </Link>
   );
 }

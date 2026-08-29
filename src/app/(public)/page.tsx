@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Search } from "@/components/icons";
 import { Container, Grid, Inline, Section, Stack } from "@/components/layout";
 import { BusinessCard, CategoryChip } from "@/components/patterns";
-import { Media, Surface, Text } from "@/components/ui";
+import { ButtonLink, Media, Surface, Text } from "@/components/ui";
 import { CATEGORIAS, ZONAS, cuantosEnZona, recientes } from "@/data";
 
 import { resumir } from "./_resumen";
@@ -122,6 +122,23 @@ export default function DescubrirPage() {
               ))}
             </Stack>
           </Stack>
+        </Surface>
+
+        {/* Para el otro lado del proyecto */}
+        <Surface relleno="lg" className="border-accent-border bg-accent-surface">
+          <Inline gap="lg" align="center" wrap={false}>
+            <Stack gap="tight" className="flex-1">
+              <Text size="body-lg" weight="semibold" tone="accent">
+                ¿Tienes un negocio en una de estas zonas?
+              </Text>
+              <Text size="body-md" tone="secondary">
+                Ponlo en Sendero. Es gratis y sin comisión.
+              </Text>
+            </Stack>
+            <ButtonLink href="/para-tu-negocio" variante="secondary" className="shrink-0">
+              Ver cómo
+            </ButtonLink>
+          </Inline>
         </Surface>
 
         {/* Los últimos en confirmar sus datos */}

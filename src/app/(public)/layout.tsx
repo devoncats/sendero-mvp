@@ -6,17 +6,14 @@ import { Container, Inline } from "@/components/layout";
 import { AvisoSinConexion } from "@/components/patterns";
 import { Text } from "@/components/ui";
 
+import { Pestanas } from "./_pestanas";
+
 /**
  * El portal. `data-density="editorial"` es todo el mecanismo: de aquí para
  * abajo los tokens semánticos valen lo que valen en revista de viaje —
  * controles de 48 px, ritmo de 1.5rem, serif permitido en titulares.
  *
  * Ningún componente sabe que está aquí.
- *
- * La barra de pestañas del diseño (Descubrir · Buscar · Guardados) todavía no
- * está: Guardados necesita estado en el teléfono del visitante y esa decisión
- * —con sus kilobytes— se toma cuando se construya. Mientras tanto, una cabecera
- * que no lleva a ningún sitio muerto.
  */
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
@@ -45,6 +42,8 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <AvisoSinConexion />
 
       <div className="flex-1">{children}</div>
+
+      <Pestanas />
     </div>
   );
 }

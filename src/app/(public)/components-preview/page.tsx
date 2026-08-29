@@ -119,7 +119,6 @@ const NEGOCIOS: NegocioResumen[] = [
     estadoAbierto: true,
     confianza: "verificado",
     confianzaTexto: "Datos confirmados hace 3 días",
-    guardado: true,
   },
   {
     nombre: "Hamacas de El Carmen",

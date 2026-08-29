@@ -5,4 +5,5 @@ export { CategoryChip } from "./category-chip";
 export { EmptyState } from "./empty-state";
 export { EstadoApertura } from "./estado-apertura";
 export { FilterGroup, FilterSheet } from "./filter-sheet";
+export { BotonGuardar, useGuardados } from "./guardados";
 export { OfflineBanner } from "./offline-banner";

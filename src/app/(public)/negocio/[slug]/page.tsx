@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import {
   AlertCircle,
   ArrowLeft,
-  Bookmark,
   CheckCircle,
   ExternalLink,
   MapPin,
@@ -13,7 +12,7 @@ import {
   Phone,
 } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
-import { EstadoApertura } from "@/components/patterns";
+import { BotonGuardar, EstadoApertura } from "@/components/patterns";
 import { Badge, ButtonLink, Media, Surface, Text } from "@/components/ui";
 import { NEGOCIOS, categoria, negocioPorSlug, zona } from "@/data";
 import {
@@ -79,9 +78,7 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
           >
             <ArrowLeft className="size-icon-md" aria-hidden />
           </Link>
-          <span className="flex size-control-sm items-center justify-center rounded-full bg-surface shadow-raised">
-            <Bookmark className="size-icon-md" aria-label="Guardar" />
-          </span>
+          <BotonGuardar slug={negocio.slug} nombre={negocio.nombre} />
         </Inline>
       </div>
 
