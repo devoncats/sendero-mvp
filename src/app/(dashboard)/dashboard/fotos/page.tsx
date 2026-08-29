@@ -6,6 +6,8 @@ import { Container, Grid, Inline, Stack } from "@/components/layout";
 import { Badge, Media, Surface, Text } from "@/components/ui";
 import { COLA_DEMO, type Foto, negocioDelDueno } from "@/data/panel";
 
+import { AvisoMvp } from "../../_aviso-mvp";
+
 export const metadata: Metadata = { title: "Fotos" };
 
 /**
@@ -130,17 +132,11 @@ export default function FotosPage() {
           </Stack>
         </Stack>
 
-        {/* El mismo aviso que en Horario: sin servidor no hay dónde subir. */}
-        <Surface relleno="lg" radio="control" className="border-info-border bg-info-surface">
-          <Inline gap="md" align="start" wrap={false}>
-            <Info className="size-icon-md shrink-0 text-info" aria-hidden />
-            <Text size="body-md" className="text-info-content">
-              En este MVP las fotos todavía no se suben: no hay servidor detrás. El botón abre la
-              cámara o la galería del teléfono, y lo que se ve abajo son los tres estados por los que
-              pasa una foto de verdad.
-            </Text>
-          </Inline>
-        </Surface>
+        <AvisoMvp>
+          En este MVP las fotos todavía no se suben: no hay servidor detrás. El botón abre la cámara
+          o la galería del teléfono, y lo que se ve abajo son los tres estados por los que pasa una
+          foto de verdad.
+        </AvisoMvp>
 
         {/* Solo cuando de verdad hay algo en vuelo */}
         {subiendo.length > 0 ? (

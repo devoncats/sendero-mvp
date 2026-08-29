@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { AlertCircle, ArrowLeft, ExternalLink, Info, MapPin } from "@/components/icons";
+import { AlertCircle, ArrowLeft, ExternalLink, MapPin } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
 import { Badge, ButtonLink, Input, Surface, Text } from "@/components/ui";
 import type { Dia, Franja } from "@/data";
 import { SLUG_DEMO, negocioDelDueno } from "@/data/panel";
 import { zona } from "@/data";
 import { enlaceMapa, fechaLarga, nombreDia, resumenSemana, textoDia } from "@/lib/formato";
+
+import { AvisoMvp } from "../../_aviso-mvp";
 
 export const metadata: Metadata = { title: "Horario y ubicación" };
 
@@ -111,25 +113,10 @@ export default function HorarioPage() {
           </Stack>
         </Stack>
 
-        {/*
-          Honestidad antes que demo: sin servidor no hay dónde guardar, y una
-          barra que diga "guardado hace un momento" sería mentira. Los controles
-          sí funcionan —son nativos— para que se vea cómo se sentirá.
-        */}
-        <Surface
-          relleno="lg"
-          className="border-info-border bg-info-surface"
-          radio="control"
-        >
-          <Inline gap="md" align="start" wrap={false}>
-            <Info className="size-icon-md shrink-0 text-info" aria-hidden />
-            <Text size="body-md" className="text-info-content">
-              En este MVP los cambios todavía no se guardan: no hay servidor detrás. Los controles
-              funcionan para que se vea cómo será, y lo que aparece abajo es lo que hay hoy en la
-              ficha.
-            </Text>
-          </Inline>
-        </Surface>
+        <AvisoMvp>
+          En este MVP los cambios todavía no se guardan: no hay servidor detrás. Los controles
+          funcionan para que se vea cómo será, y lo que aparece abajo es lo que hay hoy en la ficha.
+        </AvisoMvp>
 
         {/*
           Rejilla asimétrica 2/1: Grid solo modela columnas iguales, y aquí el
