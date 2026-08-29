@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "medir": "node scripts/medir.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.34.0",
@@ -19,8 +20,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chrome-launcher": "^1.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
+    "lighthouse": "^13.4.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

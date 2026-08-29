@@ -242,7 +242,7 @@
     <p class="entrada">
       Medición del build de producción de las 14 pantallas, contra el presupuesto que define el
       proyecto: <strong>170 KB de JavaScript por ruta pública y LCP por debajo de 2,5 s en 4G</strong>.
-      Sin optimizar todavía: esto es lo que hay.
+      Medido con Lighthouse sobre el build de producción, no estimado.
     </p>
   </header>
 
@@ -257,11 +257,11 @@
         </p>
       </div>
       <div class="tarjeta ojo">
-        <span class="pastilla ojo">Fuera de lo previsto</span>
-        <span class="cifra">235,6 <span class="unidad">KB en total</span></span>
+        <span class="pastilla ojo">Se pasa por poco</span>
+        <span class="cifra">2648 <span class="unidad">ms de LCP</span></span>
         <p>
-          Lo que de verdad descarga el teléfono. El presupuesto solo contaba JavaScript, y
-          <strong>las fuentes pesan 97 KB</strong> que nadie estaba mirando.
+          Portal en 4G lenta con la CPU estrangulada. La meta son 2500 ms, así que se pasa por
+          <strong>unos 150</strong>. El dashboard, que descarga una fuente menos, cumple con 2344.
         </p>
       </div>
     </div>
@@ -340,23 +340,45 @@
   </section>
 
   <section>
-    <h2>Lo que no pude medir</h2>
+    <h2>Core Web Vitals, medidas</h2>
     <p>
-      El navegador de esta sesión no emite <code>paint timing</code>, así que
-      <strong>no hay LCP, FCP ni CLS reales</strong> en este informe. Prefiero decirlo a estimarlos y
-      que parezcan medidos.
+      Lighthouse en preset móvil contra el servidor de producción: <strong>4G lenta y CPU
+      estrangulada 4×</strong>, que es lo más cerca de un Moto G Power que se puede simular desde un
+      portátil. Dos corridas, cifras estables entre ellas.
     </p>
-    <ul>
-      <li>
-        <strong>Lo que sí está verificado del CLS:</strong> en la pantalla de resultados hay 30
-        elementos de imagen y <strong>ninguno sin proporción declarada</strong>. La defensa contra
-        saltos de diseño está puesta en todas partes.
-      </li>
-      <li>
-        <strong>Para cerrarlo hace falta Lighthouse</strong> contra el build de producción, con CPU y
-        red estranguladas. Es una dependencia nueva, así que no la instalé sin preguntar.
-      </li>
-    </ul>
+    <div class="marco">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Ruta</th>
+            <th scope="col" style="text-align: right;">LCP</th>
+            <th scope="col" style="text-align: right;">CLS</th>
+            <th scope="col" style="text-align: right;">TBT</th>
+            <th scope="col" style="text-align: right;">Rendimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="ruta">/</td><td class="n">2648 ms</td><td class="n">0</td><td class="n">22 ms</td><td class="n">96</td></tr>
+          <tr><td class="ruta">/buscar</td><td class="n">2650 ms</td><td class="n">0</td><td class="n">23 ms</td><td class="n">96</td></tr>
+          <tr><td class="ruta">/zona/[id]</td><td class="n">2651 ms</td><td class="n">0</td><td class="n">22 ms</td><td class="n">96</td></tr>
+          <tr><td class="ruta">/negocio/[slug]</td><td class="n">2646 ms</td><td class="n">0</td><td class="n">20 ms</td><td class="n">96</td></tr>
+          <tr><td class="ruta">/guardados</td><td class="n">2638 ms</td><td class="n">0</td><td class="n">16 ms</td><td class="n">97</td></tr>
+          <tr><td class="ruta">/para-tu-negocio</td><td class="n">2645 ms</td><td class="n">0</td><td class="n">20 ms</td><td class="n">97</td></tr>
+          <tr><td class="ruta">/dashboard</td><td class="n margen">2344 ms</td><td class="n">0</td><td class="n">19 ms</td><td class="n">98</td></tr>
+          <tr><td class="ruta">/dashboard/fotos</td><td class="n margen">2349 ms</td><td class="n">0</td><td class="n">21 ms</td><td class="n">98</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      <strong>CLS es cero en las ocho rutas.</strong> El salto de 11 px era el único, y está cerrado.
+      El bloqueo del hilo principal es de 16 a 23 ms — prácticamente nada, que es lo que se esperaba
+      de una aplicación casi sin JavaScript propio. Cero recursos bloquean el primer pintado.
+    </p>
+    <p>
+      <strong>El LCP del portal se pasa por unos 150 ms</strong> y el del dashboard cumple. La
+      diferencia entre ambos son 300 ms, y la única diferencia material entre esas rutas es la
+      segunda fuente: 49,7 KB a 200 KB/s son 250 ms. Encaja.
+    </p>
   </section>
 
   <section>
@@ -456,8 +478,8 @@
       <dd>4G lenta: 1,6 Mbps de bajada, 150 ms de ida y vuelta.</dd>
       <dt>Exclusiones</dt>
       <dd>El paquete <code>noModule</code> de 110 KB, comprobado como no descargado por navegadores con soporte de módulos.</dd>
-      <dt>Sin medir</dt>
-      <dd>LCP, FCP y CLS: requieren <code>paint timing</code>, que este entorno no expone.</dd>
+      <dt>Vitals</dt>
+      <dd>Lighthouse 13.4 en preset móvil, sobre Edge (Chromium). Dos corridas por ruta, cifras estables. Se corre con <code>pnpm medir</code> teniendo el servidor de producción arriba.</dd>
     </dl>
   </section>
 
