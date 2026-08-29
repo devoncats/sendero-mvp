@@ -23,17 +23,21 @@ export function Input({
   invalido = false,
   requerido = false,
   describedBy,
+  ariaLabel,
   className,
 }: {
   id: string;
   name?: string;
-  type?: "text" | "tel" | "email" | "search" | "number" | "url";
+  /** `time` abre el selector nativo del teléfono, que en un Android de gama
+   *  media es mucho mejor que cualquier cosa que construyamos nosotros. */
+  type?: "text" | "tel" | "email" | "search" | "number" | "url" | "time";
   placeholder?: string;
   defaultValue?: string;
   tamano?: keyof typeof TAMANOS;
   invalido?: boolean;
   requerido?: boolean;
   describedBy?: string;
+  ariaLabel?: string;
   className?: string;
 }) {
   return (
@@ -46,6 +50,7 @@ export function Input({
       required={requerido}
       aria-invalid={invalido || undefined}
       aria-describedby={describedBy}
+      aria-label={ariaLabel}
       className={cn(
         "w-full rounded-control border bg-surface px-inset-md text-body-md text-content-primary",
         "placeholder:text-content-tertiary",
