@@ -22,7 +22,9 @@ export type NegocioResumen = {
   /** El nombre de la persona detrás. Nunca es opcional en Sendero. */
   persona: string;
   categoria: string;
-  zona: string;
+  /** Se omite cuando ya se sabe: en la página de una zona, repetirla en cada
+   *  tarjeta es ruido. */
+  zona?: string;
   href: string;
   foto?: string;
   fotoAlt?: string;
@@ -79,9 +81,11 @@ export function BusinessCard({
       <Text size="body-sm" tone="secondary">
         {persona}
       </Text>
-      <Text size="body-sm" tone="tertiary">
-        {zona}
-      </Text>
+      {zona ? (
+        <Text size="body-sm" tone="tertiary">
+          {zona}
+        </Text>
+      ) : null}
       {estado ? (
         <Text
           size="body-sm"

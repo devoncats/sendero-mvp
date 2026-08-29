@@ -69,7 +69,7 @@ export default function DescubrirPage() {
             <Grid cols={2} movil={2} gap="md" as="ul">
               {ZONAS.map((z) => (
                 <li key={z.id}>
-                  <Link href={`/buscar?zona=${z.id}`} className="flex flex-col gap-inset-xs">
+                  <Link href={`/zona/${z.id}`} className="flex flex-col gap-inset-xs">
                     <Media proporcion="4/3" etiqueta={z.nombre} alt={`Paisaje de ${z.nombre}`} sizes="(min-width: 640px) 300px, 45vw" />
                     <Text size="body-md" weight="semibold">
                       {z.nombre}

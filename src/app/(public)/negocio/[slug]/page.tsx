@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   Bookmark,
   CheckCircle,
+  ExternalLink,
   MapPin,
   MessageCircle,
   Phone,
@@ -15,7 +16,14 @@ import { Container, Inline, Stack } from "@/components/layout";
 import { EstadoApertura } from "@/components/patterns";
 import { Badge, ButtonLink, Media, Surface, Text } from "@/components/ui";
 import { NEGOCIOS, categoria, negocioPorSlug, zona } from "@/data";
-import { enlaceLlamada, enlaceWhatsApp, fechaLarga, precio, resumenSemana } from "@/lib/formato";
+import {
+  enlaceLlamada,
+  enlaceMapa,
+  enlaceWhatsApp,
+  fechaLarga,
+  precio,
+  resumenSemana,
+} from "@/lib/formato";
 
 /** Las 30 fichas se generan en build. No hay servidor que consultar. */
 export function generateStaticParams() {
@@ -166,9 +174,22 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
 
               <Inline gap="md" align="start" wrap={false} className="border-t border-border-subtle pt-inset-md">
                 <MapPin className="size-icon-md shrink-0 text-content-tertiary" aria-hidden />
-                <Text size="body-sm" tone="secondary">
-                  {negocio.referencia}
-                </Text>
+                <Stack gap="tight">
+                  <Text size="body-sm" tone="secondary">
+                    {negocio.referencia}
+                  </Text>
+                  {/* La referencia escrita manda; el mapa es el respaldo. La
+                      búsqueda va por nombre de zona porque nadie ha ido a
+                      tomarle el GPS a treinta talleres. */}
+                  <a
+                    href={enlaceMapa(`${z.nombre}, ${z.provincia}, Panamá`)}
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-touch-min items-center gap-icon-gap text-body-sm font-medium text-brand"
+                  >
+                    Abrir {z.nombre} en la app de mapas
+                    <ExternalLink className="size-icon-sm" aria-hidden />
+                  </a>
+                </Stack>
               </Inline>
 
               <Inline gap="md" align="start" wrap={false}>

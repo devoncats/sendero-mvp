@@ -174,3 +174,15 @@ export function enlaceWhatsApp(numero: string, mensaje: string): string {
 export function enlaceLlamada(numero: string): string {
   return `tel:+${numero}`;
 }
+
+/**
+ * Abre la app de mapas nativa con una búsqueda por nombre.
+ *
+ * Por nombre y no por coordenadas a propósito: nadie ha ido a tomarle el GPS a
+ * treinta talleres, y una coordenada inventada es peor que ninguna. El formato
+ * universal de Google Maps lo entienden Android e iOS, y en el teléfono abre la
+ * aplicación en vez del navegador. Cero JavaScript y cero mapa embebido.
+ */
+export function enlaceMapa(consulta: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consulta)}`;
+}

@@ -16,13 +16,17 @@ const TEXTO_CONFIANZA = {
   sinConfirmar: "Sin confirmar todavía",
 } as const;
 
-export function resumir(n: Negocio): NegocioResumen {
+/**
+ * `conZona` en falso dentro de la página de una zona: repetir "Santa Fe,
+ * Veraguas" en las cuatro tarjetas de Santa Fe no informa, solo alarga.
+ */
+export function resumir(n: Negocio, { conZona = true } = {}): NegocioResumen {
   const z = zona(n.zona);
   return {
     nombre: n.nombre,
     persona: `${n.persona.nombre} · ${n.persona.oficio.toLowerCase()}`,
     categoria: categoria(n.categoria).nombre.es,
-    zona: `${z.nombre}, ${z.provincia}`,
+    zona: conZona ? `${z.nombre}, ${z.provincia}` : undefined,
     href: `/negocio/${n.slug}`,
     confianza: n.estadoDato,
     confianzaTexto: TEXTO_CONFIANZA[n.estadoDato],
