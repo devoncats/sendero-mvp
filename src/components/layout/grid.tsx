@@ -3,13 +3,23 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * Mobile-first de verdad: una columna siempre, y las demás desde `sm` o `md`
- * según cuánto quepa. Un Moto G Power no muestra tres columnas de nada.
+ * Cuántas columnas en el teléfono, y cuántas cuando hay sitio.
+ *
+ * `movil = 1` es para bloques que necesitan el ancho completo en un teléfono:
+ * dos textos comparados, un formulario. `movil = 2` es para tarjetas con foto,
+ * que en 375 px se leen perfectamente a media pantalla — y que apiladas a una
+ * columna convierten nueve zonas en una página infinita.
+ *
+ * Se aprendió construyendo Descubrir: el mobile-first automático no siempre es
+ * el mobile-first correcto.
  */
 const COLUMNAS = {
-  2: "grid-cols-1 sm:grid-cols-2",
-  3: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
-  4: "grid-cols-1 sm:grid-cols-2 md:grid-cols-4",
+  "1-2": "grid-cols-1 sm:grid-cols-2",
+  "1-3": "grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
+  "1-4": "grid-cols-1 sm:grid-cols-2 md:grid-cols-4",
+  "2-2": "grid-cols-2",
+  "2-3": "grid-cols-2 md:grid-cols-3",
+  "2-4": "grid-cols-2 md:grid-cols-4",
 } as const;
 
 const GAPS = {
@@ -22,21 +32,24 @@ const GAPS = {
 type Etiqueta = "div" | "ul" | "ol" | "section";
 
 /**
- * Rejilla de columnas iguales. Se escribe con `repeat(N, minmax(0, 1fr))` bajo
- * el capó, que es lo que evita que una celda con texto largo empuje a las otras.
+ * Rejilla de columnas iguales, con `repeat(N, minmax(0, 1fr))` bajo el capó —
+ * que es lo que evita que una celda con texto largo empuje a las otras.
  */
 export function Grid({
   cols = 2,
+  movil = 1,
   gap = "md",
   as: Tag = "div",
   className,
   children,
 }: {
-  cols?: keyof typeof COLUMNAS;
+  cols?: 2 | 3 | 4;
+  movil?: 1 | 2;
   gap?: keyof typeof GAPS;
   as?: Etiqueta;
   className?: string;
   children?: ReactNode;
 }) {
-  return <Tag className={cn("grid", COLUMNAS[cols], GAPS[gap], className)}>{children}</Tag>;
+  const clave = `${movil}-${cols}` as keyof typeof COLUMNAS;
+  return <Tag className={cn("grid", COLUMNAS[clave], GAPS[gap], className)}>{children}</Tag>;
 }
