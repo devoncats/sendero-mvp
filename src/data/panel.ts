@@ -36,3 +36,48 @@ export const METRICAS_DEMO: Metricas = {
   contactosWhatsapp: 12,
   periodo: "este mes",
 };
+
+/**
+ * La cola de subida de fotos del dueño.
+ *
+ * Vive aquí y no en `Negocio` porque no es dato público: un visitante nunca ve
+ * una cola de subida, solo el dueño dentro de su sesión. Cuando exista un
+ * servicio de subida real, esta constante se cambia por su origen y la pantalla
+ * no se entera.
+ *
+ * Los tres estados están representados a propósito. En un teléfono con señal de
+ * montaña, «subiendo» y «falló» no son casos raros: son el día normal.
+ */
+export type EstadoFoto = "lista" | "subiendo" | "fallida";
+
+export type Foto = {
+  id: string;
+  /** Qué se ve en ella. Es también el texto alternativo. */
+  etiqueta: string;
+  estado: EstadoFoto;
+  /** 0–100, solo mientras sube. */
+  progreso?: number;
+  peso?: string;
+  archivo?: string;
+};
+
+export const COLA_DEMO: readonly Foto[] = [
+  { id: "f1", etiqueta: "Delia tejiendo en el corredor", estado: "lista" },
+  { id: "f2", etiqueta: "El taller por dentro", estado: "lista" },
+  { id: "f3", etiqueta: "Sombreros terminados", estado: "lista" },
+  {
+    id: "f4",
+    etiqueta: "Sombrero de once vueltas",
+    estado: "subiendo",
+    progreso: 38,
+    peso: "2,4 MB",
+    archivo: "sombrero-11-vueltas.jpg",
+  },
+  {
+    id: "f5",
+    etiqueta: "Batea de totuma",
+    estado: "fallida",
+    peso: "1,8 MB",
+    archivo: "batea-totuma.jpg",
+  },
+];

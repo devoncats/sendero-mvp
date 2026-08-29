@@ -52,7 +52,7 @@ export const NEGOCIOS: readonly Negocio[] = [
     idiomas: ["Español"],
     confirmadoEl: "2026-08-25",
     estadoDato: "verificado",
-    fotos: 4,
+    fotos: 3,
   },
   {
     slug: "comedor-dona-chela",
