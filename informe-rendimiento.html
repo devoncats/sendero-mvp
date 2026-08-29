@@ -360,35 +360,42 @@
     <div class="hallazgo">
       <div class="cabeza">
         <h3>Un salto de 11 px en cada ficha</h3>
-        <span class="pastilla ojo">Defecto</span>
+        <span class="pastilla bien">Arreglado</span>
       </div>
       <p>
-        <code>EstadoApertura</code> reserva 24 px de alto antes de hidratarse, pero al hidratar mide
-        35: la pastilla de «Abierto ahora» lleva relleno que no conté. El comentario que escribí en
-        ese archivo afirma que nada salta. Se equivoca, y está en las 30 páginas de negocio.
+        <code>EstadoApertura</code> reservaba 24 px de alto antes de hidratarse, pero al hidratar
+        medía 35: la pastilla de «Abierto ahora» lleva relleno que no conté. Eran 11 px de salto en
+        las 30 páginas de negocio, cada vez que hidrataba.
       </p>
       <div class="receta">
-        <strong>Arreglo:</strong> que el hueco reservado sea el mismo marcado, con
-        <code>invisible</code> en vez de una altura mínima adivinada. Tres líneas, y deja de haber
-        margen para el error.
+        <strong>Hecho:</strong> el hueco reservado es ahora el mismo marcado, con
+        <code>invisible</code> en vez de una altura adivinada. Adivinar la altura de algo que ya sabes
+        dibujar no tiene sentido — se dibuja y se esconde. El estado «cerrado» pasó también a
+        pastilla, para que los cuatro estados midan igual y el salto no vuelva por otra puerta.
+        <strong>Verificado: 35 px y 35 px, salto 0.</strong>
       </div>
     </div>
 
     <div class="hallazgo">
       <div class="cabeza">
         <h3>Las fuentes son el 41 % de la página</h3>
-        <span class="pastilla ojo">Decisión pendiente</span>
+        <span class="pastilla ojo">Sin resolver</span>
       </div>
       <p>
-        97 KB en dos familias. Inter es innegociable: es la interfaz entera. Source Serif son 49,7 KB
-        que existen para que los titulares del portal se sientan de revista, y esa es exactamente la
-        personalidad editorial que aprobaste en el lienzo.
+        97 KB en dos familias, y aquí hay algo que no cuadra:
+        <strong>Source Serif se descarga en las catorce rutas, incluidas las del dashboard, donde
+        ningún elemento la usa</strong>. Se pide desde el CSS, no desde una precarga.
+      </p>
+      <p>
+        Intenté ahorrarla quitando el serif de la cabecera del dashboard — que además lo prohíben las
+        reglas del propio proyecto, así que el cambio se queda. Pero <strong>no ahorró nada</strong>:
+        al volver a medir, esas rutas siguen descargando las dos familias. La primera lectura que
+        decía lo contrario fue una casualidad de caché, y la doy por errónea.
       </p>
       <div class="receta">
-        <strong>Tres salidas, de menor a mayor renuncia:</strong> recortar el subconjunto de glifos de
-        Source Serif a lo que de verdad se usa; dejarla en <code>font-display: optional</code>, de modo
-        que solo aparezca si ya estaba en caché; o quitarla y que el portal sea solo Inter. La primera
-        no cuesta identidad; la tercera cuesta la mitad del carácter del proyecto.
+        <strong>Siguiente paso:</strong> averiguar por qué <code>next/font</code> hace que se pida una
+        familia que nadie usa — probablemente por cómo se declara desde el layout raíz. Hasta
+        entenderlo, cualquier decisión sobre <code>font-display</code> o subconjuntos es a ciegas.
       </div>
     </div>
 
