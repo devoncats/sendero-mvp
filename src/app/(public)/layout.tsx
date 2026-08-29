@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { Compass, Search } from "@/components/icons";
 import { Container, Inline } from "@/components/layout";
+import { AvisoSinConexion } from "@/components/patterns";
 import { Text } from "@/components/ui";
 
 /**
@@ -39,6 +40,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
           </Inline>
         </Container>
       </header>
+
+      {/* Solo aparece cuando de verdad se cae la señal */}
+      <AvisoSinConexion />
 
       <div className="flex-1">{children}</div>
     </div>

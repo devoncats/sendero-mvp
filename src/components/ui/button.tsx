@@ -43,7 +43,20 @@ type Base = {
  *
  * Ningún estado vive solo en hover: el hover es refuerzo, nunca la única señal.
  */
-function clases({ variante = "primary", tamano = "md", soloIcono, anchoCompleto, className }: Base) {
+/**
+ * Las clases del botón, sueltas.
+ *
+ * Existe para los componentes cliente que sí necesitan un manejador —el límite
+ * de error y su "Reintentar"— sin obligar a Button a aceptar onClick. El
+ * vocabulario visual sigue teniendo una sola fuente.
+ */
+export function clasesDeBoton({
+  variante = "primary",
+  tamano = "md",
+  soloIcono,
+  anchoCompleto,
+  className,
+}: Base) {
   return cn(
     "inline-flex items-center justify-center gap-icon-gap rounded-control font-semibold",
     "transition-colors motion-reduce:transition-none",
@@ -62,7 +75,7 @@ export function Button({
   ...props
 }: Base & { type?: "button" | "submit" | "reset"; disabled?: boolean }) {
   return (
-    <button type={type} disabled={disabled} className={clases(props)}>
+    <button type={type} disabled={disabled} className={clasesDeBoton(props)}>
       {children}
     </button>
   );
@@ -77,13 +90,13 @@ export function ButtonLink({
 }: Base & { href: string; externo?: boolean }) {
   if (externo) {
     return (
-      <a href={href} rel="noopener noreferrer" className={clases(props)}>
+      <a href={href} rel="noopener noreferrer" className={clasesDeBoton(props)}>
         {children}
       </a>
     );
   }
   return (
-    <Link href={href} className={clases(props)}>
+    <Link href={href} className={clasesDeBoton(props)}>
       {children}
     </Link>
   );
