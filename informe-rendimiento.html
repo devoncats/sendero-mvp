@@ -328,6 +328,11 @@
       pide igual a los 23 ms porque siempre hay un titular con serif en el primer pantallazo.
     </p>
     <p>
+      Ese reparto es el del portal. <strong>El dashboard descarga una sola fuente</strong> desde que
+      se le quitó el serif a la cabecera: 183,5 KB en total contra los 235,6 del portal. La diferencia
+      entera son los 49,7 KB de la segunda familia.
+    </p>
+    <p>
       A 1,6 Mbps —el perfil «4G lenta»— esos 235,6 KB son <strong>1,33 s de transferencia pura</strong>.
       Es un suelo aritmético, no un LCP: el LCP real le suma establecer la conexión, parsear y la CPU
       del teléfono.
@@ -378,24 +383,47 @@
 
     <div class="hallazgo">
       <div class="cabeza">
-        <h3>Las fuentes son el 41 % de la página</h3>
-        <span class="pastilla ojo">Sin resolver</span>
+        <h3>El dashboard pagaba una fuente que no usa</h3>
+        <span class="pastilla bien">Arreglado</span>
       </div>
       <p>
-        97 KB en dos familias, y aquí hay algo que no cuadra:
-        <strong>Source Serif se descarga en las catorce rutas, incluidas las del dashboard, donde
-        ningún elemento la usa</strong>. Se pide desde el CSS, no desde una precarga.
+        La cabecera del dashboard escribía «Sendero» en serif, dentro de una densidad que según las
+        reglas del proyecto no usa serif nunca. Esa palabra sola arrastraba <strong>Source Serif
+        entera, 49,7 KB</strong>, a las seis rutas operacionales.
       </p>
       <p>
-        Intenté ahorrarla quitando el serif de la cabecera del dashboard — que además lo prohíben las
-        reglas del propio proyecto, así que el cambio se queda. Pero <strong>no ahorró nada</strong>:
-        al volver a medir, esas rutas siguen descargando las dos familias. La primera lectura que
-        decía lo contrario fue una casualidad de caché, y la doy por errónea.
+        Quitada. Medido sobre un build limpio: <code>/dashboard</code>, <code>/dashboard/fotos</code>
+        y <code>/acceso</code> descargan ahora <strong>una sola fuente, 47,3 KB</strong>. El portal
+        sigue descargando las dos, y debe: ahí el serif es la identidad editorial.
       </p>
       <div class="receta">
-        <strong>Siguiente paso:</strong> averiguar por qué <code>next/font</code> hace que se pida una
-        familia que nadie usa — probablemente por cómo se declara desde el layout raíz. Hasta
-        entenderlo, cualquier decisión sobre <code>font-display</code> o subconjuntos es a ciegas.
+        <strong>Queda abierto para el portal:</strong> 97 KB en dos familias, el 41 % de la página.
+        Inter es innegociable. Los 49,7 KB de Source Serif compran el carácter de revista que se
+        aprobó en el diseño — recortar su subconjunto de glifos es la salida que no cuesta identidad.
+      </div>
+    </div>
+
+    <div class="hallazgo">
+      <div class="cabeza">
+        <h3>El servidor de desarrollo hace mentir a la medición</h3>
+        <span class="pastilla ojo">Método</span>
+      </div>
+      <p>
+        <code>pnpm dev</code> escribe dentro de <code>.next</code> mientras corre y deja restos de una
+        compilación anterior mezclados con los nuevos. Eso costó dos diagnósticos equivocados en esta
+        misma fase: un build que no compilaba por tipos corruptos, y el ahorro de arriba, que
+        <strong>di por fallido cuando había funcionado</strong>.
+      </p>
+      <p>
+        La segunda trampa es más sutil: <strong>grepear el HTML no dice qué se renderiza</strong>.
+        Next serializa el árbol de React dentro de la página, incluido el <code>not-found</code> de la
+        raíz — que sí usa serif. Por eso <code>font-serif</code> aparece en el HTML del dashboard
+        aunque ahí no haya un solo elemento en serif.
+      </p>
+      <div class="receta">
+        <strong>Anotado en CLAUDE.md:</strong> parar el servidor, <code>rm -rf .next</code>,
+        <code>build</code>, <code>start</code>. Y para saber qué se pinta, mirar el DOM o
+        <code>document.fonts</code>, nunca el HTML crudo.
       </div>
     </div>
 

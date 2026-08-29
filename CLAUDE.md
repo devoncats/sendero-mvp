@@ -174,6 +174,27 @@ Los negocios son inventados pero plausibles, siempre **con el nombre de la perso
 
 ---
 
+## Cómo medir
+
+**Para y limpia antes de medir:** `pnpm dev` escribe dentro de `.next` mientras corre, y
+deja HTML y tipos de una compilación anterior mezclados con los nuevos. Medir así da
+números falsos que parecen buenos —o malos— sin razón.
+
+```
+# detén el servidor de desarrollo, y luego
+rm -rf .next && pnpm build && pnpm start
+```
+
+Esto costó dos diagnósticos equivocados en la Fase 4: un build que no compilaba por tipos
+corruptos, y un ahorro de 49,7 KB que se dio por fallido cuando había funcionado.
+
+**Grepear el HTML no dice qué se renderiza.** Next serializa el árbol de React dentro de la
+página, incluido el `not-found` de la raíz. Una clase puede aparecer en ese payload sin que
+ningún elemento la lleve: `font-serif` sale en el HTML del dashboard y aun así ahí no hay
+serif. Para saber qué se pinta de verdad, mira el DOM o `document.fonts`.
+
+---
+
 ## Al terminar cualquier sesión
 
 Corre `pnpm lint && pnpm build`. Si algo falla, arréglalo antes de entregar el trabajo.
