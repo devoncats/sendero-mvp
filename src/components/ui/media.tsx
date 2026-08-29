@@ -1,6 +1,6 @@
 import NextImage from "next/image";
 
-import { Image as ImageIcon } from "@/components/icons";
+import { Photo } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
 /**
@@ -64,7 +64,7 @@ export function Media({
         role="img"
         aria-label={alt ?? etiqueta ?? "Sin foto todavía"}
       >
-        <ImageIcon className="size-icon-lg" aria-hidden />
+        <Photo className="size-icon-lg" aria-hidden />
         {etiqueta ? <span className="px-inset-xs text-center text-caption">{etiqueta}</span> : null}
       </div>
     );

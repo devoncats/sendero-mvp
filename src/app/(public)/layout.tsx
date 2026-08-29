@@ -24,7 +24,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-10 border-b border-border-subtle bg-surface">
         <Container ancho="sm">
           <Inline justify="between" wrap={false} className="h-control-md">
-            <Link href="/" className="flex items-center gap-icon-gap">
+            <Link href="/" className="flex min-h-control-sm items-center gap-icon-gap">
               <Compass className="size-icon-md text-brand" aria-hidden />
               <Text as="span" size="heading-sm" serif weight="semibold">
                 Sendero

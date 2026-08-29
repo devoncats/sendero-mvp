@@ -47,7 +47,9 @@ export {
   // Dominio — negocios, lugares, contacto
   Clock,
   Compass,
-  Image,
+  // `Image` a secas colisiona con el elemento del DOM y confunde a jsx-a11y.
+  // Además nombra lo que dibuja: aquí significa foto.
+  Image as Photo,
   MapPin,
   MessageCircle,
   Phone,
