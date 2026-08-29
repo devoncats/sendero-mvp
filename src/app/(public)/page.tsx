@@ -19,10 +19,10 @@ export default function HomePage() {
         pantallas en la Fase 3.
       </p>
       <Link
-        href="/tokens-preview"
+        href="/negocio/artesanias-delia-quintero"
         className="flex h-control-md w-fit items-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content"
       >
-        Ver la vista de tokens
+        Ver una ficha de negocio
       </Link>
     </main>
   );

@@ -128,7 +128,32 @@ export function apertura(semana: Semana, ahora: Date): Apertura {
   return { estado: "cerrado", abreA: minutos < aMinutos(hoy.desde) ? hora(hoy.desde) : undefined };
 }
 
-/** "hace 3 días" · "hace un mes" · "hoy". Para la frescura del dato. */
+const MESES = [
+  "enero",
+  "febrero",
+  "marzo",
+  "abril",
+  "mayo",
+  "junio",
+  "julio",
+  "agosto",
+  "septiembre",
+  "octubre",
+  "noviembre",
+  "diciembre",
+];
+
+/**
+ * "25 de agosto de 2026". Se usa en las páginas estáticas porque nunca
+ * envejece: una fecha absoluta sigue siendo cierta un mes después del build,
+ * y "hace 3 días" no.
+ */
+export function fechaLarga(iso: string): string {
+  const d = new Date(`${iso}T12:00:00`);
+  return `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
+}
+
+/** "hace 3 días" · "hace un mes" · "hoy". Solo donde se conozca el ahora real. */
 export function hace(iso: string, ahora: Date): string {
   const dias = Math.floor((ahora.getTime() - new Date(iso).getTime()) / 86_400_000);
   if (dias <= 0) return "hoy";
