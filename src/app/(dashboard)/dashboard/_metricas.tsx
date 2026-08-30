@@ -277,13 +277,20 @@ export async function PantallaMetricas({
         </ul>
 
         {/*
-          `items-start`: cada tarjeta mide lo que mide su contenido. Por
-          defecto la rejilla las estira a la altura de la fila, y la de
-          «Cómo te encontraron» —cuatro filas— quedaba con un hueco vacío
-          debajo para igualar a la gráfica, que es mucho más alta.
+          Dos columnas que son dos pilas, no una rejilla de cuatro celdas.
+
+          Con cuatro celdas en dos filas la altura la marcaba la gráfica, que es
+          la tarjeta más alta: «Cuándo te ven» tenía que esperar a la línea
+          siguiente y entre las dos tarjetas de la derecha quedaba un hueco del
+          alto de esa diferencia. Apiladas, cada una empieza donde termina la
+          anterior. `items-start` remata: ninguna se estira para igualar a la
+          columna de al lado.
+
+          El orden del DOM es el del teléfono —gráfica, productos, orígenes,
+          horas— y el escritorio solo decide en qué columna cae cada pila.
         */}
         <div className="grid items-start gap-inset-md lg:grid-cols-3">
-          <div className="lg:col-span-2">
+          <div className="grid gap-inset-md lg:col-span-2">
             <Tarjeta titulo="Visitas por día" apunte={periodo === 30 ? "agosto" : undefined}>
               <Barras
                 serie={visitas}
@@ -300,13 +307,7 @@ export async function PantallaMetricas({
                   : `El mejor día de la semana tuvo ${Math.max(...visitas)} visitas.`}
               </Text>
             </Tarjeta>
-          </div>
 
-          <Tarjeta titulo="Cómo te encontraron" apunte="del mes">
-            <Origenes origenes={m.origenes} visitas={total(m.visitas)} />
-          </Tarjeta>
-
-          <div className="lg:col-span-2">
             <Tarjeta titulo="Tus productos" apunte="del mes">
               {/*
                 Una tabla de verdad, no un dibujo. Se recorre por filas y
@@ -354,15 +355,21 @@ export async function PantallaMetricas({
             </Tarjeta>
           </div>
 
-          <Tarjeta titulo="Cuándo te ven" apunte="del mes">
-            <MapaHoras franjas={m.franjas} />
-            <Inline gap="icon" align="start" wrap={false} className="mt-inset-sm">
-              <IconoMetricas className="size-icon-sm shrink-0 text-content-tertiary" aria-hidden />
-              <Text size="caption" tone="secondary">
-                Los sábados a mediodía. Si un día vas a estar pendiente del teléfono, es ese.
-              </Text>
-            </Inline>
-          </Tarjeta>
+          <div className="grid gap-inset-md">
+            <Tarjeta titulo="Cómo te encontraron" apunte="del mes">
+              <Origenes origenes={m.origenes} visitas={total(m.visitas)} />
+            </Tarjeta>
+
+            <Tarjeta titulo="Cuándo te ven" apunte="del mes">
+              <MapaHoras franjas={m.franjas} />
+              <Inline gap="icon" align="start" wrap={false} className="mt-inset-sm">
+                <IconoMetricas className="size-icon-sm shrink-0 text-content-tertiary" aria-hidden />
+                <Text size="caption" tone="secondary">
+                  Los sábados a mediodía. Si un día vas a estar pendiente del teléfono, es ese.
+                </Text>
+              </Inline>
+            </Tarjeta>
+          </div>
         </div>
       </Stack>
     </main>
