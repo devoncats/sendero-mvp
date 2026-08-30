@@ -276,7 +276,13 @@ export async function PantallaMetricas({
           />
         </ul>
 
-        <div className="grid gap-inset-md lg:grid-cols-3">
+        {/*
+          `items-start`: cada tarjeta mide lo que mide su contenido. Por
+          defecto la rejilla las estira a la altura de la fila, y la de
+          «Cómo te encontraron» —cuatro filas— quedaba con un hueco vacío
+          debajo para igualar a la gráfica, que es mucho más alta.
+        */}
+        <div className="grid items-start gap-inset-md lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Tarjeta titulo="Visitas por día" apunte={periodo === 30 ? "agosto" : undefined}>
               <Barras
