@@ -4,12 +4,12 @@ import { Metricas as IconoMetricas } from "@/components/icons";
 import { Inline, Stack } from "@/components/layout";
 import { Surface, Text } from "@/components/ui";
 import { METRICAS_EXPERTAS, negocioDelDueno, total } from "@/data/panel";
-import type { SerieDiaria } from "@/data/panel";
+import type { Origen, SerieDiaria } from "@/data/panel";
 import { cn } from "@/lib/cn";
 import { precio } from "@/lib/formato";
 
 import { AvisoMvp } from "../_aviso-mvp";
-import { Barras, BarrasOrigen, MapaHoras, Sparkline } from "../_graficas";
+import { Barras, MapaHoras, Sparkline } from "../_graficas";
 
 /**
  * La portada del modo experto.
@@ -92,6 +92,46 @@ function Cifra({
         {nota}
       </Text>
     </Surface>
+  );
+}
+
+/**
+ * De dónde llegaron las visitas.
+ *
+ * Esta no es SVG y las otras sí, a propósito. Es una lista con una barra al
+ * lado, y su texto es texto: dentro de un `viewBox` la letra escala con el
+ * ancho de la tarjeta —enorme en un monitor, ilegible en un teléfono— y deja de
+ * obedecer a la escala tipográfica. Las barras sí son geometría, y esas se
+ * pintan con el ancho en porcentaje, que es el dato.
+ */
+function Origenes({ origenes, visitas }: { origenes: readonly Origen[]; visitas: number }) {
+  return (
+    <ul className="grid gap-inset-md">
+      {origenes.map((o) => {
+        const pct = Math.round((o.visitas / visitas) * 100);
+        return (
+          <li key={o.etiqueta}>
+            <Inline justify="between" align="baseline" gap="sm" wrap={false}>
+              <Text as="span" size="body-md" truncate>
+                {o.etiqueta}
+              </Text>
+              <Text
+                as="span"
+                size="body-md"
+                weight="semibold"
+                tone="secondary"
+                className="shrink-0 tabular-nums"
+              >
+                {o.visitas} · {pct} %
+              </Text>
+            </Inline>
+            <div className="mt-inset-xs h-1.5 overflow-hidden rounded-full bg-surface-sunken">
+              <div className="h-full rounded-full bg-brand" style={{ width: `${pct}%` }} />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -257,7 +297,7 @@ export async function PantallaMetricas({
           </div>
 
           <Tarjeta titulo="Cómo te encontraron" apunte="del mes">
-            <BarrasOrigen origenes={m.origenes} visitas={total(m.visitas)} />
+            <Origenes origenes={m.origenes} visitas={total(m.visitas)} />
           </Tarjeta>
 
           <div className="lg:col-span-2">
