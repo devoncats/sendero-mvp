@@ -10,7 +10,9 @@
  *
  * `Heart` está deliberadamente ausente: guardar es `Bookmark`.
  *
- * Estas 27 entradas son exactamente las que usan las 14 pantallas del MVP.
+ * Las 27 primeras entradas son las que usan las 14 pantallas del MVP. Las seis
+ * últimas las trajo el modo experto: cinco nombran las secciones de su barra
+ * lateral y una, cerrar sesión. Ninguna repite un significado que ya estuviera.
  */
 export type { LucideIcon } from "lucide-react";
 
@@ -53,4 +55,14 @@ export {
   MapPin,
   MessageCircle,
   Phone,
+
+  // Modo experto — las secciones de la barra lateral y la salida de la sesión
+  ChartColumn as Metricas,
+  // La ficha del negocio: el escaparate, no el edificio.
+  Store as Ficha,
+  Tag as Producto,
+  SlidersHorizontal as Ajustes,
+  // Idioma. `Languages` dibuja dos alfabetos; el globo se reconoce antes.
+  Globe as Idioma,
+  LogOut as CerrarSesion,
 } from "lucide-react";

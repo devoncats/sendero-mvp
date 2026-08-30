@@ -8,4 +8,6 @@ export { FilterGroup, FilterSheet } from "./filter-sheet";
 export { BotonGuardar, useGuardados } from "./guardados";
 export { Navegacion } from "./navegacion";
 export type { RutaNav } from "./navegacion";
+export { MenuCuenta, ShellExperto } from "./panel";
+export type { GrupoLateral, RutaLateral } from "./panel";
 export { OfflineBanner } from "./offline-banner";

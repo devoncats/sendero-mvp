@@ -38,6 +38,35 @@ un dashboard. Necesita que cada pantalla diga qué hacer ahora.
 
 ---
 
+## Los dos modos del panel
+
+El dashboard se ve de dos maneras, y la elige el dueño.
+
+| | `guiado` | `experto` |
+|---|---|---|
+| Por defecto | **sí**, para todo el mundo | solo si se enciende |
+| Navegación | cinco enlaces en el encabezado | barra lateral de siete secciones |
+| Portada de `/dashboard` | «Lo siguiente»: una sola cosa que hacer | métricas del mes |
+| Las cifras | una frase | tarjetas, serie diaria, orígenes y mapa de horas |
+
+**El modo guiado no cambió ni un píxel, y esa es la condición de todo esto.** Quien nunca
+pidió el otro modo ve el panel de siempre. Cada modo manda su propio marcado, así que el
+guiado tampoco descarga la barra lateral ni las gráficas.
+
+El modo vive en la cookie `sendero-modo`, que lee `modoPanel()` en el servidor y escribe la
+Server Action `cambiarModo`. Es un formulario de verdad: funciona sin JavaScript, no pesa,
+y el modo llega decidido en el HTML —sin parpadeo—. **A cambio, las rutas del dashboard
+dejaron de ser estáticas.** Aquí no hay backend, así que ese precio son milisegundos, pero
+está anotado a propósito: es lo único que la cookie se llevó por delante.
+
+En el teléfono el modo experto es el mismo marcado con la barra lateral en un cajón detrás
+de la hamburguesa. No hay una vista móvil aparte, ni un enlace duplicado.
+
+Medido, brotli: **guiado 175,5 KB · experto 179,4 KB.** La diferencia son 3,9 KB de HTML
+—la barra y los SVG—; los trozos de JavaScript son exactamente los mismos.
+
+---
+
 ## Reglas duras
 
 Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
@@ -55,15 +84,23 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   `next/font/local`, no quitar el serif.
 - CLS **0** y TBT por debajo de 25 ms en las ocho rutas medidas. Eso no se negocia:
   si una sesión los empeora, se arregla en esa sesión.
-- Cada `"use client"` se descuenta del presupuesto. Los cinco que hay suman < 5 KB.
+- Cada `"use client"` se descuenta del presupuesto. Los seis que hay suman < 6 KB.
   El quinto es `Navegacion`, que marca la sección activa en el encabezado de escritorio:
   +0,8 KB de JS por ruta, medido.
+  El sexto es `patterns/panel.tsx`, y es uno solo para las dos cosas del dashboard que
+  se abren y se cierran: el menú de cuenta y el cajón de la barra lateral del modo
+  experto. Comparten exactamente lo que justifica el JavaScript —Esc, toque fuera y
+  devolver el foco—, así que comparten archivo y directiva.
 - **Server Components por defecto.** `"use client"` solo con estado o evento, y cuando
   se añada, justificarlo en una línea.
 - **Cero librerías nuevas sin pedir permiso.** Cada dependencia es peso en un Moto G Power.
   Están Next, Tailwind y Lucide. **Radix no está y no hizo falta**: la hoja de filtros
   se resolvió con `<details>` nativo, que ya es accesible por teclado y cuesta 0 KB.
   Antes de instalar un diálogo, pregúntate si de verdad necesitas que sea modal.
+  **Tampoco hay librería de gráficas.** Las del modo experto son SVG en línea servido desde
+  el servidor (`app/(dashboard)/_graficas.tsx`): barras, sparklines y mapa de horas, con
+  `role="img"` y un `aria-label` que dice el dato en palabras. Las tablas se quedan en HTML,
+  que es lo que un lector de pantalla recorre por filas y columnas.
 - **Sin mapas interactivos JS.** Imagen estática + enlace que abre la app de mapas nativa.
 - Sin librerías de animación, sin carruseles con autoplay, sin parallax, sin animación al scroll.
 - Toda imagen con `next/image` y proporción declarada. Cero saltos de layout.
@@ -136,7 +173,9 @@ Lo que **no** cambia con el ancho:
 - **El orden del DOM.** Es el del teléfono en todas las pantallas. Lo que se recoloca se
   recoloca con `order` o con columnas explícitas de rejilla, nunca duplicando marcado —
   ni un `h1`, ni un horario, ni un bloque de texto aparecen dos veces en el HTML.
-- **El panel sigue sin barra lateral.** Las cinco pantallas caben en el encabezado.
+- **El panel guiado sigue sin barra lateral.** Sus cinco pantallas caben en el encabezado,
+  y un ancho de sobra no es razón para añadirle un menú a quien nunca usó un panel. La
+  barra lateral existe solo en el modo experto, que es otra cosa y se enciende a mano.
 - **Los 48 px de control y los 44 de objetivo táctil.** Hay ratón, así que hay hover, pero
   el hover solo refuerza: ninguna acción vive únicamente ahí.
 
@@ -170,6 +209,10 @@ Solo desde `src/components/icons.ts`, que es **el único archivo autorizado a im
 lo que dibuja, y prefiere una entrada existente.
 
 Guardar es `Bookmark`, **nunca un corazón**.
+
+Son 33 entradas. Las seis últimas las trajo el modo experto —`Metricas`, `Ficha`,
+`Producto`, `Ajustes`, `Idioma`, `CerrarSesion`—, y están renombradas por lo que
+significan en este producto, no por lo que dibuja Lucide.
 
 ---
 

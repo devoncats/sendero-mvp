@@ -81,6 +81,11 @@
   --color-trust-unconfirmed: var(--sd-color-trust-unconfirmed);
   --color-trust-unconfirmed-surface: var(--sd-color-trust-unconfirmed-surface);
 
+  /* Velo. Lo pide el cajón de la barra lateral del modo experto, que en un
+     teléfono tapa el contenido mientras está abierto. El valor ya existía en
+     tokens.css; lo que faltaba era el puente. */
+  --color-scrim: var(--sd-color-scrim);
+
   /* Espaciado semántico — cambia con la densidad */
   --spacing-inset-xs: var(--sd-space-inset-xs);
   --spacing-inset-sm: var(--sd-space-inset-sm);
