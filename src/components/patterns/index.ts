@@ -6,4 +6,6 @@ export { EmptyState } from "./empty-state";
 export { EstadoApertura } from "./estado-apertura";
 export { FilterGroup, FilterSheet } from "./filter-sheet";
 export { BotonGuardar, useGuardados } from "./guardados";
+export { Navegacion } from "./navegacion";
+export type { RutaNav } from "./navegacion";
 export { OfflineBanner } from "./offline-banner";

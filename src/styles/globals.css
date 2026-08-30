@@ -224,3 +224,33 @@
     }
   }
 }
+
+/* ============================================================================
+ * El panel de filtros deja de plegarse en escritorio.
+ *
+ * Vive aquí y no en una utilidad de Tailwind porque hay que pisar la hoja del
+ * navegador, que es lo que esconde el contenido de un `<details>` cerrado.
+ *
+ * Esto es lo que evita tener que elegir. Sin JavaScript el servidor no sabe el
+ * ancho, así que el atributo `open` solo puede decir una cosa para los dos
+ * tamaños: si se manda abierto, en el teléfono el panel tapa los resultados;
+ * si se manda cerrado, en el monitor no se ve. `::details-content` rompe el
+ * empate — el atributo sigue decidiendo el teléfono y aquí se fuerza visible a
+ * partir de `lg`, esté abierto o no.
+ *
+ * Bajo `@supports` a propósito: donde el pseudoelemento no exista, el resumen
+ * se queda y el panel sigue siendo la hoja plegable de siempre. Degrada a lo
+ * que ya funcionaba, no a una pantalla rota.
+ * ========================================================================== */
+@media (min-width: 1024px) {
+  @supports selector(::details-content) {
+    .filtros-riel > summary {
+      display: none;
+    }
+
+    .filtros-riel::details-content {
+      content-visibility: visible;
+      block-size: auto;
+    }
+  }
+}

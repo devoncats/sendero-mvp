@@ -3,18 +3,31 @@ import type { ReactNode } from "react";
 
 import { Compass, Menu } from "@/components/icons";
 import { Container, Inline } from "@/components/layout";
+import { Navegacion, type RutaNav } from "@/components/patterns";
 import { Text } from "@/components/ui";
 import { negocioDelDueno } from "@/data/panel";
+
+/**
+ * Las cinco pantallas del panel. Caben en el encabezado, y por eso siguen sin
+ * barra lateral: un dueño que nunca usó un panel no tiene que aprender un menú
+ * antes de poder hacer algo, y tener sitio de sobra no cambia esa razón.
+ */
+const RUTAS_PANEL: readonly RutaNav[] = [
+  { href: "/dashboard", etiqueta: "Panel" },
+  { href: "/dashboard/negocio", etiqueta: "Mi negocio" },
+  { href: "/dashboard/productos", etiqueta: "Productos" },
+  { href: "/dashboard/fotos", etiqueta: "Fotos" },
+  { href: "/dashboard/horario", etiqueta: "Horario" },
+];
 
 /**
  * El dashboard. Mismos componentes, otra densidad: controles de 36 px, ritmo
  * de 1rem, herramienta de trabajo. El serif no entra aquí — no por una regla
  * de CSS, sino porque no se usa.
  *
- * Sin barra lateral, como decidió la dirección C: un dueño que nunca usó un
- * panel no tiene que aprender un menú antes de poder hacer nada. Barra
- * superior y «volver al panel», que es toda la navegación que hace falta con
- * cinco pantallas.
+ * Sin barra lateral, como decidió la dirección C. En escritorio las cinco
+ * pantallas suben al encabezado; por debajo de `md` se sigue navegando desde
+ * el panel, que es donde están todas las puertas.
  */
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const negocio = negocioDelDueno();
@@ -42,9 +55,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   Sendero
                 </Text>
               </Link>
-              <Text size="body-md" tone="secondary" truncate>
+              {/* A md el encabezado no da para el nombre y los cinco enlaces. */}
+              <Text size="body-md" tone="secondary" truncate className="md:hidden lg:block">
                 {negocio.nombre}
               </Text>
+              <Navegacion rutas={RUTAS_PANEL} etiqueta="Tu ficha" />
             </Inline>
             <Inline gap="sm" wrap={false}>
               <span
@@ -54,7 +69,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 {iniciales}
               </span>
               <span className="sr-only">{negocio.persona.nombre}</span>
-              <Menu className="size-icon-md" aria-label="Menú" />
+              <Menu className="size-icon-md md:hidden" aria-label="Menú" />
             </Inline>
           </Inline>
         </Container>

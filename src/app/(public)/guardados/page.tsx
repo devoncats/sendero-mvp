@@ -15,7 +15,7 @@ export default function GuardadosPage() {
   const negocios = NEGOCIOS.map((n) => ({ ...resumir(n), slug: n.slug }));
 
   return (
-    <Container ancho="sm" as="main">
+    <Container ancho="sm" as="main" className="lg:max-w-page-xl">
       <Stack gap="loose" className="py-stack-loose">
         <Text as="h1" size="heading-lg" serif weight="semibold">
           Guardados

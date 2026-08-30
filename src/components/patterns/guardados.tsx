@@ -1,6 +1,6 @@
 "use client";
 
-// Cuarto y último "use client" del proyecto. Lo que se guarda vive en el
+// Cuarto "use client" del proyecto. Lo que se guarda vive en el
 // teléfono del visitante y en ningún otro sitio: no hay cuentas, no hay
 // servidor, y no queremos ninguna de las dos cosas para esto.
 //

@@ -12,8 +12,9 @@ import {
   Photo,
   Upload,
 } from "@/components/icons";
-import { Container, Stack } from "@/components/layout";
-import { ButtonLink, Surface, Text } from "@/components/ui";
+import { Container, Inline, Stack } from "@/components/layout";
+import { Badge, ButtonLink, Media, Surface, Text } from "@/components/ui";
+import { categoria, zona } from "@/data";
 import { ACCIONES, pendientes } from "@/data/pendientes";
 import { METRICAS_DEMO, SLUG_DEMO, negocioDelDueno } from "@/data/panel";
 
@@ -47,15 +48,28 @@ export default function PanelPage() {
     ? ICONO_ACCION[siguiente.id as keyof typeof ICONO_ACCION]
     : undefined;
 
+  const z = zona(negocio.zona);
+  const cat = categoria(negocio.categoria);
+
   return (
-    <Container ancho="md" as="main">
-      <Stack gap="loose" className="items-center py-section">
+    <Container ancho="md" as="main" className="lg:max-w-page-lg">
+      {/*
+        La tarjeta de «Lo siguiente» no crece con la pantalla: ensanchada a
+        1000 px se volvería un banner y perdería la voz de instrucción. Lo que
+        el escritorio añade es lo que un teléfono no puede dar — la ficha de
+        verdad al lado de la tarea, para que «agrega dos fotos» deje de ser una
+        instrucción abstracta.
+      */}
+      <Stack
+        gap="loose"
+        className="items-center py-section lg:grid lg:grid-cols-3 lg:items-start"
+      >
         {siguiente ? (
           /* Una sola cosa. Todo lo demás en voz baja. */
           <Surface
             relleno="xl"
             radio="overlay"
-            className="w-full max-w-page-sm border-brand-border text-center"
+            className="w-full max-w-page-sm border-brand-border text-center lg:col-span-2 lg:max-w-none"
           >
             <Stack gap="default" align="center">
               <span
@@ -88,7 +102,7 @@ export default function PanelPage() {
           <Surface
             relleno="xl"
             radio="overlay"
-            className="w-full max-w-page-sm border-success-border text-center"
+            className="w-full max-w-page-sm border-success-border text-center lg:col-span-2 lg:max-w-none"
           >
             <Stack gap="default" align="center">
               <span
@@ -118,7 +132,7 @@ export default function PanelPage() {
         )}
 
         {/* Todo lo demás, en voz baja */}
-        <Stack gap="default" className="w-full max-w-page-sm">
+        <Stack gap="default" className="w-full max-w-page-sm lg:col-span-2 lg:max-w-none">
           <Text size="overline" tone="tertiary">
             También puedes
           </Text>
@@ -151,9 +165,13 @@ export default function PanelPage() {
         {/*
           Las cifras como frase, no como widgets. Cuatro tarjetas con números
           sin acción son ruido para quien nunca usó un panel — la dirección C
-          las bajó a esto a propósito.
+          las bajó a esto a propósito, y tener sitio de sobra no lo cambia.
         */}
-        <Text size="body-lg" tone="secondary" className="max-w-page-sm text-center">
+        <Text
+          size="body-lg"
+          tone="secondary"
+          className="max-w-page-sm text-center lg:col-span-2 lg:max-w-none lg:text-left"
+        >
           {METRICAS_DEMO.periodo === "este mes" ? "Este mes " : ""}
           <strong className="font-semibold text-content-primary">
             {METRICAS_DEMO.visitasFicha} personas
@@ -164,6 +182,69 @@ export default function PanelPage() {
           </strong>{" "}
           por WhatsApp.
         </Text>
+
+        {/* Lo único que añade el escritorio */}
+        <aside className="hidden w-full lg:sticky lg:top-inset-lg lg:col-start-3 lg:row-start-1 lg:row-span-3 lg:block">
+          <Stack gap="tight">
+            <Text size="overline" tone="tertiary">
+              Tu ficha, como la ven ellos
+            </Text>
+            <Surface relleno="none" className="overflow-hidden">
+              {/*
+                Densidad editorial dentro de una pantalla operacional. Todo el
+                mecanismo es este atributo: la misma tarjeta que ve el visitante
+                respira como en el portal, sin que ningún componente se entere.
+              */}
+              <div data-density="editorial">
+                <Media
+                  proporcion="4/3"
+                  radio="none"
+                  etiqueta={`Retrato de ${negocio.persona.nombre}`}
+                  alt={`Foto de ${negocio.nombre}`}
+                  sizes="304px"
+                />
+                <Stack gap="tight" className="p-inset-md">
+                  <Badge tono="accent" overline className="self-start">
+                    {cat.nombre.es}
+                  </Badge>
+                  <Text size="body-md" weight="semibold">
+                    {negocio.nombre}
+                  </Text>
+                  <Text size="body-sm" tone="secondary">
+                    {negocio.persona.nombre} · {z.nombre}
+                  </Text>
+                  {negocio.fotos < 3 ? (
+                    <Inline gap="icon">
+                      <AlertCircle className="size-icon-sm text-trust-stale" aria-hidden />
+                      <Text size="body-sm" tone="warning">
+                        {negocio.fotos === 1 ? "Solo 1 foto" : `Solo ${negocio.fotos} fotos`}
+                      </Text>
+                    </Inline>
+                  ) : null}
+                  <Inline gap="icon">
+                    {negocio.estadoDato === "verificado" ? (
+                      <CheckCircle className="size-icon-sm text-success" aria-hidden />
+                    ) : (
+                      <AlertCircle className="size-icon-sm text-trust-stale" aria-hidden />
+                    )}
+                    <Text
+                      size="body-sm"
+                      tone={negocio.estadoDato === "verificado" ? "success" : "warning"}
+                    >
+                      {negocio.estadoDato === "verificado"
+                        ? "Datos confirmados"
+                        : "Sin confirmar todavía"}
+                    </Text>
+                  </Inline>
+                </Stack>
+              </div>
+            </Surface>
+            <ButtonLink href={`/negocio/${SLUG_DEMO}`} variante="ghost" tamano="sm">
+              Abrir la ficha completa
+              <ExternalLink className="size-icon-sm" aria-hidden />
+            </ButtonLink>
+          </Stack>
+        </aside>
       </Stack>
     </Container>
   );

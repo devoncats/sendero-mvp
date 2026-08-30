@@ -41,6 +41,12 @@ export type NegocioResumen = {
  * fila entera y no un texto de 14 px.
  *
  * `orientacion="vertical"` pone la foto arriba, para rejillas.
+ *
+ * `orientacion="auto"` es la de las listas que se vuelven rejilla: fila con
+ * miniatura en el teléfono, y foto arriba a partir de `sm`, que es donde las
+ * rejillas del proyecto pasan a dos columnas. La orientación no puede ser un
+ * prop del ancho —el componente no sabe a qué ancho está—, así que la decide
+ * el mismo punto de ruptura que la rejilla que la contiene.
  */
 export function BusinessCard({
   negocio,
@@ -48,7 +54,7 @@ export function BusinessCard({
   className,
 }: {
   negocio: NegocioResumen;
-  orientacion?: "horizontal" | "vertical";
+  orientacion?: "horizontal" | "vertical" | "auto";
   className?: string;
 }) {
   const {
@@ -67,6 +73,7 @@ export function BusinessCard({
 
   const IconoConfianza = confianza ? CONFIANZA_ICONO[confianza] : null;
   const vertical = orientacion === "vertical";
+  const auto = orientacion === "auto";
 
   const cuerpo = (
     <Stack gap="tight">
@@ -115,7 +122,9 @@ export function BusinessCard({
       href={href}
       className={cn(
         "group flex gap-inset-md rounded-media",
-        vertical ? "flex-col" : "flex-row items-start",
+        vertical && "flex-col",
+        !vertical && "flex-row items-start",
+        auto && "sm:flex-col sm:items-stretch",
         className,
       )}
     >
@@ -123,8 +132,18 @@ export function BusinessCard({
         src={foto}
         alt={fotoAlt ?? `Foto de ${nombre}`}
         proporcion={vertical ? "4/3" : "1/1"}
-        sizes={vertical ? "(min-width: 640px) 33vw, 100vw" : "80px"}
-        className={vertical ? "w-full" : "size-avatar-xl shrink-0"}
+        sizes={
+          vertical
+            ? "(min-width: 1024px) 368px, (min-width: 640px) 33vw, 100vw"
+            : auto
+              ? "(min-width: 1024px) 420px, (min-width: 640px) 45vw, 80px"
+              : "80px"
+        }
+        className={cn(
+          vertical && "w-full",
+          !vertical && "h-avatar-xl w-avatar-xl shrink-0",
+          auto && "sm:aspect-photo sm:h-auto sm:w-full sm:shrink",
+        )}
       />
       <div className="min-w-0 flex-1">{cuerpo}</div>
     </Link>

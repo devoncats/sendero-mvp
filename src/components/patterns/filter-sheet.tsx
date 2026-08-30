@@ -18,13 +18,19 @@ import { cn } from "@/lib/cn";
  * Coste: cero kilobytes y cero dependencias, contra los ~15-20 KB de un diálogo.
  * Con 50 KB de margen en el presupuesto, no era una decisión difícil.
  *
- * En móvil se ancla abajo, que es donde llega el pulgar.
+ * En móvil se ancla abajo, que es donde llega el pulgar, y `abiertoPorDefecto`
+ * decide si arranca plegado. A partir de `lg` deja de plegarse: la clase
+ * `filtros-riel` esconde el resumen y fuerza el contenido visible desde
+ * `globals.css`, esté el atributo puesto o no. Es el mismo elemento — abrir,
+ * elegir, cerrar y volver a mirar es un peaje que solo tiene sentido cuando no
+ * hay sitio.
  */
 export function FilterSheet({
   activos = 0,
   resumen,
   acciones,
   abiertoPorDefecto = false,
+  riel = false,
   className,
   children,
 }: {
@@ -35,6 +41,8 @@ export function FilterSheet({
   /** Pie del panel: limpiar y aplicar. */
   acciones?: ReactNode;
   abiertoPorDefecto?: boolean;
+  /** A partir de `lg`, panel permanente en vez de hoja plegable. */
+  riel?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -44,6 +52,7 @@ export function FilterSheet({
       className={cn(
         "group border-t border-border-subtle bg-surface-overlay",
         "sm:rounded-surface sm:border",
+        riel && "filtros-riel lg:sticky lg:top-control-md lg:border-none lg:bg-transparent",
         className,
       )}
     >
@@ -67,9 +76,20 @@ export function FilterSheet({
         />
       </summary>
 
-      <Stack gap="default" className="px-gutter pb-inset-lg pt-inset-md">
+      <Stack
+        gap="default"
+        className={cn("px-gutter pb-inset-lg pt-inset-md", riel && "lg:px-0")}
+      >
+        {/* El título lo daba el resumen plegable. Al esconderlo en `lg`, el riel
+            se quedaba sin nombre — y el recuento pasa a estar de más, porque
+            ya está sobre los resultados. */}
+        {riel ? (
+          <Text as="h2" size="heading-sm" weight="semibold" className="hidden lg:block">
+            Filtros
+          </Text>
+        ) : null}
         {resumen ? (
-          <Text size="body-sm" tone="tertiary">
+          <Text size="body-sm" tone="tertiary" className={cn(riel && "lg:hidden")}>
             {resumen}
           </Text>
         ) : null}

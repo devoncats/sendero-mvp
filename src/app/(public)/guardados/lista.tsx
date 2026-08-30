@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { Bookmark } from "@/components/icons";
-import { Stack } from "@/components/layout";
+import { Grid, Stack } from "@/components/layout";
 import { BusinessCard, EmptyState, type NegocioResumen, useGuardados } from "@/components/patterns";
 import { Text, clasesDeBoton } from "@/components/ui";
 
@@ -38,13 +38,13 @@ export function ListaGuardados({ negocios }: { negocios: (NegocioResumen & { slu
         {mios.length} {mios.length === 1 ? "negocio" : "negocios"} · se quedan aquí aunque estés sin
         señal
       </Text>
-      <Stack as="ul">
+      <Grid cols={3} movil={1} gap="lg" as="ul">
         {mios.map((n) => (
           <li key={n.slug}>
-            <BusinessCard negocio={n} />
+            <BusinessCard negocio={n} orientacion="auto" />
           </li>
         ))}
-      </Stack>
+      </Grid>
     </Stack>
   );
 }

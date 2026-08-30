@@ -18,12 +18,23 @@ export default function DescubrirPage() {
   const nuevos = recientes(3);
 
   return (
-    <Container ancho="sm" as="main">
-      <Stack gap="loose" className="py-stack-loose">
+    <Container ancho="sm" as="main" className="lg:max-w-page-xl">
+      {/*
+        En escritorio la misma pila se vuelve una rejilla de dos columnas y
+        «Cómo funciona» sube al lado de la promesa: en el teléfono está a cuatro
+        pantallazos, y quien no baja nunca se entera de que esto no cobra
+        comisión.
+
+        Se hace con `order` y no duplicando el bloque. El orden del DOM —que es
+        el del teléfono— se queda como está, y con él el orden de lectura de un
+        lector de pantalla. Mover ese bloque no rompe el foco porque dentro no
+        hay nada enfocable: es una lista de tres frases.
+      */}
+      <Stack gap="loose" className="py-stack-loose lg:grid lg:grid-cols-2 lg:items-start">
         {/* La promesa, en una frase */}
-        <Stack gap="default">
+        <Stack gap="default" className="lg:order-1 lg:pr-inset-xl">
           <Stack gap="tight">
-            <Text as="h1" size="display-sm" serif weight="semibold">
+            <Text as="h1" size="display-sm" serif weight="semibold" className="lg:text-display-md">
               El Panamá que no sale en el folleto
             </Text>
             <Text size="body-lg" tone="secondary">
@@ -61,16 +72,22 @@ export default function DescubrirPage() {
         </Stack>
 
         {/* Zonas — las nueve, sin página intermedia que no aporta nada */}
-        <Section espaciado="none">
+        <Section espaciado="none" className="lg:order-3 lg:col-span-2">
           <Stack>
             <Text as="h2" size="heading-sm" weight="semibold">
               Nueve zonas
             </Text>
-            <Grid cols={2} movil={2} gap="md" as="ul">
+            {/* Nueve caben exactas en un 3×3. Esa es la razón de tres y no cuatro. */}
+            <Grid cols={3} movil={2} gap="md" as="ul">
               {ZONAS.map((z) => (
                 <li key={z.id}>
                   <Link href={`/zona/${z.id}`} className="flex flex-col gap-inset-xs">
-                    <Media proporcion="4/3" etiqueta={z.nombre} alt={`Paisaje de ${z.nombre}`} sizes="(min-width: 640px) 300px, 45vw" />
+                    <Media
+                      proporcion="4/3"
+                      etiqueta={z.nombre}
+                      alt={`Paisaje de ${z.nombre}`}
+                      sizes="(min-width: 1024px) 380px, (min-width: 768px) 30vw, 45vw"
+                    />
                     <Text size="body-md" weight="semibold">
                       {z.nombre}
                     </Text>
@@ -85,7 +102,7 @@ export default function DescubrirPage() {
         </Section>
 
         {/* Categorías */}
-        <Section espaciado="none">
+        <Section espaciado="none" className="lg:order-4 lg:col-span-2">
           <Stack>
             <Text as="h2" size="heading-sm" weight="semibold">
               Qué buscas
@@ -100,8 +117,12 @@ export default function DescubrirPage() {
           </Stack>
         </Section>
 
-        {/* Cómo funciona */}
-        <Surface relleno="lg" borde={false} className="bg-brand-surface">
+        {/* Cómo funciona — en escritorio, al lado de la promesa */}
+        <Surface
+          relleno="lg"
+          borde={false}
+          className="bg-brand-surface lg:order-2 lg:self-start lg:p-inset-xl"
+        >
           <Stack>
             <Text as="h2" size="heading-sm" weight="semibold" className="text-brand-content">
               Cómo funciona
@@ -125,7 +146,10 @@ export default function DescubrirPage() {
         </Surface>
 
         {/* Para el otro lado del proyecto */}
-        <Surface relleno="lg" className="border-accent-border bg-accent-surface">
+        <Surface
+          relleno="lg"
+          className="border-accent-border bg-accent-surface lg:order-6 lg:col-span-2"
+        >
           <Inline gap="lg" align="center" wrap={false}>
             <Stack gap="tight" className="flex-1">
               <Text size="body-lg" weight="semibold" tone="accent">
@@ -142,18 +166,18 @@ export default function DescubrirPage() {
         </Surface>
 
         {/* Los últimos en confirmar sus datos */}
-        <Section espaciado="none">
+        <Section espaciado="none" className="lg:order-5 lg:col-span-2">
           <Stack>
             <Text as="h2" size="heading-sm" weight="semibold">
               Nuevos en Sendero
             </Text>
-            <Stack as="ul">
+            <Grid cols={3} movil={1} gap="lg" as="ul">
               {nuevos.map((n) => (
                 <li key={n.slug}>
-                  <BusinessCard negocio={resumir(n)} />
+                  <BusinessCard negocio={resumir(n)} orientacion="auto" />
                 </li>
               ))}
-            </Stack>
+            </Grid>
           </Stack>
         </Section>
       </Stack>

@@ -55,7 +55,9 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   `next/font/local`, no quitar el serif.
 - CLS **0** y TBT por debajo de 25 ms en las ocho rutas medidas. Eso no se negocia:
   si una sesión los empeora, se arregla en esa sesión.
-- Cada `"use client"` se descuenta del presupuesto. Los cuatro que hay suman < 4 KB.
+- Cada `"use client"` se descuenta del presupuesto. Los cinco que hay suman < 5 KB.
+  El quinto es `Navegacion`, que marca la sección activa en el encabezado de escritorio:
+  +0,8 KB de JS por ruta, medido.
 - **Server Components por defecto.** `"use client"` solo con estado o evento, y cuando
   se añada, justificarlo en una línea.
 - **Cero librerías nuevas sin pedir permiso.** Cada dependencia es peso en un Moto G Power.
@@ -114,6 +116,41 @@ hereda por la cascada CSS. Un componente nunca sabe en qué área está.
 Usa siempre los tokens semánticos de densidad (`--sd-space-inset-md`, `--sd-size-control-md`,
 `--sd-font-size-heading-lg`), no los primitivos (`--sd-space-4`). Los primitivos no cambian
 con la densidad; los semánticos sí. Ese es el mecanismo entero.
+
+### Escritorio — lo que el ancho cambia y lo que no
+
+El teléfono es la pantalla principal y su marcado es el que manda. El escritorio son
+variantes `md:` y `lg:` sobre ese mismo marcado: **ningún componente nuevo, ninguna
+librería, ningún JavaScript de layout.** Coste medido, gzip: **+1,5 a +2,4 KB por ruta.**
+
+| Punto | Ancho | Qué se enciende |
+|---|---|---|
+| `md` | 768 px | Las pestañas inferiores se apagan y la navegación sube al encabezado. Zonas a 3 columnas. |
+| `lg` | 1024 px | Riel de filtros en `/buscar`. Tarjeta de contacto fija en la ficha y barra inferior apagada. Columna de «Cómo llegar» en zona. Vista previa en el panel. |
+| `xl` | 1280 px | El contenedor topa en 1200 px (`--sd-container-xl`). Más allá solo crece el margen. |
+
+Lo que **no** cambia con el ancho:
+
+- **La densidad.** Un monitor no convierte `editorial` en `operational`. Apretar el portal
+  en escritorio sería una tercera densidad y rompería el mecanismo entero.
+- **El orden del DOM.** Es el del teléfono en todas las pantallas. Lo que se recoloca se
+  recoloca con `order` o con columnas explícitas de rejilla, nunca duplicando marcado —
+  ni un `h1`, ni un horario, ni un bloque de texto aparecen dos veces en el HTML.
+- **El panel sigue sin barra lateral.** Las cinco pantallas caben en el encabezado.
+- **Los 48 px de control y los 44 de objetivo táctil.** Hay ratón, así que hay hover, pero
+  el hover solo refuerza: ninguna acción vive únicamente ahí.
+
+El riel de filtros merece una nota. Sin JavaScript el servidor no sabe el ancho, así que
+el atributo `open` de `<details>` solo puede decir una cosa para los dos tamaños. Lo
+resuelve `::details-content` en `globals.css`: el atributo sigue decidiendo el teléfono
+—plegado en cuanto hay un filtro puesto— y a partir de `lg` el contenido se fuerza visible
+y se esconde el resumen. Va bajo `@supports`, así que donde el pseudoelemento no exista
+el panel sigue siendo la hoja plegable de siempre.
+
+**El presupuesto de 250 KB es de viewport móvil.** Hoy se cumple a los dos anchos porque
+todavía no hay fotos reales: `Media` sin `src` dibuja el marcador y no pesa. En cuanto
+entren las fotos, el escritorio pedirá candidatos más grandes y hará falta un segundo
+techo medido, no dar por bueno el de móvil.
 
 ### Dark mode no es una inversión
 

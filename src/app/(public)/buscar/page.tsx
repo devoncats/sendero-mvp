@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Search, X } from "@/components/icons";
-import { Container, Inline, Stack } from "@/components/layout";
+import { Container, Grid, Inline, Stack } from "@/components/layout";
 import { BusinessCard, CategoryChip, EmptyState, FilterGroup, FilterSheet } from "@/components/patterns";
 import { Text } from "@/components/ui";
 import type { CategoriaId, Negocio, ZonaId } from "@/data";
@@ -75,13 +75,28 @@ export default async function BuscarPage({
     .join(" ");
 
   return (
-    <Container ancho="sm" as="main">
-      <Stack gap="loose" className="py-stack">
-        <Text as="h1" size="heading-lg" serif weight="semibold">
+    <Container ancho="sm" as="main" className="lg:max-w-page-xl">
+      {/*
+        En escritorio los filtros dejan de ser una hoja que hay que abrir y se
+        quedan a la izquierda, permanentes: abrir, elegir, cerrar y volver a
+        mirar el resultado es un peaje que solo tiene sentido cuando no hay
+        sitio. El panel sigue siendo el mismo `<details>`.
+      */}
+      <Stack
+        gap="loose"
+        className="py-stack lg:grid lg:grid-cols-4 lg:items-start"
+      >
+        <Text
+          as="h1"
+          size="heading-lg"
+          serif
+          weight="semibold"
+          className="lg:col-start-2 lg:col-span-3"
+        >
           {encabezado}
         </Text>
 
-        <form action="/buscar" method="get">
+        <form action="/buscar" method="get" className="lg:col-start-2 lg:col-span-3">
           {/* Los filtros activos viajan con la búsqueda, si no se perderían al enviar */}
           {zonaId ? <input type="hidden" name="zona" value={zonaId} /> : null}
           {catId ? <input type="hidden" name="categoria" value={catId} /> : null}
@@ -109,7 +124,7 @@ export default async function BuscarPage({
 
         {/* Lo que está puesto ahora, y cómo quitarlo */}
         {activos > 0 || q ? (
-          <Inline gap="sm">
+          <Inline gap="sm" className="lg:col-start-2 lg:col-span-3">
             {q ? (
               <CategoryChip href={enlaceCon(params, { q: undefined })} activo={false}>
                 «{q}»
@@ -131,11 +146,18 @@ export default async function BuscarPage({
           </Inline>
         ) : null}
 
+        {/*
+          `abiertoPorDefecto` sigue decidiendo solo el teléfono: cerrado en
+          cuanto hay un criterio puesto, que es cuando lo que se quiere ver son
+          los resultados. En el monitor el panel está desplegado siempre, y eso
+          lo resuelve el CSS y no este atributo.
+        */}
         <FilterSheet
           activos={activos}
           resumen={hayCriterio ? `${resultados.length} negocios` : "Los 30 negocios"}
           abiertoPorDefecto={!hayCriterio}
-          className="-mx-gutter sm:mx-0"
+          riel
+          className="-mx-gutter sm:mx-0 lg:col-start-1 lg:row-start-1 lg:row-span-4"
         >
           <FilterGroup etiqueta="Zona">
             {ZONAS.map((z) => (
@@ -162,41 +184,43 @@ export default async function BuscarPage({
         </FilterSheet>
 
         {resultados.length > 0 ? (
-          <Stack>
+          <Stack className="lg:col-start-2 lg:col-span-3">
             <Text size="body-sm" tone="tertiary">
               {resultados.length} {resultados.length === 1 ? "negocio" : "negocios"}
               {detalle ? ` · ${detalle}` : ""}
             </Text>
-            <Stack as="ul">
+            <Grid cols={2} movil={1} gap="lg" as="ul">
               {resultados.map((n) => (
                 <li key={n.slug}>
-                  <BusinessCard negocio={resumir(n)} />
+                  <BusinessCard negocio={resumir(n)} orientacion="auto" />
                 </li>
               ))}
-            </Stack>
+            </Grid>
           </Stack>
         ) : (
-          <EmptyState
-            icono={Search}
-            titulo={
-              zonaId && catId
-                ? `Todavía no hay ${categoria(catId).nombre.es.toLowerCase()} en ${zona(zonaId).nombre}`
-                : "No encontramos nada con eso"
-            }
-            descripcion={
-              zonaId
-                ? `Es una zona pequeña. Hay ${NEGOCIOS.filter((n) => n.zona === zonaId).length} negocios de otras categorías.`
-                : "Prueba con el nombre de una zona, un oficio o un producto — «sombrero», «café», «lancha»."
-            }
-            accion={
-              <Link
-                href={zonaId ? enlaceCon({}, { zona: zonaId }) : "/buscar"}
-                className="inline-flex h-control-md items-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content"
-              >
-                {zonaId ? `Ver todo en ${zona(zonaId).nombre}` : "Ver los 30 negocios"}
-              </Link>
-            }
-          />
+          <div className="lg:col-start-2 lg:col-span-3">
+            <EmptyState
+              icono={Search}
+              titulo={
+                zonaId && catId
+                  ? `Todavía no hay ${categoria(catId).nombre.es.toLowerCase()} en ${zona(zonaId).nombre}`
+                  : "No encontramos nada con eso"
+              }
+              descripcion={
+                zonaId
+                  ? `Es una zona pequeña. Hay ${NEGOCIOS.filter((n) => n.zona === zonaId).length} negocios de otras categorías.`
+                  : "Prueba con el nombre de una zona, un oficio o un producto — «sombrero», «café», «lancha»."
+              }
+              accion={
+                <Link
+                  href={zonaId ? enlaceCon({}, { zona: zonaId }) : "/buscar"}
+                  className="inline-flex h-control-md items-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content"
+                >
+                  {zonaId ? `Ver todo en ${zona(zonaId).nombre}` : "Ver los 30 negocios"}
+                </Link>
+              }
+            />
+          </div>
         )}
       </Stack>
     </Container>

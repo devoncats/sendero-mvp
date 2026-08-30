@@ -15,7 +15,11 @@ import { cn } from "@/lib/cn";
  */
 const COLUMNAS = {
   "1-2": "grid-cols-1 sm:grid-cols-2",
-  "1-3": "grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
+  // La tercera columna espera a `lg`. En una tablet de 768 px, tres columnas
+  // dejan 181 px por tarjeta — y una tarjeta de negocio lleva categoría, nombre,
+  // persona y zona: a ese ancho el nombre se parte en tres líneas. Las zonas sí
+  // pasan a tres en `md` ("2-3") porque solo llevan nombre y provincia.
+  "1-3": "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
   "1-4": "grid-cols-1 sm:grid-cols-2 md:grid-cols-4",
   "2-2": "grid-cols-2",
   "2-3": "grid-cols-2 md:grid-cols-3",
