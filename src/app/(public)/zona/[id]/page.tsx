@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { ArrowLeft, ChevronRight, ExternalLink, MapPin } from "@/components/icons";
+import { ArrowLeft, ChevronRight, ExternalLink, MapPin, Ruta } from "@/components/icons";
 import { Container, Grid, Inline, Stack } from "@/components/layout";
 import { BusinessCard, CategoryChip } from "@/components/patterns";
-import { Media, Surface, Text } from "@/components/ui";
+import { ButtonLink, Media, Surface, Text } from "@/components/ui";
 import type { ZonaId } from "@/data";
-import { ZONAS, categoria, categoriasDeZona, negociosDeZona } from "@/data";
+import { ZONAS, categoria, categoriasDeZona, cuantosConPunto, negociosDeZona } from "@/data";
 import { enlaceMapa } from "@/lib/formato";
 
 import { resumir } from "../../_resumen";
@@ -43,6 +43,8 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
   const zonaId = z.id as ZonaId;
   const negocios = negociosDeZona(zonaId);
   const categorias = categoriasDeZona(zonaId);
+  // Con dos paradas no hay nada que ordenar: entonces no se ofrece la ruta.
+  const conPunto = cuantosConPunto(zonaId);
 
   return (
     <Container ancho="sm" as="main" className="lg:max-w-page-xl">
@@ -137,6 +139,14 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
               Abrir en la app de mapas
               <ExternalLink className="size-icon-sm" aria-hidden />
             </a>
+            {/* «Cómo llegar» es donde vive el movimiento, y armar una ruta es
+                moverse. Solo si hay suficientes puntos para que haya orden. */}
+            {conPunto >= 3 ? (
+              <ButtonLink href={`/zona/${z.id}/ruta`} variante="secondary" anchoCompleto>
+                <Ruta className="size-icon-sm" aria-hidden />
+                Armar una ruta por {z.nombre}
+              </ButtonLink>
+            ) : null}
           </Stack>
         </Surface>
 

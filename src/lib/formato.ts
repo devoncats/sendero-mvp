@@ -178,11 +178,44 @@ export function enlaceLlamada(numero: string): string {
 /**
  * Abre la app de mapas nativa con una búsqueda por nombre.
  *
- * Por nombre y no por coordenadas a propósito: nadie ha ido a tomarle el GPS a
- * treinta talleres, y una coordenada inventada es peor que ninguna. El formato
- * universal de Google Maps lo entienden Android e iOS, y en el teléfono abre la
- * aplicación en vez del navegador. Cero JavaScript y cero mapa embebido.
+ * Por nombre y no por coordenadas: nadie ha ido a tomarle el GPS a treinta
+ * talleres, y una coordenada inventada sigue siendo peor que ninguna. Lo que
+ * cambió es que ahora existe una **opcional**, la que pone el propio dueño
+ * desde su panel — y para esa está `enlaceRuta`, más abajo.
+ *
+ * Esta función no se queda como resto de nada: es la correcta para una zona,
+ * que no tiene punto y nunca lo va a tener, y para cualquier negocio que
+ * todavía no ha puesto el suyo. Un pueblo se busca por su nombre.
+ *
+ * El formato universal de Google Maps lo entienden Android e iOS, y en el
+ * teléfono abre la aplicación en vez del navegador. Cero JavaScript y cero
+ * mapa embebido.
  */
 export function enlaceMapa(consulta: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consulta)}`;
+}
+
+/**
+ * Las direcciones de un recorrido entero, en orden, para la app de mapas.
+ *
+ * El primer punto es el origen, el último el destino y los de en medio van como
+ * escalas. Google acepta hasta nueve escalas en este formato; por encima de eso
+ * se recortan las del medio, porque un enlace roto no lleva a nadie a ninguna
+ * parte y medio recorrido sí.
+ *
+ * Aquí sí van coordenadas: son las que el dueño puso, y el punto de un enlace
+ * de direcciones es precisamente llegar a la puerta.
+ */
+export function enlaceRuta(puntos: readonly { lat: number; lng: number }[]): string {
+  const c = (p: { lat: number; lng: number }) => `${p.lat},${p.lng}`;
+  if (puntos.length === 0) return "";
+  if (puntos.length === 1) return enlaceMapa(c(puntos[0]));
+
+  const origen = puntos[0];
+  const destino = puntos[puntos.length - 1];
+  const escalas = puntos.slice(1, -1).slice(0, 9);
+
+  const q = new URLSearchParams({ api: "1", origin: c(origen), destination: c(destino) });
+  if (escalas.length > 0) q.set("waypoints", escalas.map(c).join("|"));
+  return `https://www.google.com/maps/dir/?${q.toString()}`;
 }

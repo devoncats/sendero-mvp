@@ -285,6 +285,14 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
                     Abrir {z.nombre} en la app de mapas
                     <ExternalLink className="size-icon-sm" aria-hidden />
                   </a>
+                  {/* Discreto a propósito: la acción de esta ficha es
+                      escribirle a la persona, y nada compite con eso. */}
+                  <Link
+                    href={`/zona/${z.id}/ruta?intereses=${negocio.categoria}`}
+                    className="inline-flex min-h-touch-min items-center gap-icon-gap text-body-sm font-medium text-brand"
+                  >
+                    Ver una ruta que pase por aquí
+                  </Link>
                 </Stack>
               </Inline>
 

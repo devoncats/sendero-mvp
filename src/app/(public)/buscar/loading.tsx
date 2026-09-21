@@ -3,7 +3,9 @@ import { Container, Grid, Inline, Stack } from "@/components/layout";
 /**
  * Esqueleto con la forma real del resultado, no un girador en el centro.
  * Así la página no salta cuando llegan los datos — que es medio CLS ahorrado
- * en la única ruta del portal que se renderiza por petición.
+ * en una de las dos rutas del portal que se renderizan por petición — la otra
+ * es el planificador de `/zona/[id]/ruta`, que llegó después y por el mismo
+ * motivo: lee la URL para saber qué enseñar.
  *
  * En escritorio imita la misma repartición que la página: riel a la izquierda
  * y rejilla de dos a la derecha. Un esqueleto con otra forma que el resultado
