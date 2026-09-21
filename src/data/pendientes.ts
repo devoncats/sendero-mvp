@@ -81,6 +81,19 @@ export function pendientes(n: Negocio, ahora: Date): Pendiente[] {
     });
   }
 
+  // 3 bis. El punto no reemplaza a la referencia: la referencia es para llegar
+  // y el punto es para entrar en el orden de una ruta. Va después a propósito.
+  if (!n.coordenadas) {
+    lista.push({
+      id: "punto",
+      titulo: "Pon tu punto en el mapa",
+      porque:
+        "Sin él tu negocio queda fuera de las rutas que los visitantes arman para tu pueblo. Sales en la lista, pero no en el recorrido.",
+      accion: "Poner el punto",
+      href: "/dashboard/horario",
+    });
+  }
+
   // 4. Un producto sin precio hace que la gente no pregunte, por no incomodar.
   const sinPrecio = n.productos.filter((p) => p.precio === undefined);
   if (sinPrecio.length > 0) {
@@ -121,8 +134,11 @@ export const ACCIONES: readonly { titulo: string; href: string }[] = [
   { titulo: "Cambiar tus fotos", href: "/dashboard/fotos" },
 ];
 
-/** Cuán completa está la ficha, de 0 a 1. Cinco cosas posibles por revisar. */
+/** Cuán completa está la ficha, de 0 a 1. Seis cosas posibles por revisar. */
 export function completitud(n: Negocio, ahora: Date): number {
-  const total = 5;
+  // Este número tiene que ir de la mano con cuántos `if` hay en `pendientes`.
+  // Si se añade uno y esto no sube, la barra del modo guiado no falla: miente,
+  // que es peor.
+  const total = 6;
   return (total - pendientes(n, ahora).length) / total;
 }

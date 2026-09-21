@@ -10,6 +10,8 @@ import { zona } from "@/data";
 import { enlaceMapa, fechaLarga, nombreDia, resumenSemana, textoDia } from "@/lib/formato";
 
 import { AvisoMvp } from "../../_aviso-mvp";
+import { Campo } from "../../_campo";
+import { CapturarPunto } from "./_punto";
 
 export const metadata: Metadata = { title: "Horario y ubicación" };
 
@@ -154,6 +156,23 @@ export default function HorarioPage() {
                   dirías a alguien por teléfono.
                 </Text>
               </Stack>
+
+              {/*
+                El punto va DESPUÉS de la referencia escrita, y el orden es la
+                decisión: la referencia sigue valiendo más, porque a la casa de
+                zinc verde se llega preguntando. El punto es lo que deja a este
+                negocio entrar en el orden de una ruta, que es otra cosa.
+              */}
+              <Campo
+                id="punto-lat"
+                etiqueta="Tu punto en el mapa"
+                ayuda="Con esto tu negocio entra en las rutas que los visitantes arman para tu pueblo. Sin él sales en la lista igual, pero no en el recorrido."
+              >
+                <CapturarPunto
+                  lat={negocio.coordenadas?.lat}
+                  lng={negocio.coordenadas?.lng}
+                />
+              </Campo>
               <a
                 href={enlaceMapa(`${z.nombre}, ${z.provincia}, Panamá`)}
                 rel="noopener noreferrer"

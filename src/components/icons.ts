@@ -65,4 +65,13 @@ export {
   // Idioma. `Languages` dibuja dos alfabetos; el globo se reconoce antes.
   Globe as Idioma,
   LogOut as CerrarSesion,
+
+  // El planificador de rutas
+  // Un recorrido ordenado por un pueblo. `Compass` ya está y significa
+  // descubrir, que es lo contrario de esto: salir sin plan. Esto es el plan.
+  Route as Ruta,
+  // «Dónde estoy yo», que no es «dónde queda esto». El dueño ve las dos cosas
+  // en la misma pantalla —su punto y el mapa de su pueblo—, y usar el mismo
+  // glifo para ambas sería el peor sitio posible para ahorrarse una entrada.
+  LocateFixed as MiUbicacion,
 } from "lucide-react";

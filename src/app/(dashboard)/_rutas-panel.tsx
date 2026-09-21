@@ -20,6 +20,7 @@ const SECCION_DE: Record<string, string> = {
   fotos: "/dashboard/fotos",
   horario: "/dashboard/horario",
   referencia: "/dashboard/horario",
+  punto: "/dashboard/horario",
   precios: "/dashboard/productos",
   confirmar: "/dashboard/negocio",
 };
