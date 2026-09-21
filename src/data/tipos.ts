@@ -62,6 +62,13 @@ export type Producto = {
   detalle?: string;
 };
 
+/**
+ * Un punto en el mundo, en grados decimales. Nace aquí y no en `lib/` porque
+ * las dependencias apuntan hacia abajo: `data` es el fondo de la pila y no
+ * importa de nadie.
+ */
+export type Coordenadas = { lat: number; lng: number };
+
 export type Persona = {
   nombre: string;
   oficio: string;
@@ -80,8 +87,15 @@ export type Negocio = {
   descripcion: Texto;
   productos: Producto[];
   horario: Semana;
-  /** Cómo llegar en palabras. Vale más que un punto en el mapa. */
+  /** Cómo llegar en palabras. Sigue valiendo más que un punto en el mapa. */
   referencia: string;
+  /**
+   * El punto exacto, si el dueño lo puso. Opcional, y va a seguir siéndolo: lo
+   * pone él desde su panel, y un directorio nuevo está lleno de gente que
+   * todavía no lo ha hecho. Sin él el negocio sale en las listas igual — solo
+   * queda fuera del orden de una ruta, que es lo único que necesita geometría.
+   */
+  coordenadas?: Coordenadas;
   /** E.164 sin el signo, para armar el enlace wa.me. */
   whatsapp: string;
   pagos: string[];

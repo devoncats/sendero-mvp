@@ -29,6 +29,14 @@ export function cuantosEnZona(id: ZonaId): number {
 }
 
 /**
+ * Cuántos negocios de la zona han puesto su punto. Lo pregunta el portal para
+ * decidir si ofrece armar una ruta: con dos paradas no hay nada que ordenar.
+ */
+export function cuantosConPunto(id: ZonaId): number {
+  return NEGOCIOS.reduce((n, negocio) => n + (negocio.zona === id && negocio.coordenadas ? 1 : 0), 0);
+}
+
+/**
  * Las categorías que de verdad tienen algo en esa zona. Ofrecer un filtro que
  * lleva a un vacío es la peor experiencia posible en un directorio pequeño.
  */
