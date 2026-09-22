@@ -28,6 +28,7 @@ export function CategoryChip({
       className={cn(
         "inline-flex h-control-sm items-center gap-icon-gap rounded-full border px-inset-md text-body-md",
         "transition-colors motion-reduce:transition-none",
+        "active:scale-press active:bg-action-secondary-active",
         activo
           ? "border-brand-border bg-brand-surface font-medium text-brand-content"
           : "border-border-default bg-surface text-content-secondary hover:bg-action-secondary-hover",

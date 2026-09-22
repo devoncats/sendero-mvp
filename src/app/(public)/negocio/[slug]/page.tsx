@@ -13,7 +13,7 @@ import {
   Phone,
 } from "@/components/icons";
 import { Container, Grid, Inline, Stack } from "@/components/layout";
-import { BotonGuardar, EstadoApertura } from "@/components/patterns";
+import { BotonGuardar, EncabezadoSeccion, EstadoApertura } from "@/components/patterns";
 import { Badge, ButtonLink, Media, Surface, Text } from "@/components/ui";
 import { NEGOCIOS, categoria, negocioPorSlug, zona } from "@/data";
 import {
@@ -103,7 +103,8 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
               <Media
                 proporcion="1/1"
                 radio="none"
-                etiqueta={`Retrato de ${negocio.persona.nombre} en su taller`}
+                semilla={negocio.persona.nombre}
+                prioridad
                 alt={`${negocio.persona.nombre}, ${negocio.persona.oficio.toLowerCase()} en ${z.nombre}`}
                 sizes="(min-width: 1024px) 368px, (min-width: 640px) 640px, 100vw"
                 className="sm:rounded-media lg:aspect-portrait"
@@ -153,9 +154,9 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
               {negocio.persona.cita ? (
                 <Text
                   as="blockquote"
-                  size="heading-md"
+                  size="heading-lg"
                   serif
-                  className="lg:border-l-2 lg:border-accent lg:pl-inset-lg"
+                  className="border-l-2 border-accent pl-inset-md lg:pl-inset-lg"
                 >
                   «{negocio.persona.cita}»
                 </Text>
@@ -169,9 +170,7 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
 
           {/* Qué encuentras — la lista vertical de la dirección A */}
           <Stack gap="default" className="lg:col-span-2">
-            <Text as="h2" size="heading-sm" weight="semibold">
-              Qué encuentras
-            </Text>
+            <EncabezadoSeccion kicker="Qué encuentras">Lo que hace y a cómo</EncabezadoSeccion>
             {/*
               Lo único que gana tamaño real en escritorio: los productos y sus
               precios se comparan de un vistazo, que es justo lo que se hace
@@ -185,21 +184,26 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
                   align="center"
                   wrap={false}
                   as="li"
-                  className="lg:flex-col lg:items-stretch"
+                  className="overflow-hidden rounded-surface border border-border-subtle bg-surface p-inset-sm lg:flex-col lg:items-stretch lg:p-0"
                 >
                   <Media
                     proporcion="1/1"
-                    className="h-avatar-xl w-avatar-xl shrink-0 lg:h-auto lg:w-full lg:shrink"
+                    semilla={p.nombre}
+                    className="h-avatar-xl w-avatar-xl shrink-0 lg:h-auto lg:w-full lg:shrink lg:rounded-none"
                     sizes="(min-width: 1024px) 232px, 80px"
                     alt={p.nombre}
                   />
-                  <Stack gap="tight" className="min-w-0">
+                  <Stack gap="tight" className="min-w-0 lg:p-inset-md">
                     <Text size="body-md" weight="medium">
                       {p.nombre}
                     </Text>
-                    <Text size="body-sm" tone="tertiary">
+                    {/* El precio es lo que se compara antes de escribir: deja de
+                        ser la línea más apagada de la fila. */}
+                    <Text size="body-sm" tone="secondary" weight="medium">
                       {p.precio !== undefined ? precio(p.precio, p.desde) : "Precio según el encargo"}
-                      {p.detalle ? ` · ${p.detalle}` : ""}
+                      {p.detalle ? (
+                        <span className="font-normal text-content-tertiary">{` · ${p.detalle}`}</span>
+                      ) : null}
                     </Text>
                   </Stack>
                 </Inline>
@@ -216,12 +220,33 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
             <Stack gap="default">
               <Stack gap="tight">
                 <EstadoApertura semana={negocio.horario} />
-                {/* Inline y no Grid: Grid es mobile-first y colapsa a una
-                    columna en el teléfono, que es justo donde un par
-                    etiqueta/valor tiene que seguir siendo una sola fila. */}
-                <Stack gap="tight">
+                {/*
+                  Siete filas sueltas, todas del mismo peso y sin nada que las
+                  contuviera: la parte más consultada de la ficha se leía como
+                  una lista de la compra.
+
+                  Ahora es un grupo —cabecera en versalita fuera, filas dentro
+                  separadas por filete—, que es como la HIG agrupa datos. El
+                  fondo hundido y no un borde: dentro de una tarjeta que ya
+                  tiene el suyo, otra caja con borde es una caja de más.
+
+                  Inline y no Grid: Grid es mobile-first y colapsa a una
+                  columna en el teléfono, que es justo donde un par
+                  etiqueta/valor tiene que seguir siendo una sola fila.
+                */}
+                <Text size="overline" tone="tertiary">
+                  Horario
+                </Text>
+                <div className="divide-y divide-border-subtle overflow-hidden rounded-control bg-surface-sunken">
                   {semana.map((fila) => (
-                    <Inline key={fila.dias} justify="between" gap="md" align="baseline" wrap={false}>
+                    <Inline
+                      key={fila.dias}
+                      justify="between"
+                      gap="md"
+                      align="baseline"
+                      wrap={false}
+                      className="px-inset-md py-inset-sm"
+                    >
                       <Text as="span" size="body-md" tone="secondary">
                         {fila.dias}
                       </Text>
@@ -235,7 +260,7 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
                       </Text>
                     </Inline>
                   ))}
-                </Stack>
+                </div>
               </Stack>
 
               {/* El contacto solo aparece aquí en escritorio: en el teléfono

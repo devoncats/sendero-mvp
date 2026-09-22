@@ -163,6 +163,15 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   desde el primer día **la página más pesada del portal**: +2,3 KB sobre la portada, todo
   HTML de itinerario. Los trozos de JavaScript son exactamente los mismos.
   Esa ruta ya está en `scripts/medir.mjs`: una ruta pública sin medir no cumple nada.
+  **El rediseño visual del portal costó entre +1,2 y +2,0 KB por ruta** —CSS compartido
+  y marcado, nada de JavaScript—, así que el techo de 250 KB se queda donde estaba: se
+  había autorizado subirlo y no hizo falta. La portada subió +1,8 KB y el peor caso del
+  planificador +1,5 KB. El dashboard también paga +1,2 KB, porque la hoja de estilos es
+  una sola para las dos áreas: eso es lo que cuesta que el sistema sea uno.
+  Esos números salen de comprimir en brotli el HTML más todos los `_next` que la página
+  referencia, medidos contra un build del árbol sin los cambios. **No son comparables con
+  los de la Fase 4**, que salieron de Lighthouse y cuentan de otra manera; lo que vale de
+  ellos es la diferencia, que sí se midió con la misma vara a ambos lados.
 - **LCP objetivo < 2.5 s en 4G lenta; el portal está en 2,65 s y se acepta.**
   Esos 150 ms son el precio de Source Serif en los titulares, y esa identidad editorial
   se decidió a conciencia. El dashboard, que no la usa, cumple con 2,34 s.
@@ -170,6 +179,12 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   `next/font/local`, no quitar el serif.
 - CLS **0** y TBT por debajo de 25 ms en las ocho rutas medidas. Eso no se negocia:
   si una sesión los empeora, se arregla en esa sesión.
+  **`scripts/medir.mjs` necesita Chrome de verdad.** Apuntándolo a Edge con `CHROME_PATH`
+  arranca, pero los números salen inservibles: en una misma máquina el LCP de `/ruta` varió
+  1,3 s entre dos corridas del **mismo** código, y el TBT de la portada dio 190 ms sin
+  tocar nada. Con esa vara no se puede decir si una sesión empeoró el TBT o no. El CLS sí
+  aguanta —dio 0 en las diez rutas, antes y después—, y para el peso hay una cuenta
+  determinista que no depende del navegador. Si vas a juzgar LCP o TBT, instala Chrome.
 - Cada `"use client"` se descuenta del presupuesto. Los ocho que hay suman < 9 KB.
   El quinto es `Navegacion`, que marca la sección activa en el encabezado de escritorio:
   +0,8 KB de JS por ruta, medido.
@@ -184,6 +199,10 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   enlace pegado es un ciclo de escribir y responder que no cabe en un formulario sin JS.
   El registro del service worker **no** añadió un noveno: vive dentro de
   `aviso-sin-conexion.tsx`, que ya era cliente y ya trataba de este mismo asunto.
+  El rediseño visual del portal tampoco añadió ninguno, y no por suerte: **profundidad,
+  jerarquía, tinte y pulsado son CSS**, y el CSS lo sirve el servidor. Los trozos de
+  JavaScript del build son los mismos quince de antes. Si un cambio de aspecto te pide
+  un `"use client"`, casi siempre es que lo estás resolviendo en el sitio equivocado.
 - **Server Components por defecto.** `"use client"` solo con estado o evento, y cuando
   se añada, justificarlo en una línea.
 - **Cero librerías nuevas sin pedir permiso.** Cada dependencia es peso en un Moto G Power.
@@ -199,6 +218,10 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   el servidor, sin costa, sin carreteras, sin norte y sin escala, y su pie dice que no es
   un mapa. Dibuja el **orden** de las paradas, que es lo único que una lista no enseña.
 - Sin librerías de animación, sin carruseles con autoplay, sin parallax, sin animación al scroll.
+- **Hay exactamente una degradación en todo el proyecto**, y es `lavado-superior` en
+  `globals.css`: el aire de la cabecera de la portada. Entró con condiciones —servida,
+  estática, dos extremos que son tokens, cero bytes de JavaScript— y no hay una segunda.
+  No sangra con `100vw`: con barra de desplazamiento visible eso mete scroll horizontal.
 - Toda imagen con `next/image` y proporción declarada. Cero saltos de layout.
 
 ### Accesibilidad — WCAG 2.2 AA
@@ -303,6 +326,59 @@ todavía no hay fotos reales: `Media` sin `src` dibuja el marcador y no pesa. En
 entren las fotos, el escritorio pedirá candidatos más grandes y hará falta un segundo
 techo medido, no dar por bueno el de móvil.
 
+### El portal tiene voz editorial. El panel no.
+
+El sistema de tokens llega a `display-lg` (3,75 rem) y el portal no usaba nada de ese
+techo: los seis `<h2>` eran todos `heading-sm`, el mismo cuerpo que el logotipo. Se leía
+como una maqueta con buen copy. Lo que lo cambió no fue código nuevo, fue **usar lo que
+ya estaba pagado**.
+
+- **Cabecera de sección** — `patterns/encabezado-seccion.tsx`: filete que abre, versalita
+  que dice de qué va, titular `heading-md` en serif. Es el patrón de una revista y es
+  **solo del portal**: ese componente no entra al dashboard.
+- **Todo lo que se elige es una tarjeta.** `BusinessCard` era un `<Link>` pelado —sin
+  fondo, sin borde, sin relleno— que declaraba `group` sin un solo `group-hover:`. Ahora
+  es superficie con borde, `hover:shadow-card` y pulsado. Las nueve zonas de la portada
+  y los productos de una ficha llevan el mismo tratamiento.
+- **Jerarquía dentro de la tarjeta.** El nombre sube a `heading-xs`, y zona, horario y
+  confianza bajan a **una sola línea** separada por puntos. Eran tres renglones de 14 px
+  gris a 2 px del nombre: eso es lo que convertía cada tarjeta en un muro.
+- **Grupos al estilo HIG** para los datos densos —la tabla de horarios de una ficha—:
+  cabecera en versalita **fuera** del contenedor, filas dentro separadas por filete, y
+  fondo hundido en vez de otro borde, porque ya está dentro de una tarjeta con el suyo.
+- **El pulsado existe.** `active:scale-press` (utilidad en `globals.css`, porque Tailwind
+  no tiene espacio de nombres `--scale-*`) más un cambio de color en cada variante de
+  botón. Los tokens de `active` llevaban ahí desde el primer día sin que nadie los usara:
+  el portal respondía al puntero y no al dedo, que es al revés de para quién se hizo.
+  **El encogido va bajo `prefers-reduced-motion: no-preference`**, y por eso todo lo que
+  lo lleva lleva además color o elevación — nadie se queda sin respuesta al tocar.
+
+### El marcador de una foto que no existe
+
+No hay ni una imagen en el repo. Los treinta negocios y las nueve zonas dibujaban el
+**mismo** cuadro gris, y en la portada del directorio eso era nueve piezas idénticas
+diciendo que no lo son.
+
+`Media` acepta `semilla` —el nombre de la zona, del negocio, del producto— y de ahí salen
+un tinte estable y las iniciales en serif (`lib/marcador.ts`). Sin `semilla` se queda el
+icono de siempre, que es lo correcto para lo que no tiene nombre propio: un mapa.
+
+- Los tintes son **opacidades sobre `--color-brand` y `--color-accent`**, no colores
+  nuevos: así el marcador se invierte solo en oscuro sin una segunda tabla.
+- El tamaño del monograma sale de `cqmin`, no de la escala tipográfica: el que manda es
+  el hueco, que mide 80 px en una miniatura y 700 en una cabecera.
+- **La función de hash es FNV-1a y eso está medido, no elegido de oídas.** Con djb2
+  cuatro de las nueve zonas caían en el mismo tinte; añadirle la mezcla de Murmur lo
+  dejó en siete de nueve, porque su multiplicador es múltiplo de cinco y pega el resto
+  entre cinco a un solo valor. FNV-1a reparte las nueve en los cinco tonos y los treinta
+  negocios en seis y seis. Si tocas `TINTES`, vuelve a contar.
+
+`Negocio.foto` **sigue siendo opcional y va a seguir siéndolo.** El camino para las fotos
+de verdad ya está tendido —`src`, `sizes` y `prioridad` funcionan, y `prioridad` se pasa
+en los dos LCP del portal—; lo único que falta el día que existan es rellenar `foto` en
+`resumir()`. Cuando entren habrá que **volver a medir el presupuesto**: el escritorio va
+a pedir candidatos más grandes y el techo de hoy es de viewport móvil.
+
 ### Dark mode no es una inversión
 
 La elevación es sombra en claro y superficie más clara en oscuro. El botón primario
@@ -343,10 +419,10 @@ src/
 ├─ components/
 │  ├─ ui/               primitivos: Button, Text, Surface, Media, Badge, Input
 │  ├─ layout/           Container, Stack, Inline, Grid, Section
-│  ├─ patterns/         BusinessCard, CategoryChip, EmptyState, OfflineBanner
+│  ├─ patterns/         BusinessCard, CategoryChip, EncabezadoSeccion, EmptyState…
 │  └─ icons.ts          el re-export curado de Lucide
 ├─ data/                datos estáticos tipados — zonas, negocios, categorías
-├─ lib/                 utilidades (cn, formatters)
+├─ lib/                 utilidades (cn, formatters, marcador)
 └─ styles/
    ├─ tokens.css        GENERADO — no editar
    └─ globals.css       reset + reglas globales

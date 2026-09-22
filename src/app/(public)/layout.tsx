@@ -2,12 +2,19 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Compass, Search } from "@/components/icons";
-import { Container, Inline } from "@/components/layout";
+import { Container, Inline, Stack } from "@/components/layout";
 import { AvisoSinConexion, Navegacion } from "@/components/patterns";
 import { Text } from "@/components/ui";
 
 import { Pestanas } from "./_pestanas";
 import { RUTAS_PORTAL } from "./_rutas";
+
+/** Lo que no está en las pestañas y aun así hace falta poder encontrar. */
+const ENLACES_PIE = [
+  { href: "/ruta", etiqueta: "Armar una ruta" },
+  { href: "/guardados", etiqueta: "Lo que guardaste" },
+  { href: "/para-tu-negocio", etiqueta: "¿Tienes un negocio?" },
+] as const;
 
 /**
  * El portal. `data-density="editorial"` es todo el mecanismo: de aquí para
@@ -49,6 +56,46 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <AvisoSinConexion />
 
       <div className="flex-1">{children}</div>
+
+      {/*
+        El portal se acababa en seco: el último negocio de la lista y nada más.
+        Un pie corto es lo que dice que la página terminó y no que se quedó a
+        medio cargar.
+
+        Tres enlaces y una frase, y ni uno más. Repetir aquí las nueve zonas
+        sería un mapa del sitio, y un mapa del sitio es peso en un Moto G Power
+        para decir lo que ya dicen el encabezado y las pestañas.
+      */}
+      <footer className="border-t border-border-subtle bg-surface-sunken py-stack">
+        <Container ancho="sm" className="lg:max-w-page-xl">
+          <Stack gap="default">
+            <Stack gap="tight">
+              <Inline gap="icon" wrap={false}>
+                <Compass className="size-icon-md text-brand" aria-hidden />
+                <Text as="span" size="heading-sm" serif weight="semibold">
+                  Sendero
+                </Text>
+              </Inline>
+              <Text size="body-sm" tone="secondary" className="max-w-prose">
+                Un directorio de las zonas de Panamá donde no llegan los tours. Sin reservas, sin
+                comisiones: le escribes directo a la persona.
+              </Text>
+            </Stack>
+
+            <Inline gap="lg" as="nav" aria-label="Enlaces del pie">
+              {ENLACES_PIE.map(({ href, etiqueta }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="inline-flex min-h-touch-min items-center text-body-sm font-medium text-brand"
+                >
+                  {etiqueta}
+                </Link>
+              ))}
+            </Inline>
+          </Stack>
+        </Container>
+      </footer>
 
       <Pestanas />
     </div>

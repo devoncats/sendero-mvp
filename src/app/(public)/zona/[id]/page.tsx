@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { ArrowLeft, ChevronRight, ExternalLink, MapPin, Ruta } from "@/components/icons";
 import { Container, Grid, Inline, Stack } from "@/components/layout";
-import { BusinessCard, CategoryChip } from "@/components/patterns";
+import { BusinessCard, CategoryChip, EncabezadoSeccion } from "@/components/patterns";
 import { ButtonLink, Media, Surface, Text } from "@/components/ui";
 import type { ZonaId } from "@/data";
 import { ZONAS, categoria, categoriasDeZona, cuantasParadasPosibles, negociosDeZona } from "@/data";
@@ -66,7 +66,8 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
           <Media
             proporcion="16/9"
             radio="none"
-            etiqueta={`Paisaje de ${z.nombre}`}
+            semilla={z.nombre}
+            prioridad
             alt={`${z.nombre}, ${z.provincia}`}
             sizes="(min-width: 1024px) 755px, (min-width: 640px) 640px, 100vw"
             className="sm:rounded-media"
@@ -153,9 +154,9 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
 
         {/* Qué hay aquí */}
         <Stack className="lg:col-span-2">
-          <Text as="h2" size="heading-sm" weight="semibold">
+          <EncabezadoSeccion kicker="Quién está aquí">
             {negocios.length} {negocios.length === 1 ? "negocio" : "negocios"} en {z.nombre}
-          </Text>
+          </EncabezadoSeccion>
           {/* Solo las categorías que de verdad tienen algo: un chip que lleva
               a un vacío es la peor experiencia en un directorio pequeño */}
           <Inline gap="sm">
