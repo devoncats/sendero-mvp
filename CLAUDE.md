@@ -67,6 +67,63 @@ Medido, brotli: **guiado 175,5 KB · experto 179,4 KB.** La diferencia son 3,9 K
 
 ---
 
+## El planificador de rutas
+
+El directorio dice qué hay. El planificador dice **qué cabe en el tiempo que tienes, en qué
+orden, y qué va a estar abierto cuando pases** — la pregunta que queda cuando el visitante
+ya encontró los negocios.
+
+Vive en `/zona/[id]/ruta`, y todo su estado está en la URL: `dias`, `intereses`, `ritmo`,
+`desde`, `base` y `dia`. Los filtros son enlaces y los dos selectores un `<form method="get">`
+nativo, así que la pantalla entera funciona sin JavaScript. La misma dirección da siempre el
+mismo itinerario, hoy y dentro de un mes; por eso se puede compartir por WhatsApp y guardar
+sin señal. **El orden de las claves en la URL es fijo a propósito**: dos filtros equivalentes
+tienen que producir la misma cadena o el service worker guarda dos entradas para un solo plan.
+
+A cambio, la ruta se renderiza por petición. Es la **segunda** del portal después de
+`/buscar`, y está anotado igual que se anotó el precio de la cookie del panel.
+
+### El punto en el mapa
+
+`Negocio.coordenadas` es **opcional y va a seguir siéndolo**. Lo pone el dueño desde
+`/dashboard/horario`, con un botón de geolocalización —se pulsa estando parado en el
+negocio—, pegando un enlace de Google Maps, o a mano. Un directorio nuevo está lleno de
+gente que todavía no lo ha hecho: **sin punto, el negocio sale en las listas igual y solo
+queda fuera del orden del recorrido**, en una lista aparte que dice por qué. De los treinta
+negocios de ejemplo, tres no lo tienen, y eso es deliberado — uno es el del panel, para que
+el pendiente se vea, y los otros para que la degradación no sea código muerto.
+
+La referencia escrita **sigue mandando**. A la casa de zinc verde se llega preguntando; el
+punto sirve para ordenar un recorrido, que es otra cosa. Por eso el campo va debajo del
+textarea de `referencia` y no encima, y `enlaceMapa` por nombre sigue siendo lo correcto
+para una zona y para quien no tiene punto.
+
+### Qué se puede prometer y qué no
+
+No hay API de direcciones ni backend, así que las distancias son **línea recta por un factor
+de rodeo de 1.35** (`lib/geo.ts`) y el orden sale de vecino cercano más 2-opt sobre doce
+paradas como máximo: cincuenta líneas de aritmética, cero librerías. **La pantalla lo dice
+dos veces** —«aproximados, en línea recta»— porque una cifra que parece precisa y no lo es
+hace más daño que una redonda.
+
+Las duraciones por parada (`lib/itinerario.ts`) son convenciones del planificador, no datos:
+nadie ha cronometrado treinta talleres. Están en `lib/` y no en `data/` por eso mismo.
+El **hospedaje es ancla, no parada**: de él se sale y a él se vuelve, y nunca entra en el
+orden. Un negocio `sinConfirmar` **sí entra**, marcado — no es lo mismo que cerrado, y
+dejarlo fuera sería castigarlo desde el producto.
+
+Y si un negocio abre **más tarde** ese mismo día, el planificador **espera**: no lo descarta.
+Descartarlo sería decirle al visitante que no puede comer ahí cuando lo único que pasa es
+que la cocina abre a las once. Se prefiere siempre una parada que ya esté abierta —para no
+romper el orden geográfico— y solo si ninguna lo está se acepta la espera, tomando la que
+abra antes. Este caso existe de verdad en los datos: Fonda La Ensenada cierra los lunes y
+abre a las 11:00 los martes, y sin esta regla se caía del plan los dos días.
+
+El esquema SVG del recorrido dibuja el **orden**, que es lo único que una lista no enseña.
+No es un mapa y su pie lo dice: sin costa, sin carreteras, sin norte y sin escala.
+
+---
+
 ## Reglas duras
 
 Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
@@ -77,6 +134,11 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   fuentes, comprimido en brotli. No solo JavaScript: contar únicamente el JS dejaba fuera
   97 KB de tipografía, que es el 41 % de una página del portal.
   Medido en la Fase 4: **portal 235,6 KB · dashboard 183,5 KB**. Ambos cumplen.
+  El planificador de rutas midió **242,2 KB en su peor caso** (`/zona/santa-fe/ruta?dias=3`,
+  que es la zona con más negocios y el HTML máximo). Cabe, con 7,9 KB de margen, y es
+  desde el primer día **la página más pesada del portal**: +2,3 KB sobre la portada, todo
+  HTML de itinerario. Los trozos de JavaScript son exactamente los mismos.
+  Esa ruta ya está en `scripts/medir.mjs`: una ruta pública sin medir no cumple nada.
 - **LCP objetivo < 2.5 s en 4G lenta; el portal está en 2,65 s y se acepta.**
   Esos 150 ms son el precio de Source Serif en los titulares, y esa identidad editorial
   se decidió a conciencia. El dashboard, que no la usa, cumple con 2,34 s.
@@ -84,13 +146,20 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   `next/font/local`, no quitar el serif.
 - CLS **0** y TBT por debajo de 25 ms en las ocho rutas medidas. Eso no se negocia:
   si una sesión los empeora, se arregla en esa sesión.
-- Cada `"use client"` se descuenta del presupuesto. Los seis que hay suman < 6 KB.
+- Cada `"use client"` se descuenta del presupuesto. Los ocho que hay suman < 9 KB.
   El quinto es `Navegacion`, que marca la sección activa en el encabezado de escritorio:
   +0,8 KB de JS por ruta, medido.
   El sexto es `patterns/panel.tsx`, y es uno solo para las dos cosas del dashboard que
   se abren y se cierran: el menú de cuenta y el cajón de la barra lateral del modo
   experto. Comparten exactamente lo que justifica el JavaScript —Esc, toque fuera y
   devolver el foco—, así que comparten archivo y directiva.
+  Los dos últimos los trajo el planificador de rutas. `patterns/ruta-guardada.tsx`
+  guarda el plan en `localStorage` y le avisa al service worker qué precachear.
+  `dashboard/horario/_punto.tsx` captura la coordenada del dueño: `navigator.geolocation`
+  es un permiso del navegador y no existe en el servidor, y ver salir un punto de un
+  enlace pegado es un ciclo de escribir y responder que no cabe en un formulario sin JS.
+  El registro del service worker **no** añadió un noveno: vive dentro de
+  `aviso-sin-conexion.tsx`, que ya era cliente y ya trataba de este mismo asunto.
 - **Server Components por defecto.** `"use client"` solo con estado o evento, y cuando
   se añada, justificarlo en una línea.
 - **Cero librerías nuevas sin pedir permiso.** Cada dependencia es peso en un Moto G Power.
@@ -102,6 +171,9 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   `role="img"` y un `aria-label` que dice el dato en palabras. Las tablas se quedan en HTML,
   que es lo que un lector de pantalla recorre por filas y columnas.
 - **Sin mapas interactivos JS.** Imagen estática + enlace que abre la app de mapas nativa.
+  El esquema del recorrido en `/zona/[id]/ruta` no es una excepción: es SVG servido desde
+  el servidor, sin costa, sin carreteras, sin norte y sin escala, y su pie dice que no es
+  un mapa. Dibuja el **orden** de las paradas, que es lo único que una lista no enseña.
 - Sin librerías de animación, sin carruseles con autoplay, sin parallax, sin animación al scroll.
 - Toda imagen con `next/image` y proporción declarada. Cero saltos de layout.
 
@@ -119,6 +191,22 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
 
 Cada pantalla necesita, diseñados y no como nota al pie: **carga, vacío, error y sin conexión.**
 Se asume 3G, no wifi. El dueño del negocio nunca debe perder trabajo por una desconexión.
+
+Y «sin conexión» dejó de ser solo un aviso. Hay un **service worker escrito a mano** en
+`public/sw.js` —sin next-pwa, sin workbox— que precachea la portada, los guardados y
+`/sin-conexion`; sirve `/_next/static/**` desde caché sin revalidar, porque va con hash;
+y resuelve las navegaciones con red primero y una carrera de 3 segundos, que es el techo
+de paciencia en 3G. Al guardar una ruta, la página le manda al worker el plan, su zona,
+las fichas de sus paradas **y la lista de estáticos que acaba de usar** — sin eso el HTML
+se guarda y abre sin estilos en cuanto el navegador desaloja su propia caché.
+
+**El panel nunca se sirve de caché, y eso es obligatorio, no una precaución.** El modo vive
+en la cookie `sendero-modo`: servir una copia le enseñaría al dueño el modo equivocado.
+Si algún día `/dashboard` abre sin red, la exclusión está rota.
+
+Hueco reconocido y aceptado: quien pierde la señal *durante* su primerísima carga no queda
+cubierto. Precachear los assets con hash desde un manifiesto escrito a mano se queda
+obsoleto en el primer despliegue y sirve el CSS de la versión anterior, que es peor.
 
 ---
 
@@ -210,9 +298,14 @@ lo que dibuja, y prefiere una entrada existente.
 
 Guardar es `Bookmark`, **nunca un corazón**.
 
-Son 33 entradas. Las seis últimas las trajo el modo experto —`Metricas`, `Ficha`,
-`Producto`, `Ajustes`, `Idioma`, `CerrarSesion`—, y están renombradas por lo que
-significan en este producto, no por lo que dibuja Lucide.
+Son 35 entradas. Seis las trajo el modo experto —`Metricas`, `Ficha`, `Producto`,
+`Ajustes`, `Idioma`, `CerrarSesion`—, y están renombradas por lo que significan en
+este producto, no por lo que dibuja Lucide.
+
+Las dos últimas son del planificador: `Ruta` (un recorrido ordenado; `Compass` ya
+significa descubrir, que es salir sin plan) y `MiUbicacion` («dónde estoy yo», que no
+es «dónde queda esto» — el dueño ve las dos en la misma pantalla). Guardar una ruta
+sigue siendo `Bookmark`: no se añadió un glifo para eso.
 
 ---
 

@@ -7,6 +7,8 @@ export { EstadoApertura } from "./estado-apertura";
 export { FilterGroup, FilterSheet } from "./filter-sheet";
 export { BotonGuardar, useGuardados } from "./guardados";
 export { Navegacion } from "./navegacion";
+export { BotonGuardarRuta, useRutaGuardada } from "./ruta-guardada";
+export type { RutaGuardada } from "./ruta-guardada";
 export type { RutaNav } from "./navegacion";
 export { MenuCuenta, ShellExperto } from "./panel";
 export type { GrupoLateral, RutaLateral } from "./panel";

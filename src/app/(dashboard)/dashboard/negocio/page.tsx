@@ -9,37 +9,11 @@ import { SLUG_DEMO, negocioDelDueno } from "@/data/panel";
 import { fechaLarga } from "@/lib/formato";
 
 import { AvisoMvp } from "../../_aviso-mvp";
+import { Campo } from "../../_campo";
 
 export const metadata: Metadata = { title: "Mi negocio" };
 
 const MAX_DESCRIPCION = 400;
-
-/** Etiqueta, control y ayuda. La ayuda no es opcional: cada campo dice para qué sirve. */
-function Campo({
-  id,
-  etiqueta,
-  ayuda,
-  children,
-}: {
-  id: string;
-  etiqueta: string;
-  ayuda?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Stack gap="tight">
-      <Text as="label" htmlFor={id} size="label" weight="medium">
-        {etiqueta}
-      </Text>
-      {children}
-      {ayuda ? (
-        <Text id={`${id}-ayuda`} size="caption" tone="tertiary">
-          {ayuda}
-        </Text>
-      ) : null}
-    </Stack>
-  );
-}
 
 const CLASES_SELECT =
   "h-control-lg w-full rounded-control border border-border-default bg-surface px-inset-md text-body-lg text-content-primary";
