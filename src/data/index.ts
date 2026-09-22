@@ -1,6 +1,6 @@
 import { CATEGORIAS, categoria } from "./categorias";
 import { NEGOCIOS } from "./negocios";
-import type { CategoriaId, Negocio, ZonaId } from "./tipos";
+import type { CategoriaId, Negocio, Zona, ZonaId } from "./tipos";
 import { ZONAS, zona } from "./zonas";
 
 export { CATEGORIAS, categoria, NEGOCIOS, ZONAS, zona };
@@ -43,6 +43,16 @@ export function cuantasParadasPosibles(id: ZonaId): number {
       n + (negocio.zona === id && negocio.coordenadas && negocio.categoria !== "hospedaje" ? 1 : 0),
     0,
   );
+}
+
+/**
+ * Las zonas donde armar una ruta tiene sentido: hacen falta dos sitios para que
+ * exista un orden. Vive aquí y no en cada pantalla porque lo preguntan la
+ * portada, la navegación y la ficha de la zona, y tres copias del mismo filtro
+ * son tres sitios donde puede empezar a discrepar.
+ */
+export function zonasConRuta(): Zona[] {
+  return ZONAS.filter((z) => cuantasParadasPosibles(z.id) >= 2);
 }
 
 /**

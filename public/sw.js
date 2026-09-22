@@ -21,9 +21,10 @@ const MIOS = [PAGINAS, ESTATICO, RUTA];
 
 const CAIDA = "/sin-conexion";
 
-/* Lo mínimo para que la aplicación abra sin red: la portada, lo guardado y la
-   pantalla que explica qué pasa. Tres navegaciones, nada más. */
-const SEMILLA = ["/", "/guardados", CAIDA];
+/* Lo mínimo para que la aplicación abra sin red: las pantallas a las que lleva
+   la navegación de primer nivel, más la que explica qué pasa. Buscar no entra:
+   sin red no hay nada que buscar que no esté ya en guardados. */
+const SEMILLA = ["/", "/ruta", "/guardados", CAIDA];
 
 /* El techo de paciencia en 3G. Pasados estos milisegundos se sirve la copia en
    vez de dejar a alguien mirando una pantalla en blanco. */

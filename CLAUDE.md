@@ -73,7 +73,14 @@ El directorio dice qué hay. El planificador dice **qué cabe en el tiempo que t
 orden, y qué va a estar abierto cuando pases** — la pregunta que queda cuando el visitante
 ya encontró los negocios.
 
-Se entra desde la portada, desde la ficha de la zona y desde la de un negocio.
+Se entra desde la navegación —«Rutas», en el encabezado y en las pestañas—, desde la
+portada, desde la ficha de la zona y desde la de un negocio.
+
+`/ruta` hace dos cosas, y la segunda es la que la justifica. Con `?zona=` redirige y no
+se renderiza. Sin zona es una pantalla que lista las zonas: un enlace de primer nivel
+necesita un destino, y el planificador no tiene uno sin zona. Aquí sí se listan las nueve
+y no se repite nada, porque su único trabajo es elegir dónde — a diferencia de la portada,
+donde la rejilla de zonas está a un scroll.
 El de la portada es un `<select>` y no nueve enlaces: la rejilla de zonas está
 justo debajo, y repetir ahí los mismos nueve nombres sería decir dos veces lo mismo
 en una pantalla. Como un `<form method="get">` no sabe escribir un segmento de la
@@ -146,9 +153,12 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   fuentes, comprimido en brotli. No solo JavaScript: contar únicamente el JS dejaba fuera
   97 KB de tipografía, que es el 41 % de una página del portal.
   Medido en la Fase 4: **portal 235,6 KB · dashboard 183,5 KB**. Ambos cumplen.
-  La portada subió a 240,6 KB al ganar el selector de rutas: 0,8 KB de HTML y cero
-  JavaScript, porque es un formulario GET nativo.
-  El planificador de rutas midió **242,3 KB en su peor caso** (`/zona/santa-fe/ruta?dias=3`,
+  Poner «Rutas» en la navegación costó **+1,7 KB de JavaScript en todas las rutas
+  públicas**: la barra de pestañas es un componente cliente, y con la cuarta sección
+  se lleva al bundle el icono `Ruta`. Es el precio de tener la entrada en el
+  encabezado y en las pestañas, y está medido, no estimado.
+  La portada quedó en 242,4 KB y `/ruta` —el selector de zona— en 239,9 KB.
+  El planificador de rutas midió **244,0 KB en su peor caso** (`/zona/santa-fe/ruta?dias=3`,
   que es la zona con más negocios y el HTML máximo). Cabe, con 7,9 KB de margen, y es
   desde el primer día **la página más pesada del portal**: +2,3 KB sobre la portada, todo
   HTML de itinerario. Los trozos de JavaScript son exactamente los mismos.

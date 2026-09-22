@@ -4,7 +4,7 @@ import { Ruta, Search } from "@/components/icons";
 import { Container, Grid, Inline, Section, Stack } from "@/components/layout";
 import { BusinessCard, CategoryChip } from "@/components/patterns";
 import { ButtonLink, Media, Surface, Text } from "@/components/ui";
-import { CATEGORIAS, ZONAS, cuantasParadasPosibles, cuantosEnZona, recientes } from "@/data";
+import { CATEGORIAS, ZONAS, cuantosEnZona, recientes, zonasConRuta } from "@/data";
 
 import { resumir } from "./_resumen";
 
@@ -14,15 +14,8 @@ const PASOS = [
   "Le escribes por WhatsApp. Sin reservas ni comisiones.",
 ];
 
-/**
- * Solo las zonas donde el planificador tiene algo que ordenar. Ofrecer una que
- * devuelve «con esos filtros no sale una ruta» es la peor primera impresión
- * posible, y es el mismo criterio que ya usa `categoriasDeZona` en el buscador:
- * un filtro que lleva a un vacío es lo peor de un directorio pequeño.
- *
- * El mismo umbral que usa la ficha de la zona, y sale de la misma función.
- */
-const ZONAS_CON_RUTA = ZONAS.filter((z) => cuantasParadasPosibles(z.id) >= 2);
+/** Ofrecer una zona que lleva a un vacío es lo peor de un directorio pequeño. */
+const ZONAS_CON_RUTA = zonasConRuta();
 
 export default function DescubrirPage() {
   const nuevos = recientes(3);
