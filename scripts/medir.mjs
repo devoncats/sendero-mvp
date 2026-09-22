@@ -19,6 +19,7 @@ const BASE = `http://localhost:${PUERTO}`;
 const RUTAS = [
   "/",
   "/buscar",
+  "/ruta",
   "/zona/santa-fe",
   // El peor caso del planificador: la zona con más negocios y tres días, que es
   // el HTML máximo. Medir el caso por defecto daría un número bonito y falso.

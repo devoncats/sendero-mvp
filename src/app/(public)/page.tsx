@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-import { Search } from "@/components/icons";
+import { Ruta, Search } from "@/components/icons";
 import { Container, Grid, Inline, Section, Stack } from "@/components/layout";
 import { BusinessCard, CategoryChip } from "@/components/patterns";
 import { ButtonLink, Media, Surface, Text } from "@/components/ui";
-import { CATEGORIAS, ZONAS, cuantosEnZona, recientes } from "@/data";
+import { CATEGORIAS, ZONAS, cuantosEnZona, recientes, zonasConRuta } from "@/data";
 
 import { resumir } from "./_resumen";
 
@@ -13,6 +13,9 @@ const PASOS = [
   "Ves quién está detrás, qué vende y cuándo abre.",
   "Le escribes por WhatsApp. Sin reservas ni comisiones.",
 ];
+
+/** Ofrecer una zona que lleva a un vacío es lo peor de un directorio pequeño. */
+const ZONAS_CON_RUTA = zonasConRuta();
 
 export default function DescubrirPage() {
   const nuevos = recientes(3);
@@ -71,8 +74,79 @@ export default function DescubrirPage() {
           </form>
         </Stack>
 
+        {/*
+          Armar una ruta, desde la portada.
+
+          Va con un `<select>` y no con nueve chips a propósito: la rejilla de
+          zonas está justo debajo, y repetir ahí los mismos nueve nombres sería
+          decir dos veces lo mismo en la misma pantalla. Una lista desplegable
+          ocupa una línea y dice lo mismo.
+
+          El formulario es GET y nativo, como el buscador. La zona viaja como
+          consulta y `/ruta` la convierte en segmento, porque un `<form>` no
+          sabe escribir una parte de la dirección.
+        */}
+        {ZONAS_CON_RUTA.length > 0 ? (
+          <Section espaciado="none" className="lg:order-3 lg:col-span-2">
+            <Surface relleno="lg" className="lg:p-inset-xl">
+              <Stack>
+                <Stack gap="tight">
+                  <Inline gap="icon" align="center">
+                    <Ruta className="size-icon-md shrink-0 text-brand" aria-hidden />
+                    <Text as="h2" size="heading-sm" weight="semibold">
+                      ¿Ya sabes a qué zona vas?
+                    </Text>
+                  </Inline>
+                  <Text size="body-md" tone="secondary">
+                    Dinos cuántos días tienes y qué te interesa, y te armamos el recorrido: en qué
+                    orden pasar y qué va a estar abierto cuando llegues.
+                  </Text>
+                </Stack>
+
+                <form action="/ruta" method="get">
+                  {/*
+                    Apilados en el teléfono. Compartiendo fila a 375 px, al
+                    selector le quedaban 147 px y se comía «El Valle de Antón,
+                    Coclé» y hasta el propio «Elige una zona». Desde `sm` hay
+                    sitio y vuelven a la misma línea.
+                  */}
+                  <div className="flex max-w-prose flex-col gap-inset-sm sm:flex-row sm:items-end">
+                    <Stack gap="tight" className="min-w-0 flex-1">
+                      <Text as="label" htmlFor="zona-ruta" size="label" weight="medium">
+                        Zona
+                      </Text>
+                      <select
+                        id="zona-ruta"
+                        name="zona"
+                        required
+                        defaultValue=""
+                        className="h-control-lg w-full rounded-control border border-border-default bg-surface px-inset-md text-body-md text-content-primary"
+                      >
+                        <option value="" disabled>
+                          Elige una zona
+                        </option>
+                        {ZONAS_CON_RUTA.map((z) => (
+                          <option key={z.id} value={z.id}>
+                            {z.nombre}, {z.provincia}
+                          </option>
+                        ))}
+                      </select>
+                    </Stack>
+                    <button
+                      type="submit"
+                      className="inline-flex h-control-lg shrink-0 items-center justify-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content"
+                    >
+                      Armar la ruta
+                    </button>
+                  </div>
+                </form>
+              </Stack>
+            </Surface>
+          </Section>
+        ) : null}
+
         {/* Zonas — las nueve, sin página intermedia que no aporta nada */}
-        <Section espaciado="none" className="lg:order-3 lg:col-span-2">
+        <Section espaciado="none" className="lg:order-4 lg:col-span-2">
           <Stack>
             <Text as="h2" size="heading-sm" weight="semibold">
               Nueve zonas
@@ -102,7 +176,7 @@ export default function DescubrirPage() {
         </Section>
 
         {/* Categorías */}
-        <Section espaciado="none" className="lg:order-4 lg:col-span-2">
+        <Section espaciado="none" className="lg:order-5 lg:col-span-2">
           <Stack>
             <Text as="h2" size="heading-sm" weight="semibold">
               Qué buscas
@@ -148,7 +222,7 @@ export default function DescubrirPage() {
         {/* Para el otro lado del proyecto */}
         <Surface
           relleno="lg"
-          className="border-accent-border bg-accent-surface lg:order-6 lg:col-span-2"
+          className="border-accent-border bg-accent-surface lg:order-7 lg:col-span-2"
         >
           <Inline gap="lg" align="center" wrap={false}>
             <Stack gap="tight" className="flex-1">
@@ -166,7 +240,7 @@ export default function DescubrirPage() {
         </Surface>
 
         {/* Los últimos en confirmar sus datos */}
-        <Section espaciado="none" className="lg:order-5 lg:col-span-2">
+        <Section espaciado="none" className="lg:order-6 lg:col-span-2">
           <Stack>
             <Text as="h2" size="heading-sm" weight="semibold">
               Nuevos en Sendero
