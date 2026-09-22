@@ -7,7 +7,7 @@ import { Container, Grid, Inline, Stack } from "@/components/layout";
 import { BusinessCard, CategoryChip } from "@/components/patterns";
 import { ButtonLink, Media, Surface, Text } from "@/components/ui";
 import type { ZonaId } from "@/data";
-import { ZONAS, categoria, categoriasDeZona, cuantosConPunto, negociosDeZona } from "@/data";
+import { ZONAS, categoria, categoriasDeZona, cuantasParadasPosibles, negociosDeZona } from "@/data";
 import { enlaceMapa } from "@/lib/formato";
 
 import { resumir } from "../../_resumen";
@@ -43,8 +43,9 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
   const zonaId = z.id as ZonaId;
   const negocios = negociosDeZona(zonaId);
   const categorias = categoriasDeZona(zonaId);
-  // Con dos paradas no hay nada que ordenar: entonces no se ofrece la ruta.
-  const conPunto = cuantosConPunto(zonaId);
+  // Hacen falta dos sitios para que exista un orden. Con uno no hay recorrido,
+  // solo una ficha — y para eso ya está la tarjeta de abajo.
+  const paradas = cuantasParadasPosibles(zonaId);
 
   return (
     <Container ancho="sm" as="main" className="lg:max-w-page-xl">
@@ -141,7 +142,7 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
             </a>
             {/* «Cómo llegar» es donde vive el movimiento, y armar una ruta es
                 moverse. Solo si hay suficientes puntos para que haya orden. */}
-            {conPunto >= 3 ? (
+            {paradas >= 2 ? (
               <ButtonLink href={`/zona/${z.id}/ruta`} variante="secondary" anchoCompleto>
                 <Ruta className="size-icon-sm" aria-hidden />
                 Armar una ruta por {z.nombre}

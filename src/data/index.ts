@@ -29,11 +29,20 @@ export function cuantosEnZona(id: ZonaId): number {
 }
 
 /**
- * Cuántos negocios de la zona han puesto su punto. Lo pregunta el portal para
- * decidir si ofrece armar una ruta: con dos paradas no hay nada que ordenar.
+ * Cuántas paradas de verdad puede tener una ruta por esa zona.
+ *
+ * No es lo mismo que «cuántos tienen punto», y la diferencia importa: el
+ * hospedaje tiene punto pero nunca es parada —es ancla, se sale de él y se
+ * vuelve a él—, así que contarlo inflaba el número. Con eso, Volcán se ofrecía
+ * y El Valle no, teniendo las dos exactamente dos paradas: la única diferencia
+ * era si a un hospedaje le habían puesto la coordenada.
  */
-export function cuantosConPunto(id: ZonaId): number {
-  return NEGOCIOS.reduce((n, negocio) => n + (negocio.zona === id && negocio.coordenadas ? 1 : 0), 0);
+export function cuantasParadasPosibles(id: ZonaId): number {
+  return NEGOCIOS.reduce(
+    (n, negocio) =>
+      n + (negocio.zona === id && negocio.coordenadas && negocio.categoria !== "hospedaje" ? 1 : 0),
+    0,
+  );
 }
 
 /**
