@@ -105,4 +105,162 @@ export type Negocio = {
   estadoDato: EstadoDato;
   /** Cuántas fotos tiene. En el MVP no hay archivos: los huecos se dibujan. */
   fotos: number;
+  /**
+   * Cuántas personas puede atender en un día: camas, cubiertos, cupo de una
+   * gira. Solo lo tienen los que forman parte de una experiencia — es lo que
+   * la cooperativa necesita para no prometer más de lo que cabe.
+   */
+  plazas?: number;
+  /** La unidad de esas plazas, en palabras: «camas», «cubiertos», «personas». */
+  unidadPlazas?: string;
+};
+
+/* ------------------------------------------------------------------------ */
+/*  La experiencia y el ente económico                                       */
+/* ------------------------------------------------------------------------ */
+
+/**
+ * Quien da la cara por la comunidad: la cooperativa, el consorcio o la
+ * sociedad que agrupa a los emprendimientos. El portal no trata con cada
+ * familia por separado — trata con este ente, y el ente reparte.
+ */
+export type EnteEconomico = {
+  id: string;
+  nombre: string;
+  tipo: "cooperativa" | "consorcio" | "sociedad";
+  zona: ZonaId;
+  /** Quien contesta el WhatsApp. Con nombre, como todo en este proyecto. */
+  contacto: Persona;
+  /** E.164 sin el signo. Aquí llegan las solicitudes de los visitantes. */
+  whatsapp: string;
+  fundadaEn: number;
+  descripcion: Texto;
+};
+
+/** De qué va cada momento del recorrido. Es también el orden del folleto. */
+export type TipoBloque = "alojamiento" | "gastronomia" | "cultural" | "natural" | "traslado";
+
+/**
+ * Un momento del itinerario, y quién lo atiende. `porPersona` es lo que le
+ * llega a ese emprendimiento por cada visitante: la suma de los bloques es el
+ * precio de la experiencia, y por eso el portal puede decir a dónde va cada
+ * balboa sin inventarse un porcentaje.
+ */
+export type Bloque = {
+  /** 1, 2… Día del recorrido, no fecha. */
+  dia: number;
+  /** HH:MM */
+  hora: string;
+  /** Minutos que dura. */
+  duracion: number;
+  tipo: TipoBloque;
+  actividad: Texto;
+  /** Slug de un `Negocio`. */
+  emprendimiento: string;
+  porPersona: number;
+  /**
+   * Otros emprendimientos que pueden atender este mismo bloque. Es lo que
+   * permite repartir visitantes con criterio: si dos fondas sirven el mismo
+   * almuerzo, la cooperativa puede mandárselos a la que más lo necesita.
+   */
+  alternativas?: string[];
+};
+
+export type Experiencia = {
+  id: string;
+  nombre: string;
+  /** La promesa en una frase. */
+  lema: Texto;
+  zona: ZonaId;
+  ente: string;
+  dias: number;
+  noches: number;
+  /** Personas por fecha. Lo pone la plaza más chica del recorrido. */
+  cupo: number;
+  /** Mínimo de personas para que salga. */
+  minimo: number;
+  descripcion: Texto;
+  bloques: Bloque[];
+  incluye: string[];
+  noIncluye: string[];
+  /** Qué llevar, en palabras de quien guía. */
+  llevar: string[];
+};
+
+export type EstadoSolicitud = "nueva" | "confirmada" | "repartida" | "atendida" | "cancelada";
+
+/**
+ * Lo que manda un visitante desde el portal. No es una reserva hasta que la
+ * cooperativa la confirma: el portal no cobra y no promete lo que no sabe.
+ */
+export type Solicitud = {
+  id: string;
+  experiencia: string;
+  /** ISO, día de llegada. */
+  fecha: string;
+  adultos: number;
+  ninos: number;
+  nombre: string;
+  /** País o ciudad. Es lo que la cooperativa necesita para su registro. */
+  procedencia: string;
+  idioma: string;
+  estado: EstadoSolicitud;
+  /** ISO, cuándo llegó. */
+  recibida: string;
+  nota?: string;
+  /**
+   * Quién atiende cada bloque, cuando la cooperativa eligió una alternativa.
+   * Clave: índice del bloque. Sin entrada, lo atiende el titular.
+   */
+  asignaciones?: Record<number, string>;
+};
+
+/* ------------------------------------------------------------------------ */
+/*  Lo administrativo: proveedores, insumos y cuentas                        */
+/* ------------------------------------------------------------------------ */
+
+export type Proveedor = {
+  id: string;
+  nombre: string;
+  /** Qué vende, en una línea. */
+  rubro: string;
+  /** De dónde viene. Un proveedor de la misma comunidad también es derrame. */
+  lugar: string;
+  local: boolean;
+  whatsapp: string;
+};
+
+/** Lo que un emprendimiento necesita tener para poder atender. */
+export type Insumo = {
+  emprendimiento: string;
+  nombre: string;
+  unidad: string;
+  existencias: number;
+  /** Por debajo de esto no alcanza para un fin de semana lleno. */
+  minimo: number;
+  proveedor: string;
+};
+
+/**
+ * Un mes de cuentas de un emprendimiento, en balboas. Lo lleva la cooperativa
+ * con lo que cada familia le reporta; no es contabilidad formal y no pretende
+ * serlo.
+ */
+export type MesFinanciero = {
+  /** "2026-10" */
+  mes: string;
+  /** Lo que llegó por la experiencia. */
+  ingresosRuta: number;
+  /** Lo que vendió por su cuenta. */
+  ingresosPropios: number;
+  gastosFijos: number;
+  gastosVariables: number;
+  /** Lo que tiene en caja al cierre. */
+  caja: number;
+  /** Lo que debe a proveedores al cierre. */
+  deuda: number;
+  /** Días que lleva vencida la deuda más vieja. 0 si va al día. */
+  diasAtraso: number;
+  /** Plazas ocupadas sobre plazas ofrecidas en el mes, 0–1. */
+  ocupacion: number;
 };
