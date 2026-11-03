@@ -1,85 +1,76 @@
-import { Ajustes, Clock, Ficha, Metricas, Photo, Producto } from "@/components/icons";
-import type { GrupoLateral } from "@/components/patterns";
-import type { Pendiente } from "@/data/pendientes";
+import { Ajustes, Ficha, Metricas, Proveedor, Solicitud, Visitantes } from "@/components/icons";
+import type { GrupoLateral, RutaNav } from "@/components/patterns";
 
 /**
- * Las secciones de la barra lateral del modo experto.
+ * La navegación del panel de la cooperativa, en los dos modos.
  *
- * Son las mismas cinco pantallas del modo guiado más dos: métricas, que es la
- * portada del modo, y configuración. El armazón no las conoce — se las pasa el
- * layout, igual que `Navegacion` recibe las suyas.
+ * Las mismas cinco pantallas en el encabezado del guiado y en la barra lateral
+ * del experto, que añade la configuración. El armazón no las conoce — se las
+ * pasa el layout, igual que `Navegacion` recibe las suyas.
  *
- * El icono va ya renderizado porque un componente no cruza la frontera al
- * cliente. Un elemento sí.
+ * Las pantallas de la ficha del dueño (negocio, productos, fotos, horario)
+ * siguen en el código pero salieron de aquí: el panel ya no es de una familia.
+ * Volverán como la ficha de cada emprendimiento, editada por la cooperativa.
  */
+
+export const RUTAS_PANEL: readonly RutaNav[] = [
+  { href: "/dashboard", etiqueta: "Panel" },
+  { href: "/dashboard/solicitudes", etiqueta: "Solicitudes" },
+  { href: "/dashboard/emprendimientos", etiqueta: "Emprendimientos" },
+  { href: "/dashboard/visitantes", etiqueta: "Visitantes" },
+  { href: "/dashboard/proveedores", etiqueta: "Proveedores" },
+];
 
 const ICONO = "size-icon-sm shrink-0";
 
-/** Dónde se arregla cada pendiente. Es lo que enciende el contador de la barra. */
-const SECCION_DE: Record<string, string> = {
-  fotos: "/dashboard/fotos",
-  horario: "/dashboard/horario",
-  referencia: "/dashboard/horario",
-  punto: "/dashboard/horario",
-  precios: "/dashboard/productos",
-  confirmar: "/dashboard/negocio",
+/** Lo que hay pendiente detrás de cada puerta. Enciende el contador de la barra. */
+export type Cuenta = {
+  solicitudes: number;
+  emprendimientos: number;
+  proveedores: number;
 };
 
-function contarPorSeccion(lista: readonly Pendiente[]): Record<string, number> {
-  const cuenta: Record<string, number> = {};
-  for (const p of lista) {
-    const href = SECCION_DE[p.id];
-    if (!href) continue;
-    cuenta[href] = (cuenta[href] ?? 0) + 1;
-  }
-  return cuenta;
-}
-
 /**
- * El modo guiado dice una sola cosa a la vez. El experto enseña las siete
- * puertas y marca cuáles tienen algo pendiente detrás, que es lo que espera
- * quien pidió este modo: ver el estado entero de un vistazo.
+ * El experto enseña todas las puertas y marca cuáles tienen algo pendiente
+ * detrás, que es lo que espera quien pidió este modo: el estado entero de un
+ * vistazo.
  */
-export function gruposLaterales(lista: readonly Pendiente[]): readonly GrupoLateral[] {
-  const cuenta = contarPorSeccion(lista);
-
+export function gruposLaterales(cuenta: Cuenta): readonly GrupoLateral[] {
   return [
     {
       titulo: "Resumen",
+      rutas: [{ href: "/dashboard", etiqueta: "Métricas", icono: <Metricas className={ICONO} aria-hidden /> }],
+    },
+    {
+      titulo: "Visitantes",
       rutas: [
         {
-          href: "/dashboard",
-          etiqueta: "Métricas",
-          icono: <Metricas className={ICONO} aria-hidden />,
+          href: "/dashboard/solicitudes",
+          etiqueta: "Solicitudes",
+          icono: <Solicitud className={ICONO} aria-hidden />,
+          pendientes: cuenta.solicitudes || undefined,
+        },
+        {
+          href: "/dashboard/visitantes",
+          etiqueta: "Registro",
+          icono: <Visitantes className={ICONO} aria-hidden />,
         },
       ],
     },
     {
-      titulo: "Mi negocio",
+      titulo: "La comunidad",
       rutas: [
         {
-          href: "/dashboard/negocio",
-          etiqueta: "Ficha",
+          href: "/dashboard/emprendimientos",
+          etiqueta: "Emprendimientos",
           icono: <Ficha className={ICONO} aria-hidden />,
-          pendientes: cuenta["/dashboard/negocio"],
+          pendientes: cuenta.emprendimientos || undefined,
         },
         {
-          href: "/dashboard/productos",
-          etiqueta: "Productos",
-          icono: <Producto className={ICONO} aria-hidden />,
-          pendientes: cuenta["/dashboard/productos"],
-        },
-        {
-          href: "/dashboard/fotos",
-          etiqueta: "Fotos",
-          icono: <Photo className={ICONO} aria-hidden />,
-          pendientes: cuenta["/dashboard/fotos"],
-        },
-        {
-          href: "/dashboard/horario",
-          etiqueta: "Horario",
-          icono: <Clock className={ICONO} aria-hidden />,
-          pendientes: cuenta["/dashboard/horario"],
+          href: "/dashboard/proveedores",
+          etiqueta: "Proveedores",
+          icono: <Proveedor className={ICONO} aria-hidden />,
+          pendientes: cuenta.proveedores || undefined,
         },
       ],
     },

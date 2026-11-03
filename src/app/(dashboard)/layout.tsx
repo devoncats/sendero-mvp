@@ -3,31 +3,15 @@ import type { ReactNode } from "react";
 
 import { ArrowLeft, Compass } from "@/components/icons";
 import { Container, Inline } from "@/components/layout";
-import { MenuCuenta, Navegacion, ShellExperto, type RutaNav } from "@/components/patterns";
+import { MenuCuenta, Navegacion, ShellExperto } from "@/components/patterns";
 import { Text } from "@/components/ui";
-import { negocioDelDueno } from "@/data/panel";
-import { pendientes } from "@/data/pendientes";
 import { modoPanel } from "@/lib/modo-panel";
 
 import { cambiarModo } from "./_acciones";
 import { ContenidoMenuCuenta } from "./_menu-cuenta";
-import { gruposLaterales } from "./_rutas-panel";
+import { insumosBajos, loSiguiente, sesion, sociosPorSalud } from "./_cooperativa";
+import { RUTAS_PANEL, gruposLaterales } from "./_rutas-panel";
 
-/**
- * Las cinco pantallas del panel guiado. Caben en el encabezado, y por eso el
- * modo guiado sigue sin barra lateral: un dueño que nunca usó un panel no tiene
- * que aprender un menú antes de poder hacer algo.
- *
- * En modo experto no se usan: ahí navega la barra lateral, y tener dos menús
- * para lo mismo sobra.
- */
-const RUTAS_PANEL: readonly RutaNav[] = [
-  { href: "/dashboard", etiqueta: "Panel" },
-  { href: "/dashboard/negocio", etiqueta: "Mi negocio" },
-  { href: "/dashboard/productos", etiqueta: "Productos" },
-  { href: "/dashboard/fotos", etiqueta: "Fotos" },
-  { href: "/dashboard/horario", etiqueta: "Horario" },
-];
 
 /** El logo. Es el mismo en los dos modos, y lleva siempre a la portada. */
 function Marca() {
@@ -57,15 +41,15 @@ function Marca() {
  */
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const modo = await modoPanel();
-  const negocio = negocioDelDueno();
-  const iniciales = negocio.persona.nombre
+  const { coop } = sesion();
+  const iniciales = coop.contacto.nombre
     .split(" ")
     .slice(0, 2)
     .map((p) => p[0])
     .join("");
 
   const cuenta = (
-    <MenuCuenta iniciales={iniciales} nombre={negocio.persona.nombre}>
+    <MenuCuenta iniciales={iniciales} nombre={coop.contacto.nombre}>
       <ContenidoMenuCuenta modo={modo} />
     </MenuCuenta>
   );
@@ -76,7 +60,11 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         <ShellExperto
           marca={<Marca />}
           cuenta={cuenta}
-          grupos={gruposLaterales(pendientes(negocio, new Date()))}
+          grupos={gruposLaterales({
+            solicitudes: loSiguiente().filter((x) => x.tipo === "solicitud").length,
+            emprendimientos: sociosPorSalud().filter((x) => x.salud.nivel === "riesgo").length,
+            proveedores: insumosBajos().length,
+          })}
           pie={
             <form action={cambiarModo}>
               <input type="hidden" name="modo" value="guiado" />
@@ -103,11 +91,11 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           <Inline justify="between" wrap={false} className="h-control-lg">
             <Inline gap="lg" wrap={false} className="min-w-0">
               <Marca />
-              {/* El nombre del negocio ya no vive aquí. Era una etiqueta que no
+              {/* El nombre de la cooperativa no vive aquí. Era una etiqueta que no
                   hacía nada y que encima se apagaba a partir de `md` para dejar
                   sitio a los cinco enlaces; ahora está en el menú de cuenta,
                   donde sí se puede hacer algo con él. */}
-              <Navegacion rutas={RUTAS_PANEL} etiqueta="Tu ficha" />
+              <Navegacion rutas={RUTAS_PANEL} etiqueta="Panel de la cooperativa" />
             </Inline>
             {cuenta}
           </Inline>

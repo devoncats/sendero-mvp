@@ -11,20 +11,21 @@ import {
 } from "@/components/icons";
 import { Stack } from "@/components/layout";
 import { Badge, Text } from "@/components/ui";
-import { SLUG_DEMO, SOPORTE_WHATSAPP, negocioDelDueno } from "@/data/panel";
+import { SOPORTE_WHATSAPP } from "@/data/panel";
 import { zona } from "@/data";
 import { cn } from "@/lib/cn";
-import { enlaceWhatsApp, fechaLarga } from "@/lib/formato";
+import { enlaceWhatsApp } from "@/lib/formato";
 import type { ModoPanel } from "@/lib/modo-panel";
 
 import { cambiarModo } from "./_acciones";
+import { sesion } from "./_cooperativa";
 
 /**
  * El contenido del menú de cuenta. Server Component: aquí está todo el texto,
  * los enlaces y el formulario que cambia de modo. Lo único que corre en el
  * cliente es abrirlo y cerrarlo.
  *
- * El nombre del negocio vive aquí y ya no en el encabezado. Ahí era una
+ * El nombre de la cooperativa vive aquí y no en el encabezado. Ahí era una
  * etiqueta que no hacía nada y que además desaparecía a partir de `md` para
  * dejar sitio a los enlaces; aquí es el título de la sesión, y debajo están
  * las cosas que se pueden hacer con ella.
@@ -40,37 +41,28 @@ function Separador() {
 }
 
 export function ContenidoMenuCuenta({ modo }: { modo: ModoPanel }) {
-  const negocio = negocioDelDueno();
-  const z = zona(negocio.zona);
+  const { coop, experiencia: e, socios } = sesion();
+  const z = zona(coop.zona);
   const experto = modo === "experto";
 
   return (
     <>
       <Stack gap="tight" className="px-inset-sm pb-inset-sm">
         <Text size="body-md" weight="semibold">
-          {negocio.nombre}
+          {coop.nombre}
         </Text>
         <Text size="caption" tone="tertiary">
-          {negocio.persona.nombre} · {z.nombre}, {z.provincia}
+          {coop.contacto.nombre} · {z.nombre}, {z.provincia}
         </Text>
-        <Badge
-          tono={negocio.estadoDato === "verificado" ? "verificado" : "sinConfirmar"}
-          className="self-start"
-        >
-          {negocio.estadoDato === "verificado" && negocio.confirmadoEl ? (
-            <>
-              <CheckCircle className="size-icon-sm" aria-hidden />
-              Confirmada el {fechaLarga(negocio.confirmadoEl)}
-            </>
-          ) : (
-            "Ficha sin confirmar"
-          )}
+        <Badge tono="brand" className="self-start">
+          <CheckCircle className="size-icon-sm" aria-hidden />
+          {socios.length} familias socias
         </Badge>
       </Stack>
 
-      <Link href={`/negocio/${SLUG_DEMO}`} className={FILA}>
+      <Link href={`/experiencia/${e.id}`} className={FILA}>
         <ExternalLink className={ICONO} aria-hidden />
-        Ver mi ficha como la ven ellos
+        Ver la experiencia como la ven ellos
       </Link>
 
       <Separador />
@@ -127,12 +119,12 @@ export function ContenidoMenuCuenta({ modo }: { modo: ModoPanel }) {
       </Link>
 
       {/* Para esta persona el soporte no es un centro de ayuda con artículos:
-          es escribirle a alguien. El mensaje va escrito con el nombre del
-          negocio, para que no tenga que explicar quién es. */}
+          es escribirle a alguien. El mensaje va escrito con el nombre de la
+          cooperativa, para que no tenga que explicar quién es. */}
       <a
         href={enlaceWhatsApp(
           SOPORTE_WHATSAPP,
-          `Hola, soy ${negocio.persona.nombre}, de ${negocio.nombre}. Necesito ayuda con mi panel.`,
+          `Hola, soy ${coop.contacto.nombre}, de ${coop.nombre}. Necesito ayuda con el panel.`,
         )}
         rel="noopener noreferrer"
         className={FILA}
