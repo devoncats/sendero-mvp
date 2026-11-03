@@ -1,8 +1,10 @@
 # Sendero — MVP
 
-Plataforma que da alcance digital a micro y pequeñas empresas de zonas turísticas
-**no masificadas de Panamá**: artesanos, fondas, hospedajes familiares, guías locales,
-productores del campo.
+Plataforma que promueve **experiencias ecoturísticas de comunidades no masificadas de
+Panamá** y, a través del ente económico de cada comunidad, da asistencia administrativa a
+los emprendimientos que las atienden: hospedajes familiares, fondas, guías, artesanas,
+conjuntos típicos, transporte local. El objetivo de fondo es el **mayor derrame económico
+posible en las familias**.
 
 Proyecto independiente. Hereda las reglas de diseño de `sendero-frontend`, pero **no**
 su maquinaria: aquí no hay pipeline de tokens, ni Storybook, ni tests, ni boundaries
@@ -12,19 +14,36 @@ por ESLint. La disciplina la sostiene este archivo.
 
 ## Qué es y qué no es
 
-Es un **directorio de descubrimiento**. El visitante encuentra un negocio y contacta
-directo por **WhatsApp o llamada**.
+Es la **vitrina de una experiencia comunitaria** y el **panel administrativo del ente
+económico** que la organiza. Así lo pidió el PO en noviembre de 2026; antes era un
+directorio de negocios sueltos, y ese cambio es la decisión que ordena todo lo demás.
 
-**No hay reservas, pagos, carrito, cuentas de usuario visitante ni backend.**
-Los datos son estáticos y tipados, importados en build time. Esto es deliberado: los
-negocios objetivo no están bancarizados ni tienen inventario digital. No lo "mejores".
+- El portal vende **una experiencia** —hoy, «Un fin de semana dentro del cráter», en El
+  Valle de Antón—, no negocios uno por uno. Los emprendimientos salen **dentro** de ella,
+  con nombre de persona, pero sin ficha, horario ni WhatsApp propios.
+- El visitante **solicita**; no reserva ni paga. La solicitud sale por WhatsApp al ente
+  económico (cooperativa, consorcio o sociedad), que confirma y **reparte** el trabajo
+  entre sus socios.
+- El panel es **del ente**, no de una familia: solicitudes, reparto, registro de
+  visitantes, cuentas de cada emprendimiento, proveedores e insumos, y la **alerta de
+  riesgo**.
+- Después vendrán el pase de día y los sitios sueltos (mercado, cascada, mirador). Por eso
+  el directorio **está dormido, no borrado** (`lib/directorio.ts`): sus rutas dan 404 y
+  salen de toda navegación, y vuelven cambiando una constante.
+
+**Sigue sin haber backend, pagos ni cuentas de visitante.** Todo lo administrativo
+—solicitudes, cuentas, insumos— está **simulado** en `src/data` y lo dice cada pantalla
+con `AvisoMvp`. El modelo está hecho para que el día que exista un servidor se cambie el
+origen de los datos y ninguna pantalla se entere. Lo que sí es de verdad son los mensajes:
+la solicitud del visitante, el aviso a cada familia y el pedido al proveedor son enlaces
+de WhatsApp ya escritos.
 
 Dos áreas:
 
 | Ruta | Para | Densidad |
 |---|---|---|
-| `(public)` | Visitantes que descubren | `editorial` |
-| `(dashboard)` | Dueños que gestionan su ficha | `operational` |
+| `(public)` | Visitantes que eligen una experiencia | `editorial` |
+| `(dashboard)` | Quien administra el ente económico | `operational` |
 
 ---
 
@@ -32,26 +51,77 @@ Dos áreas:
 
 **Visitante.** Turista con datos móviles caros o roaming. De pie, una mano, sol en la pantalla.
 
-**Dueño del negocio.** 45–65 años, Android de gama media (referencia: Moto G Power,
-Android 11), conectividad intermitente, poca costumbre con interfaces. Nunca ha usado
-un dashboard. Necesita que cada pantalla diga qué hacer ahora.
+**Quien administra la cooperativa.** Mismo perfil que tenía el dueño del negocio: 45–65
+años, Android de gama media (referencia: Moto G Power, Android 11), conectividad
+intermitente, poca costumbre con interfaces. Lo que cambió es la escala: ya no cuida una
+ficha, coordina a diez familias. Necesita que cada pantalla diga qué hacer ahora.
+
+---
+
+## La experiencia y el reparto
+
+`data/experiencias.ts` describe el recorrido en **bloques**: día, hora, tipo, actividad,
+quién lo atiende y **cuánto recibe por visitante**. El precio es la suma de los bloques, y
+por eso la portada puede decir a quién le llega cada balboa sin inventar un porcentaje. La
+cooperativa no cobra comisión: se sostiene con la cuota de sus socios.
+
+Un bloque puede tener **alternativas** —dos fondas que sirven el mismo almuerzo, dos
+hospedajes—. Es lo que permite repartir con criterio, y es donde la alerta de riesgo se
+vuelve acción: `sugerencia()` (`lib/reparto.ts`) propone mandar el grupo a la alternativa
+que necesita apoyo, **solo si abre ese día**. Una puerta cerrada no ayuda a nadie.
+
+`repartir()` convierte una solicitud en tareas por emprendimiento, marca los **conflictos**
+(un bloque que cae en un día que esa familia no abre) y `aviso()` escribe el WhatsApp de
+cada una. La solicitud `s-1109` llega un lunes a propósito, para que el conflicto se vea.
+
+Las salidas que ofrece el portal son **los próximos seis sábados**, con su cupo descontando
+lo confirmado. Es convención de la cooperativa, no del recorrido: otra fecha se pide en la
+nota. Por eso `/experiencia/[id]` se renderiza por petición.
+
+## La alerta de riesgo
+
+El PO la pidió como «alerta de riesgo de quiebra». **La pantalla nunca dice quiebra**: dice
+«necesita apoyo», el porqué en una frase y qué puede hacer la cooperativa. Con seis meses de
+cuentas reportadas a mano nadie puede pronosticar una quiebra, y una etiqueta así sobre una
+familia hace más daño que bien. La ve solo el ente; ni el visitante ni las demás familias.
+
+`lib/salud.ts` calcula el semáforo de las cuentas, no se escribe a mano. Cuatro señales,
+con umbrales que son **convenciones para discutir con la cooperativa**, no datos:
+
+| Señal | Umbral |
+|---|---|
+| Caja | menos de 2 meses de gastos fijos |
+| Ventas | 3 meses seguidos por debajo del anterior |
+| Deuda | más de 30 días de atraso con un proveedor |
+| Ocupación | menos del 20 % de las plazas |
+
+Una señal es «atención»; dos o más, «necesita apoyo». En los datos hay **dos en riesgo y uno
+en atención a propósito** —Cocina de Yolanda, Cabañas La Pintada y Sombreros del Valle—, por
+razones distintas, para que la alerta no sea código muerto.
 
 ---
 
 ## Los dos modos del panel
 
-El dashboard se ve de dos maneras, y la elige el dueño.
+El panel se ve de dos maneras, y la elige quien lo usa.
 
 | | `guiado` | `experto` |
 |---|---|---|
 | Por defecto | **sí**, para todo el mundo | solo si se enciende |
-| Navegación | cinco enlaces en el encabezado | barra lateral de siete secciones |
-| Portada de `/dashboard` | «Lo siguiente»: una sola cosa que hacer | métricas del mes |
-| Las cifras | una frase | tarjetas, serie diaria, orígenes y mapa de horas |
+| Navegación | cinco enlaces en el encabezado | barra lateral con contadores |
+| Portada de `/dashboard` | «Lo siguiente»: una sola cosa que hacer | la comunidad de un vistazo |
+| Las cifras | una frase | tarjetas, ingresos por mes y tabla de familias |
 
-**El modo guiado no cambió ni un píxel, y esa es la condición de todo esto.** Quien nunca
-pidió el otro modo ve el panel de siempre. Cada modo manda su propio marcado, así que el
-guiado tampoco descarga la barra lateral ni las gráficas.
+Las cinco pantallas son Panel, Solicitudes, Emprendimientos, Visitantes y Proveedores.
+«Lo siguiente» sale de `loSiguiente()` (`(dashboard)/_cooperativa.ts`), en este orden: una
+solicitud nueva con conflicto de horario, las demás nuevas, un socio que necesita apoyo y un
+insumo bajo mínimo.
+
+**La regla de que el guiado no cambiara ni un píxel se rompió a propósito** con la
+experiencia comunitaria: el panel cambió de dueño, y su portada con él. Lo que se mantiene
+es el trato: una sola cosa que hacer, lo demás en voz baja, y cada modo manda su propio
+marcado. Las pantallas de la ficha del dueño (`negocio`, `productos`, `fotos`, `horario`)
+siguen en el código fuera de la navegación: volverán como la ficha de cada emprendimiento.
 
 El modo vive en la cookie `sendero-modo`, que lee `modoPanel()` en el servidor y escribe la
 Server Action `cambiarModo`. Es un formulario de verdad: funciona sin JavaScript, no pesa,
@@ -62,12 +132,19 @@ está anotado a propósito: es lo único que la cookie se llevó por delante.
 En el teléfono el modo experto es el mismo marcado con la barra lateral en un cajón detrás
 de la hamburguesa. No hay una vista móvil aparte, ni un enlace duplicado.
 
-Medido, brotli: **guiado 175,5 KB · experto 179,4 KB.** La diferencia son 3,9 KB de HTML
-—la barra y los SVG—; los trozos de JavaScript son exactamente los mismos.
+Medido, brotli, con el panel de la cooperativa: **guiado 225,8 KB · experto 228,5 KB**
+(ver «Cómo medir» para el método, que no es el de las cifras antiguas). La diferencia
+siguen siendo HTML —la barra y los SVG—; los trozos de JavaScript son los mismos.
 
 ---
 
 ## El planificador de rutas
+
+> **Dormido con el directorio** (`DIRECTORIO_VISIBLE = false`). Sus rutas dan 404 y no
+> salen en ninguna navegación; lo que sigue describe cómo funciona para cuando vuelva con
+> el pase de día. La experiencia comunitaria **no** lo usa: su recorrido lo arma la
+> cooperativa, no un algoritmo. Sí reutiliza `enlaceRuta` para abrir las paradas en la
+> app de mapas.
 
 El directorio dice qué hay. El planificador dice **qué cabe en el tiempo que tienes, en qué
 orden, y qué va a estar abierto cuando pases** — la pregunta que queda cuando el visitante
@@ -172,6 +249,13 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   referencia, medidos contra un build del árbol sin los cambios. **No son comparables con
   los de la Fase 4**, que salieron de Lighthouse y cuentan de otra manera; lo que vale de
   ellos es la diferencia, que sí se midió con la misma vara a ambos lados.
+  **La experiencia comunitaria** se midió con esa misma vara —HTML más todo `_next` que
+  la página referencia, brotli 11, las fuentes precargadas tal cual—: **portada 226,6 KB ·
+  `/comunidad` 226,6 KB · `/experiencia/fin-de-semana-el-valle` 227,7 KB**, que es la más
+  pesada del portal por el recorrido y el formulario. El panel: guiado 225,8 KB, experto
+  228,5 KB, una solicitud 228,1 KB y la ficha de un emprendimiento 227,6 KB. Esta vez **no
+  hay medida del árbol anterior** con la misma vara, así que son cifras absolutas, no
+  diferencias. `scripts/medir.mjs` ya apunta a las rutas nuevas.
 - **LCP objetivo < 2.5 s en 4G lenta; el portal está en 2,65 s y se acepta.**
   Esos 150 ms son el precio de Source Serif en los titulares, y esa identidad editorial
   se decidió a conciencia. El dashboard, que no la usa, cumple con 2,34 s.
@@ -237,18 +321,25 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
 ### Estados
 
 Cada pantalla necesita, diseñados y no como nota al pie: **carga, vacío, error y sin conexión.**
-Se asume 3G, no wifi. El dueño del negocio nunca debe perder trabajo por una desconexión.
+Se asume 3G, no wifi. Quien administra la cooperativa nunca debe perder trabajo por una
+desconexión.
+
+La solicitud del visitante es un formulario con Server Action y **no guarda nada**: si
+falla la validación, vuelve con `?error=` y un código, sin los datos del visitante en la
+dirección, y los campos se rellenan otra vez. Es el precio de no tener JavaScript ni
+servidor donde dejar un borrador, y está aceptado.
 
 Y «sin conexión» dejó de ser solo un aviso. Hay un **service worker escrito a mano** en
-`public/sw.js` —sin next-pwa, sin workbox— que precachea la portada, los guardados y
-`/sin-conexion`; sirve `/_next/static/**` desde caché sin revalidar, porque va con hash;
+`public/sw.js` —sin next-pwa, sin workbox— que precachea la portada, `/comunidad`, la
+experiencia y `/sin-conexion` (versión `v2`: subirla borró las copias del directorio); sirve `/_next/static/**` desde caché sin revalidar, porque va con hash;
 y resuelve las navegaciones con red primero y una carrera de 3 segundos, que es el techo
 de paciencia en 3G. Al guardar una ruta, la página le manda al worker el plan, su zona,
 las fichas de sus paradas **y la lista de estáticos que acaba de usar** — sin eso el HTML
 se guarda y abre sin estilos en cuanto el navegador desaloja su propia caché.
 
 **El panel nunca se sirve de caché, y eso es obligatorio, no una precaución.** El modo vive
-en la cookie `sendero-modo`: servir una copia le enseñaría al dueño el modo equivocado.
+en la cookie `sendero-modo`: servir una copia enseñaría el modo equivocado, y las
+solicitudes y las cuentas de ayer.
 Si algún día `/dashboard` abre sin red, la exclusión está rota.
 
 Hueco reconocido y aceptado: quien pierde la señal *durante* su primerísima carga no queda
@@ -398,7 +489,7 @@ lo que dibuja, y prefiere una entrada existente.
 
 Guardar es `Bookmark`, **nunca un corazón**.
 
-Son 35 entradas. Seis las trajo el modo experto —`Metricas`, `Ficha`, `Producto`,
+Son 39 entradas. Seis las trajo el modo experto —`Metricas`, `Ficha`, `Producto`,
 `Ajustes`, `Idioma`, `CerrarSesion`—, y están renombradas por lo que significan en
 este producto, no por lo que dibuja Lucide.
 
@@ -406,6 +497,11 @@ Las dos últimas son del planificador: `Ruta` (un recorrido ordenado; `Compass` 
 significa descubrir, que es salir sin plan) y `MiUbicacion` («dónde estoy yo», que no
 es «dónde queda esto» — el dueño ve las dos en la misma pantalla). Guardar una ruta
 sigue siendo `Bookmark`: no se añadió un glifo para eso.
+
+Las cuatro últimas las trajo la experiencia comunitaria: `Comunidad` (`Handshake`: familias
+que se dan la mano, no un grupo de gente), `Solicitud` (una bandeja que llega y se vacía),
+`Visitantes` y `Proveedor`. La alerta de riesgo usa `AlertTriangle`, que ya estaba: no hizo
+falta un glifo de «quiebra», y no debe haberlo.
 
 ---
 
@@ -421,15 +517,19 @@ src/
 │  ├─ layout/           Container, Stack, Inline, Grid, Section
 │  ├─ patterns/         BusinessCard, CategoryChip, EncabezadoSeccion, EmptyState…
 │  └─ icons.ts          el re-export curado de Lucide
-├─ data/                datos estáticos tipados — zonas, negocios, categorías
-├─ lib/                 utilidades (cn, formatters, marcador)
+├─ data/                datos estáticos tipados — zonas, negocios, categorías,
+│                       comunidad, experiencias, solicitudes, administracion
+├─ lib/                 utilidades (cn, formatters, marcador) y la lógica pura:
+│                       salud (semáforo), reparto, itinerario, directorio
 └─ styles/
    ├─ tokens.css        GENERADO — no editar
    └─ globals.css       reset + reglas globales
 ```
 
 **Las dependencias apuntan hacia abajo.** `components/ui` no importa de `patterns`,
-`data` ni `app`. No hay lint que lo verifique aquí — verifícalo tú antes de proponer código.
+`data` ni `app`. `lib` solo importa **tipos** de `data`. Lo que junta datos y lógica para
+el panel vive en `app/(dashboard)/_cooperativa.ts`, que es también donde está la sesión
+simulada de la cooperativa. No hay lint que lo verifique aquí — verifícalo tú antes de proponer código.
 
 ---
 
@@ -443,6 +543,14 @@ Boquete y Volcán (Chiriquí), Isla Taboga, El Valle de Antón, Bastimentos.
 Categorías: Artesanía · Comida · Hospedaje · Experiencias · Transporte local · Productos del campo.
 
 Los negocios son inventados pero plausibles, siempre **con el nombre de la persona detrás**.
+
+La comunidad piloto es **El Valle de Antón**, con la *Cooperativa de Servicios Turísticos El
+Valle, R.L.* —inventada, con la forma de las que existen— y diez familias socias. Siete de
+ellas entraron con la experiencia; las tres que ya había en El Valle se sumaron. Las otras
+ocho zonas y sus negocios siguen en los datos para cuando vuelva el directorio.
+
+La referencia que trajo el PO es el catálogo de la cooperativa Copejaay, en Guatemala: un
+ERP de cooperativa con un catálogo encima. Es la forma, no el modelo a copiar.
 
 ---
 

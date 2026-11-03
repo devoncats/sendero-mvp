@@ -3,7 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 
-import { AlertCircle, ArrowLeft, Check, MapPin, MessageCircle, X } from "@/components/icons";
+import {
+  AlertCircle,
+  ArrowLeft,
+  Check,
+  MapPin,
+  MessageCircle,
+  X,
+} from "@/components/icons";
 import { Container, Inline, Section, Stack } from "@/components/layout";
 import { EncabezadoSeccion } from "@/components/patterns";
 import { Badge, Button, Input, Media, Surface, Text } from "@/components/ui";
@@ -27,13 +34,23 @@ export function generateStaticParams() {
   return EXPERIENCIAS.map((e) => ({ id: e.id }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
   const e = experiencia((await params).id);
   if (!e) return {};
   return { title: e.nombre, description: e.lema.es };
 }
 
-const TIPO: Record<TipoBloque, { etiqueta: string; tono: "brand" | "accent" | "success" | "neutral" | "info" }> = {
+const TIPO: Record<
+  TipoBloque,
+  {
+    etiqueta: string;
+    tono: "brand" | "accent" | "success" | "neutral" | "info";
+  }
+> = {
   natural: { etiqueta: "Naturaleza", tono: "success" },
   cultural: { etiqueta: "Cultura", tono: "accent" },
   gastronomia: { etiqueta: "Comida", tono: "accent" },
@@ -102,7 +119,13 @@ export default async function ExperienciaPage({
             <Text size="overline" tone="brand">
               {z.nombre} · {e.dias} días, {e.noches} noche
             </Text>
-            <Text as="h1" size="display-sm" serif weight="semibold" className="text-balance lg:text-display-md">
+            <Text
+              as="h1"
+              size="display-sm"
+              serif
+              weight="semibold"
+              className="text-balance lg:text-display-md"
+            >
               {e.nombre}
             </Text>
           </Stack>
@@ -110,8 +133,11 @@ export default async function ExperienciaPage({
             {e.descripcion.es}
           </Text>
           <Text size="body-md" tone="secondary">
-            <strong className="font-semibold text-content-primary">{precio(total)} por persona</strong> ·
-            de {e.minimo} a {e.cupo} personas · organiza {coop.nombre.split(",")[0]}
+            <strong className="font-semibold text-content-primary">
+              {precio(total)} por persona
+            </strong>{" "}
+            · de {e.minimo} a {e.cupo} personas · organiza{" "}
+            {coop.nombre.split(",")[0]}
           </Text>
         </Stack>
 
@@ -125,7 +151,9 @@ export default async function ExperienciaPage({
             {/* El recorrido, día por día */}
             <Section espaciado="none">
               <Stack>
-                <EncabezadoSeccion kicker="El recorrido">Qué se hace, y con quién</EncabezadoSeccion>
+                <EncabezadoSeccion kicker="El recorrido">
+                  Qué se hace, y con quién
+                </EncabezadoSeccion>
                 {dias.map((dia) => (
                   <Stack key={dia} gap="tight">
                     <Text as="h3" size="overline" tone="tertiary">
@@ -138,18 +166,31 @@ export default async function ExperienciaPage({
                           const n = negocioPorSlug(b.emprendimiento)!;
                           const t = TIPO[b.tipo];
                           return (
-                            <li key={`${b.dia}-${b.hora}`} className="px-inset-md py-inset-sm">
+                            <li
+                              key={`${b.dia}-${b.hora}`}
+                              className="px-inset-md py-inset-sm"
+                            >
                               {/* La hora encima y no en una columna: «8:30 a.m.» y
                                   «12:45 p.m.» no miden lo mismo, y un ancho fijo
                                   sería un valor inventado. */}
                               <Stack gap="tight">
-                                <Text as="span" size="body-sm" weight="semibold" tone="brand" className="tabular-nums">
+                                <Text
+                                  as="span"
+                                  size="body-sm"
+                                  weight="semibold"
+                                  tone="brand"
+                                  className="tabular-nums"
+                                >
                                   {hora(b.hora)}
                                 </Text>
                                 <Text size="body-md">{b.actividad.es}</Text>
                                 <Inline gap="sm" align="center">
                                   <Badge tono={t.tono}>{t.etiqueta}</Badge>
-                                  <Text as="span" size="body-sm" tone="tertiary">
+                                  <Text
+                                    as="span"
+                                    size="body-sm"
+                                    tone="tertiary"
+                                  >
                                     {n.persona.nombre} · {n.nombre}
                                   </Text>
                                 </Inline>
@@ -176,7 +217,9 @@ export default async function ExperienciaPage({
             {/* Incluye, no incluye, qué llevar */}
             <Section espaciado="none">
               <Stack>
-                <EncabezadoSeccion kicker="Antes de ir">Lo que entra en el precio</EncabezadoSeccion>
+                <EncabezadoSeccion kicker="Antes de ir">
+                  Lo que entra en el precio
+                </EncabezadoSeccion>
                 <div className="grid gap-stack sm:grid-cols-2">
                   <Stack gap="tight">
                     <Text as="h3" size="overline" tone="tertiary">
@@ -184,8 +227,14 @@ export default async function ExperienciaPage({
                     </Text>
                     <ul className="flex flex-col gap-inset-xs">
                       {e.incluye.map((x) => (
-                        <li key={x} className="flex items-start gap-icon-gap text-body-md">
-                          <Check className="mt-0.5 size-icon-md shrink-0 text-success-content" aria-hidden />
+                        <li
+                          key={x}
+                          className="flex items-start gap-icon-gap text-body-md"
+                        >
+                          <Check
+                            className="mt-0.5 size-icon-md shrink-0 text-success-content"
+                            aria-hidden
+                          />
                           {x}
                         </li>
                       ))}
@@ -197,8 +246,14 @@ export default async function ExperienciaPage({
                     </Text>
                     <ul className="flex flex-col gap-inset-xs">
                       {e.noIncluye.map((x) => (
-                        <li key={x} className="flex items-start gap-icon-gap text-body-md text-content-secondary">
-                          <X className="mt-0.5 size-icon-md shrink-0 text-content-tertiary" aria-hidden />
+                        <li
+                          key={x}
+                          className="flex items-start gap-icon-gap text-body-md text-content-secondary"
+                        >
+                          <X
+                            className="mt-0.5 size-icon-md shrink-0 text-content-tertiary"
+                            aria-hidden
+                          />
                           {x}
                         </li>
                       ))}
@@ -224,16 +279,26 @@ export default async function ExperienciaPage({
             JavaScript, sin cuenta y sin pago. Lo que sale es un WhatsApp a la
             cooperativa con todo ya escrito.
           */}
-          <Surface as="section" relleno="lg" nivel="raised" className="scroll-mt-stack lg:sticky lg:top-stack">
-            <form action={solicitar} id="solicitar" className="flex flex-col gap-stack">
+          <Surface
+            as="section"
+            relleno="lg"
+            nivel="raised"
+            className="lg:sticky lg:top-stack"
+          >
+            <form
+              action={solicitar}
+              id="solicitar"
+              className="flex scroll-mt-section flex-col gap-stack"
+            >
               <input type="hidden" name="experiencia" value={e.id} />
               <Stack gap="tight">
                 <Text as="h2" size="heading-md" serif weight="semibold">
                   Solicitar
                 </Text>
                 <Text size="body-sm" tone="secondary">
-                  No pagas nada ahora. {coop.contacto.nombre}, de la cooperativa, te confirma por
-                  WhatsApp y te dice cómo pagar a cada familia.
+                  No pagas nada ahora. {coop.contacto.nombre}, de la
+                  cooperativa, te confirma por WhatsApp y te dice cómo pagar a
+                  cada familia.
                 </Text>
               </Stack>
 
@@ -248,7 +313,9 @@ export default async function ExperienciaPage({
               ) : null}
 
               <fieldset className="flex flex-col gap-inset-xs">
-                <legend className="mb-inset-xs text-label font-medium">Llegada</legend>
+                <legend className="mb-inset-xs text-label font-medium">
+                  Llegada
+                </legend>
                 {salidas.map((s) => {
                   const lleno = s.quedan === 0;
                   return (
@@ -269,21 +336,33 @@ export default async function ExperienciaPage({
                         defaultChecked={s.fecha === primeraLibre}
                         className="size-icon-md accent-brand"
                       />
-                      <span className="flex-1 text-body-md first-letter:uppercase">{fechaConDia(s.fecha)}</span>
+                      <span className="flex-1 text-body-md first-letter:uppercase">
+                        {fechaConDia(s.fecha)}
+                      </span>
                       <span className="text-body-sm text-content-tertiary">
-                        {lleno ? "Lleno" : s.quedan === e.cupo ? "Libre" : `Quedan ${s.quedan}`}
+                        {lleno
+                          ? "Lleno"
+                          : s.quedan === e.cupo
+                            ? "Libre"
+                            : `Quedan ${s.quedan}`}
                       </span>
                     </label>
                   );
                 })}
                 <Text size="caption" tone="tertiary">
-                  ¿Otro día? Pídelo en la nota y la cooperativa te dice si se puede.
+                  ¿Otro día? Pídelo en la nota y la cooperativa te dice si se
+                  puede.
                 </Text>
               </fieldset>
 
               <div className="grid grid-cols-2 gap-inset-sm">
                 <Stack gap="tight">
-                  <Text as="label" htmlFor="adultos" size="label" weight="medium">
+                  <Text
+                    as="label"
+                    htmlFor="adultos"
+                    size="label"
+                    weight="medium"
+                  >
                     Adultos
                   </Text>
                   <input
@@ -323,8 +402,16 @@ export default async function ExperienciaPage({
               </Stack>
 
               <Stack gap="tight">
-                <Text as="label" htmlFor="procedencia" size="label" weight="medium">
-                  De dónde vienes <span className="font-normal text-content-tertiary">(opcional)</span>
+                <Text
+                  as="label"
+                  htmlFor="procedencia"
+                  size="label"
+                  weight="medium"
+                >
+                  De dónde vienes{" "}
+                  <span className="font-normal text-content-tertiary">
+                    (opcional)
+                  </span>
                 </Text>
                 <Input id="procedencia" placeholder="País o ciudad" />
               </Stack>
@@ -346,7 +433,10 @@ export default async function ExperienciaPage({
 
               <Stack gap="tight">
                 <Text as="label" htmlFor="nota" size="label" weight="medium">
-                  Nota <span className="font-normal text-content-tertiary">(opcional)</span>
+                  Nota{" "}
+                  <span className="font-normal text-content-tertiary">
+                    (opcional)
+                  </span>
                 </Text>
                 <textarea
                   id="nota"
@@ -367,7 +457,7 @@ export default async function ExperienciaPage({
         </div>
 
         {/* Quien organiza, al pie */}
-        <Surface relleno="lg" borde={false} className="bg-surface-sunken">
+        <Surface nivel="sunken" relleno="lg" borde={false}>
           <Inline gap="md" align="center" wrap={false}>
             <Media
               proporcion="1/1"
@@ -384,7 +474,10 @@ export default async function ExperienciaPage({
               <Text size="body-sm" tone="tertiary">
                 {coop.contacto.oficio} · {coop.nombre}
               </Text>
-              <Link href="/comunidad" className="mt-inset-xs inline-flex min-h-touch-min items-center text-body-sm font-medium text-brand">
+              <Link
+                href="/comunidad"
+                className="mt-inset-xs inline-flex min-h-touch-min items-center text-body-sm font-medium text-brand"
+              >
                 Quién organiza y cómo se reparte
               </Link>
             </Stack>

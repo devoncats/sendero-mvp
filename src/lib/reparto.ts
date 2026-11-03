@@ -113,24 +113,30 @@ export function aviso(s: Solicitud, grupo: { negocio: Negocio; tareas: Tarea[]; 
  * Aquí la alerta deja de ser solo un aviso: si dos fondas pueden servir el
  * mismo almuerzo y una de ellas necesita apoyo, la sugerencia es ella. Si
  * ninguna lo necesita, se queda el titular — no se mueve a nadie sin razón.
+ *
+ * Una alternativa que no abre ese día no es alternativa: mandarle un grupo a
+ * una puerta cerrada no ayuda a nadie, por mucho que necesite el trabajo.
  */
 export function sugerencia(
   bloque: Bloque,
   nivelDe: (slug: string) => NivelSalud,
+  abre: (slug: string) => boolean,
 ): { slug: string; porque: string } | undefined {
   if (!bloque.alternativas?.length) return undefined;
   const orden: Record<NivelSalud, number> = { riesgo: 0, atencion: 1, estable: 2 };
-  const candidatos = [bloque.emprendimiento, ...bloque.alternativas];
+  const candidatos = bloque.alternativas.filter(abre);
   const mejor = [...candidatos].sort((a, b) => orden[nivelDe(a)] - orden[nivelDe(b)])[0];
-  if (mejor === bloque.emprendimiento) return undefined;
-  if (orden[nivelDe(mejor)] >= orden[nivelDe(bloque.emprendimiento)]) return undefined;
+  if (!mejor || orden[nivelDe(mejor)] >= orden[nivelDe(bloque.emprendimiento)]) return undefined;
   return {
     slug: mejor,
-    porque:
-      nivelDe(mejor) === "riesgo"
-        ? "Necesita apoyo, y puede atender este mismo bloque."
-        : "Sus cuentas piden atención, y puede atender este mismo bloque.",
+    porque: "Puede atender este mismo momento, y el grupo le ayuda a reponerse.",
   };
+}
+
+/** Si un negocio abre el día que le toca a un bloque. «Sin confirmar» no cuenta como abierto. */
+export function abreEseDia(n: Negocio, llegada: string, dia: number): boolean {
+  const ese = n.horario[POR_INDICE[fechaDelDia(llegada, dia).getDay()]];
+  return ese !== "cerrado" && ese !== "sinConfirmar";
 }
 
 /**

@@ -102,7 +102,7 @@ export default function ExperienciasPage() {
           </div>
 
           {/* Cómo funciona */}
-          <Surface relleno="lg" borde={false} className="bg-brand-surface lg:p-inset-xl">
+          <Surface nivel="none" relleno="lg" borde={false} className="bg-brand-surface lg:p-inset-xl">
             <Stack>
               <Text as="h2" size="heading-sm" weight="semibold" className="text-brand-content">
                 Cómo funciona
@@ -229,7 +229,7 @@ export default function ExperienciasPage() {
             vayan entrando poco a poco; decirlo aquí es honesto con quien solo
             tiene una mañana, y no cuesta nada que luego no se pueda cumplir.
           */}
-          <Surface relleno="lg" className="border-accent-border bg-accent-surface">
+          <Surface nivel="none" relleno="lg" className="border-accent-border bg-accent-surface">
             <Stack gap="tight">
               <Text size="overline" tone="accent">
                 Pronto

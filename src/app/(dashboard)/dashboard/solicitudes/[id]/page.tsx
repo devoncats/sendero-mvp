@@ -8,7 +8,7 @@ import { ButtonLink, Surface, Text } from "@/components/ui";
 import { negocioPorSlug, personas } from "@/data";
 import { cn } from "@/lib/cn";
 import { enlaceWhatsApp, fechaConDia, fechaLarga, hora, precio } from "@/lib/formato";
-import { aviso, porEmprendimiento, sugerencia } from "@/lib/reparto";
+import { abreEseDia, aviso, porEmprendimiento, sugerencia } from "@/lib/reparto";
 
 import { AvisoMvp } from "../../../_aviso-mvp";
 import { nivelDe, solicitud, tareasDe } from "../../../_cooperativa";
@@ -41,7 +41,16 @@ export default async function SolicitudPage({ params }: { params: Promise<{ id: 
   const tareas = tareasDe(s, e);
   const conflictos = tareas.filter((t) => t.conflicto);
   const sugerencias = e.bloques
-    .map((b, i) => ({ b, i, sug: s.asignaciones?.[i] ? undefined : sugerencia(b, nivelDe) }))
+    .map((b, i) => ({
+      b,
+      i,
+      sug: s.asignaciones?.[i]
+        ? undefined
+        : sugerencia(b, nivelDe, (slug) => {
+            const n = negocioPorSlug(slug);
+            return Boolean(n && abreEseDia(n, s.fecha, b.dia));
+          }),
+    }))
     .filter((x) => x.sug);
   const grupos = porEmprendimiento(tareas);
   const total = grupos.reduce((t, g) => t + g.monto, 0);
@@ -71,7 +80,7 @@ export default async function SolicitudPage({ params }: { params: Promise<{ id: 
         </Cabecera>
 
         {s.nota ? (
-          <Surface relleno="md" className="bg-surface-sunken" borde={false}>
+          <Surface nivel="sunken" relleno="md"  borde={false}>
             <Text size="overline" tone="tertiary">
               Nota del grupo
             </Text>
@@ -80,7 +89,7 @@ export default async function SolicitudPage({ params }: { params: Promise<{ id: 
         ) : null}
 
         {activa && conflictos.length > 0 ? (
-          <Surface relleno="md" className="border-warning-border bg-warning-surface" as="section">
+          <Surface nivel="none" relleno="md" className="border-warning-border bg-warning-surface" as="section">
             <Inline gap="md" align="start" wrap={false}>
               <AlertTriangle className="size-icon-md shrink-0 text-warning-content" aria-hidden />
               <Stack gap="tight">

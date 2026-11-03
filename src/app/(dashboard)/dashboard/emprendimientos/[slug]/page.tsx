@@ -73,7 +73,7 @@ export default async function EmprendimientoPage({ params }: { params: Promise<{
 
         {/* La alerta. Nunca dice «quiebra»: dice qué pasa y qué hacer. */}
         {s.nivel === "estable" ? (
-          <Surface relleno="md" className="border-success-border bg-success-surface" as="section">
+          <Surface nivel="none" relleno="md" className="border-success-border bg-success-surface" as="section">
             <Inline gap="md" align="center" wrap={false}>
               <CheckCircle className="size-icon-md shrink-0 text-success-content" aria-hidden />
               <Text size="body-md" className="text-success-content">
@@ -82,7 +82,7 @@ export default async function EmprendimientoPage({ params }: { params: Promise<{
             </Inline>
           </Surface>
         ) : (
-          <Surface
+          <Surface nivel="none"
             relleno="md"
             as="section"
             className={s.nivel === "riesgo" ? "border-danger-border bg-danger-surface" : "border-warning-border bg-warning-surface"}
