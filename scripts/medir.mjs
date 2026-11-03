@@ -18,17 +18,13 @@ const BASE = `http://localhost:${PUERTO}`;
 
 const RUTAS = [
   "/",
-  "/buscar",
-  "/ruta",
-  "/zona/santa-fe",
-  // El peor caso del planificador: la zona con más negocios y tres días, que es
-  // el HTML máximo. Medir el caso por defecto daría un número bonito y falso.
-  "/zona/santa-fe/ruta?dias=3",
-  "/negocio/artesanias-delia-quintero",
-  "/guardados",
-  "/para-tu-negocio",
+  "/comunidad",
+  // Por petición, con el formulario y el recorrido entero: la más pesada del portal.
+  "/experiencia/fin-de-semana-el-valle",
   "/dashboard",
-  "/dashboard/fotos",
+  "/dashboard/solicitudes",
+  // La ficha administrativa más cargada: alerta, serie, insumos y proveedores.
+  "/dashboard/emprendimientos/cocina-de-yolanda",
 ];
 
 /** Umbrales de las Core Web Vitals, en «bueno». */

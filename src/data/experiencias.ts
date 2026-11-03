@@ -153,3 +153,14 @@ export function experiencia(id: string): Experiencia | undefined {
 export function precioPorPersona(e: Experiencia): number {
   return e.bloques.reduce((t, b) => t + b.porPersona, 0);
 }
+
+/**
+ * A dónde va el precio, emprendimiento por emprendimiento y de mayor a menor.
+ * Cuenta a los titulares de cada bloque: es lo que el visitante paga si la
+ * cooperativa no reparte de otra manera.
+ */
+export function repartoDelPrecio(e: Experiencia): { slug: string; monto: number }[] {
+  const montos = new Map<string, number>();
+  for (const b of e.bloques) montos.set(b.emprendimiento, (montos.get(b.emprendimiento) ?? 0) + b.porPersona);
+  return [...montos].map(([slug, monto]) => ({ slug, monto })).sort((a, b) => b.monto - a.monto);
+}

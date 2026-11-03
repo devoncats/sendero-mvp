@@ -21,7 +21,7 @@ export function fechaDelDia(llegada: string, dia: number): Date {
   return d;
 }
 
-function iso(d: Date): string {
+export function iso(d: Date): string {
   const p = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
@@ -131,4 +131,24 @@ export function sugerencia(
         ? "Necesita apoyo, y puede atender este mismo bloque."
         : "Sus cuentas piden atención, y puede atender este mismo bloque.",
   };
+}
+
+/**
+ * Las próximas salidas que ofrece el portal: los sábados, desde mañana.
+ *
+ * Es una convención de la cooperativa, no del recorrido —que funciona
+ * cualquier día con aviso—. Quien quiera otra fecha la pide en la nota, y la
+ * cooperativa ve en su panel si ese día alguien no abre.
+ */
+export function proximosSabados(ahora: Date, cuantos: number): string[] {
+  const d = new Date(ahora);
+  d.setHours(12, 0, 0, 0);
+  d.setDate(d.getDate() + 1);
+  while (d.getDay() !== 6) d.setDate(d.getDate() + 1);
+  const fechas: string[] = [];
+  for (let i = 0; i < cuantos; i++) {
+    fechas.push(iso(d));
+    d.setDate(d.getDate() + 7);
+  }
+  return fechas;
 }

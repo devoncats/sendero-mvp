@@ -24,6 +24,7 @@ import {
   precio,
   resumenSemana,
 } from "@/lib/formato";
+import { soloConDirectorio } from "@/lib/directorio";
 
 /** Las 30 fichas se generan en build. No hay servidor que consultar. */
 export function generateStaticParams() {
@@ -46,6 +47,7 @@ export async function generateMetadata({
 }
 
 export default async function NegocioPage({ params }: { params: Promise<{ slug: string }> }) {
+  soloConDirectorio();
   const { slug } = await params;
   const negocio = negocioPorSlug(slug);
   if (!negocio) notFound();

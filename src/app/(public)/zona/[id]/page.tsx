@@ -11,6 +11,7 @@ import { ZONAS, categoria, categoriasDeZona, cuantasParadasPosibles, negociosDeZ
 import { enlaceMapa } from "@/lib/formato";
 
 import { resumir } from "../../_resumen";
+import { soloConDirectorio } from "@/lib/directorio";
 
 /** Las nueve zonas se generan en build. */
 export function generateStaticParams() {
@@ -36,6 +37,7 @@ export async function generateMetadata({
 }
 
 export default async function ZonaPage({ params }: { params: Promise<{ id: string }> }) {
+  soloConDirectorio();
   const { id } = await params;
   const z = buscarZona(id);
   if (!z) notFound();

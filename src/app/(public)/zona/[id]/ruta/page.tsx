@@ -30,6 +30,7 @@ import {
   leerPedido,
   normalizar,
 } from "./_pedido";
+import { soloConDirectorio } from "@/lib/directorio";
 
 /**
  * El planificador de una zona.
@@ -100,6 +101,7 @@ export default async function RutaPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<ParamsRuta>;
 }) {
+  soloConDirectorio();
   const { id } = await params;
   const z = buscarZona(id);
   if (!z) notFound();

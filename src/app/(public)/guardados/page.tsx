@@ -6,10 +6,12 @@ import { NEGOCIOS } from "@/data";
 
 import { resumir } from "../_resumen";
 import { ListaGuardados } from "./lista";
+import { soloConDirectorio } from "@/lib/directorio";
 
 export const metadata: Metadata = { title: "Guardados" };
 
 export default function GuardadosPage() {
+  soloConDirectorio();
   // Los treinta resúmenes viajan al cliente; él decide cuáles enseñar según lo
   // que haya en su propio teléfono. El servidor nunca sabe qué guardó nadie.
   const negocios = NEGOCIOS.map((n) => ({ ...resumir(n), slug: n.slug }));

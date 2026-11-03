@@ -5,7 +5,7 @@ import { ZONAS, zona } from "./zonas";
 
 export { CATEGORIAS, categoria, NEGOCIOS, ZONAS, zona };
 export { ENTES, ente } from "./comunidad";
-export { EXPERIENCIAS, experiencia, precioPorPersona } from "./experiencias";
+export { EXPERIENCIAS, experiencia, precioPorPersona, repartoDelPrecio } from "./experiencias";
 export { SOLICITUDES, personas, plazasOcupadas } from "./solicitudes";
 export { FINANZAS, INSUMOS, PROVEEDORES, cuentasDe, proveedor } from "./administracion";
 

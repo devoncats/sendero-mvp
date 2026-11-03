@@ -6,7 +6,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Bookmark, Compass, Ruta, Search } from "@/components/icons";
+import { Comunidad, Compass } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
 import { RUTAS_PORTAL } from "./_rutas";
@@ -14,19 +14,17 @@ import { RUTAS_PORTAL } from "./_rutas";
 /** El icono de cada sección. Las etiquetas y las rutas viven en `_rutas`. */
 const ICONO: Record<string, typeof Compass> = {
   "/": Compass,
-  "/buscar": Search,
-  "/ruta": Ruta,
-  "/guardados": Bookmark,
+  "/comunidad": Comunidad,
 };
 
 /**
- * Solo en las cuatro pantallas de primer nivel. Zona y Ficha son navegación
+ * Solo en las pantallas de primer nivel. Zona y Ficha son navegación
  * hacia dentro: llevan flecha de volver, y la ficha además tiene su propia
  * barra de WhatsApp abajo — dos barras fijas compitiendo por el pulgar es una
  * de más.
  *
  * Y solo por debajo de `md`: la barra inferior existe porque el pulgar llega
- * ahí. En un escritorio no hay pulgar, y las mismas cuatro secciones están
+ * ahí. En un escritorio no hay pulgar, y las mismas secciones están
  * arriba, en el encabezado.
  */
 export function Pestanas() {

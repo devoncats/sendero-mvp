@@ -12,7 +12,7 @@
  * `/` sin tocar cabeceras ni `next.config.ts`.
  */
 
-const VERSION = "v1";
+const VERSION = "v2";
 
 const PAGINAS = `sendero-paginas-${VERSION}`;
 const ESTATICO = `sendero-estatico-${VERSION}`;
@@ -22,9 +22,14 @@ const MIOS = [PAGINAS, ESTATICO, RUTA];
 const CAIDA = "/sin-conexion";
 
 /* Lo mínimo para que la aplicación abra sin red: las pantallas a las que lleva
-   la navegación de primer nivel, más la que explica qué pasa. Buscar no entra:
-   sin red no hay nada que buscar que no esté ya en guardados. */
-const SEMILLA = ["/", "/ruta", "/guardados", CAIDA];
+   la navegación de primer nivel, la experiencia —que es lo que se vende—, y la
+   que explica qué pasa. La experiencia se sirve por petición por el cupo; la
+   copia enseña el cupo de cuando se guardó, y enviar la solicitud necesita red
+   de todos modos.
+
+   La versión subió a v2 con la experiencia comunitaria: así se borran las
+   copias del directorio, que ahora responde 404. */
+const SEMILLA = ["/", "/comunidad", "/experiencia/fin-de-semana-el-valle", CAIDA];
 
 /* El techo de paciencia en 3G. Pasados estos milisegundos se sirve la copia en
    vez de dejar a alguien mirando una pantalla en blanco. */

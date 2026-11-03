@@ -9,6 +9,7 @@ import type { CategoriaId, Negocio, ZonaId } from "@/data";
 import { CATEGORIAS, NEGOCIOS, ZONAS, buscar, categoria, zona } from "@/data";
 
 import { resumir } from "../_resumen";
+import { soloConDirectorio } from "@/lib/directorio";
 
 export const metadata: Metadata = { title: "Buscar" };
 
@@ -38,6 +39,7 @@ export default async function BuscarPage({
 }: {
   searchParams: Promise<Params>;
 }) {
+  soloConDirectorio();
   const params = await searchParams;
   const q = params.q?.trim() ?? "";
   const zonaId = ZONAS.some((z) => z.id === params.zona) ? (params.zona as ZonaId) : undefined;

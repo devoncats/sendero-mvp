@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { Compass, Search } from "@/components/icons";
+import { Compass } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
 import { AvisoSinConexion, Navegacion } from "@/components/patterns";
 import { Text } from "@/components/ui";
@@ -11,9 +11,8 @@ import { RUTAS_PORTAL } from "./_rutas";
 
 /** Lo que no está en las pestañas y aun así hace falta poder encontrar. */
 const ENLACES_PIE = [
-  { href: "/ruta", etiqueta: "Armar una ruta" },
-  { href: "/guardados", etiqueta: "Lo que guardaste" },
-  { href: "/para-tu-negocio", etiqueta: "¿Tienes un negocio?" },
+  { href: "/comunidad", etiqueta: "Quién organiza" },
+  { href: "/acceso", etiqueta: "Entrar como cooperativa" },
 ] as const;
 
 /**
@@ -37,17 +36,10 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
               </Text>
             </Link>
 
-            {/* A partir de md las pestañas suben aquí y la de abajo se apaga */}
+            {/* A partir de md las pestañas suben aquí y la de abajo se apaga.
+                El atajo de buscar se fue con el directorio: con una sola
+                comunidad no hay nada que buscar. */}
             <Navegacion rutas={RUTAS_PORTAL} />
-
-            {/* El atajo del teléfono. Arriba de md lo dice la navegación. */}
-            <Link
-              href="/buscar"
-              aria-label="Buscar"
-              className="flex size-control-sm items-center justify-center rounded-full md:hidden"
-            >
-              <Search className="size-icon-md" aria-hidden />
-            </Link>
           </Inline>
         </Container>
       </header>
@@ -62,7 +54,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         Un pie corto es lo que dice que la página terminó y no que se quedó a
         medio cargar.
 
-        Tres enlaces y una frase, y ni uno más. Repetir aquí las nueve zonas
+        Dos enlaces y una frase, y ni uno más. Repetir aquí las nueve zonas
         sería un mapa del sitio, y un mapa del sitio es peso en un Moto G Power
         para decir lo que ya dicen el encabezado y las pestañas.
       */}
@@ -77,8 +69,8 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                 </Text>
               </Inline>
               <Text size="body-sm" tone="secondary" className="max-w-prose">
-                Un directorio de las zonas de Panamá donde no llegan los tours. Sin reservas, sin
-                comisiones: le escribes directo a la persona.
+                Experiencias organizadas por las propias comunidades de Panamá. Lo que pagas
+                llega entero a las familias que te atienden.
               </Text>
             </Stack>
 

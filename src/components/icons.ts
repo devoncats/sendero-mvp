@@ -10,9 +10,10 @@
  *
  * `Heart` está deliberadamente ausente: guardar es `Bookmark`.
  *
- * Las 27 primeras entradas son las que usan las 14 pantallas del MVP. Las seis
- * últimas las trajo el modo experto: cinco nombran las secciones de su barra
- * lateral y una, cerrar sesión. Ninguna repite un significado que ya estuviera.
+ * Las 27 primeras entradas son las que usan las 14 pantallas del MVP. Seis
+ * las trajo el modo experto, dos el planificador, y las cuatro últimas la
+ * experiencia comunitaria y el panel de la cooperativa. Ninguna repite un
+ * significado que ya estuviera.
  */
 export type { LucideIcon } from "lucide-react";
 
@@ -74,4 +75,15 @@ export {
   // en la misma pantalla —su punto y el mapa de su pueblo—, y usar el mismo
   // glifo para ambas sería el peor sitio posible para ahorrarse una entrada.
   LocateFixed as MiUbicacion,
+
+  // La experiencia comunitaria y el panel de la cooperativa
+  // La comunidad: familias que se dan la mano. `Users` ya significa otra cosa
+  // aquí —gente que llega— y la cooperativa no es un grupo de visitantes.
+  Handshake as Comunidad,
+  // Lo que manda un visitante. Es una bandeja: llega, se atiende y se vacía.
+  Inbox as Solicitud,
+  // Quien llegó: el registro de visitantes.
+  Users as Visitantes,
+  // A quién le compra cada familia. El camión es lo que trae el insumo.
+  Truck as Proveedor,
 } from "lucide-react";

@@ -153,6 +153,26 @@ export function fechaLarga(iso: string): string {
   return `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
 }
 
+const DIA_SEMANA = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+
+/** "sábado 7 de noviembre". Para fechas cercanas, donde el año sobra y el día de la semana no. */
+export function fechaConDia(iso: string): string {
+  const d = new Date(`${iso}T12:00:00`);
+  return `${DIA_SEMANA[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`;
+}
+
+/** "oct." · El mes corto, para el eje de una gráfica. */
+export function mesCorto(aaaamm: string): string {
+  const m = Number(aaaamm.slice(5, 7)) - 1;
+  return `${MESES[m].slice(0, 3)}.`;
+}
+
+/** "octubre de 2026" */
+export function mesLargo(aaaamm: string): string {
+  const m = Number(aaaamm.slice(5, 7)) - 1;
+  return `${MESES[m]} de ${aaaamm.slice(0, 4)}`;
+}
+
 /** "hace 3 días" · "hace un mes" · "hoy". Solo donde se conozca el ahora real. */
 export function hace(iso: string, ahora: Date): string {
   const dias = Math.floor((ahora.getTime() - new Date(iso).getTime()) / 86_400_000);

@@ -7,11 +7,11 @@ import { Input, Surface, Text } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Entrar",
-  description: "Entra a tu negocio en Sendero con tu número de teléfono. Sin contraseñas.",
+  description: "Entra al panel de tu cooperativa con tu número de teléfono. Sin contraseñas.",
 };
 
 /**
- * Acceso del dueño.
+ * Acceso de quien administra la cooperativa.
  *
  * Fuera de (dashboard) a propósito: ese layout muestra el nombre del negocio y
  * las iniciales de la persona, y aquí todavía no sabemos quién es. Pone su
@@ -46,7 +46,7 @@ export default function AccesoPage() {
             <Stack gap="loose">
               <Stack gap="tight">
                 <Text as="h1" size="heading-lg" weight="semibold">
-                  Entra a tu negocio
+                  Entra al panel de tu cooperativa
                 </Text>
                 <Text size="body-lg" tone="secondary">
                   Sin contraseñas. Te mandamos un código por mensaje al número que ya usas.
@@ -111,9 +111,9 @@ export default function AccesoPage() {
           </Surface>
 
           <Text size="body-md" tone="secondary" className="mx-auto max-w-page-sm text-center">
-            ¿Tu negocio no está en Sendero todavía?{" "}
-            <Link href="/para-tu-negocio" className="font-medium text-brand">
-              Ponlo aquí, es gratis
+            ¿Tu comunidad quiere estar en Sendero?{" "}
+            <Link href="/comunidad" className="font-medium text-brand">
+              Mira cómo trabaja la de El Valle
             </Link>
           </Text>
         </Stack>
