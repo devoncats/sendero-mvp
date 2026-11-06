@@ -12,20 +12,20 @@ import {
 import { Stack } from "@/components/layout";
 import { Badge, Text } from "@/components/ui";
 import { SOPORTE_WHATSAPP } from "@/data/panel";
-import { zona } from "@/data";
+import { ENTES, zona } from "@/data";
 import { cn } from "@/lib/cn";
 import { enlaceWhatsApp } from "@/lib/formato";
 import type { ModoPanel } from "@/lib/modo-panel";
 
-import { cambiarModo } from "./_acciones";
-import { sesion } from "./_cooperativa";
+import { cambiarEnte, cambiarModo } from "./_acciones";
+import { cooperativa } from "./_cooperativa";
 
 /**
  * El contenido del menú de cuenta. Server Component: aquí está todo el texto,
  * los enlaces y el formulario que cambia de modo. Lo único que corre en el
  * cliente es abrirlo y cerrarlo.
  *
- * El nombre de la cooperativa vive aquí y no en el encabezado. Ahí era una
+ * El nombre del ente vive aquí y no en el encabezado. Ahí era una
  * etiqueta que no hacía nada y que además desaparecía a partir de `md` para
  * dejar sitio a los enlaces; aquí es el título de la sesión, y debajo están
  * las cosas que se pueden hacer con ella.
@@ -40,8 +40,8 @@ function Separador() {
   return <div className="my-inset-xs h-px bg-border-subtle" aria-hidden />;
 }
 
-export function ContenidoMenuCuenta({ modo }: { modo: ModoPanel }) {
-  const { coop, experiencia: e, socios } = sesion();
+export async function ContenidoMenuCuenta({ modo }: { modo: ModoPanel }) {
+  const { coop, experiencias, socios } = await cooperativa();
   const z = zona(coop.zona);
   const experto = modo === "experto";
 
@@ -60,10 +60,15 @@ export function ContenidoMenuCuenta({ modo }: { modo: ModoPanel }) {
         </Badge>
       </Stack>
 
-      <Link href={`/experiencia/${e.id}`} className={FILA}>
-        <ExternalLink className={ICONO} aria-hidden />
-        Ver la experiencia como la ven ellos
-      </Link>
+      {experiencias.map((e) => (
+        <Link key={e.id} href={`/experiencia/${e.id}`} className={FILA}>
+          <ExternalLink className={ICONO} aria-hidden />
+          <span className="flex-1">
+            Ver «{e.nombre}»
+            <span className="block text-caption text-content-tertiary">Como la ven los visitantes</span>
+          </span>
+        </Link>
+      ))}
 
       <Separador />
 
@@ -119,8 +124,8 @@ export function ContenidoMenuCuenta({ modo }: { modo: ModoPanel }) {
       </Link>
 
       {/* Para esta persona el soporte no es un centro de ayuda con artículos:
-          es escribirle a alguien. El mensaje va escrito con el nombre de la
-          cooperativa, para que no tenga que explicar quién es. */}
+          es escribirle a alguien. El mensaje va escrito con el nombre del
+          ente, para que no tenga que explicar quién es. */}
       <a
         href={enlaceWhatsApp(
           SOPORTE_WHATSAPP,
@@ -132,6 +137,26 @@ export function ContenidoMenuCuenta({ modo }: { modo: ModoPanel }) {
         <MessageCircle className={ICONO} aria-hidden />
         Ayuda por WhatsApp
       </a>
+
+      <Separador />
+
+      {/*
+        Solo para el demo. Sin cuentas no hay otra manera de ver el panel de
+        otro ente; el día que haya autenticación esto se borra con
+        `cambiarEnte`. La versalita dice que no es parte del producto.
+      */}
+      <Text size="overline" tone="tertiary" className="px-inset-sm pt-inset-xs">
+        Demostración: ver el panel de
+      </Text>
+      {ENTES.map((x) => (
+        <form key={x.id} action={cambiarEnte}>
+          <input type="hidden" name="ente" value={x.id} />
+          <button type="submit" aria-current={x.id === coop.id ? "true" : undefined} className={FILA}>
+            <span className="flex-1 truncate">{x.nombre}</span>
+            {x.id === coop.id ? <CheckCircle className="size-icon-sm shrink-0 text-brand" aria-label="Es el actual" /> : null}
+          </button>
+        </form>
+      ))}
 
       <Separador />
 

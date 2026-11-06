@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import { MessageCircle } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
 import { Badge, ButtonLink, Surface, Text } from "@/components/ui";
-import { INSUMOS, PROVEEDORES, negocioPorSlug } from "@/data";
+import { negocioPorSlug } from "@/data";
 import { enlaceWhatsApp } from "@/lib/formato";
 
+import { cooperativa } from "../../_cooperativa";
 import { Cabecera, Nota } from "../../_piezas";
 
 export const metadata: Metadata = { title: "Proveedores" };
@@ -18,20 +19,22 @@ export const metadata: Metadata = { title: "Proveedores" };
  * dice, porque comprarle a él también es derrame — la plata se queda en la
  * comunidad una vuelta más.
  */
-export default function ProveedoresPage() {
-  const lista = PROVEEDORES.map((p) => {
-    const insumos = INSUMOS.filter((i) => i.proveedor === p.id);
+export default async function ProveedoresPage() {
+  const c = await cooperativa();
+  const propios = c.proveedores();
+  const lista = propios.map((p) => {
+    const insumos = c.insumos().filter((i) => i.proveedor === p.id);
     const faltan = insumos.filter((i) => i.existencias < i.minimo);
     return { p, insumos, faltan };
   }).sort((a, b) => b.faltan.length - a.faltan.length);
-  const locales = PROVEEDORES.filter((p) => p.local).length;
+  const locales = propios.filter((p) => p.local).length;
 
   return (
     <Container ancho="md" as="main" className="py-stack lg:max-w-page-lg">
       <Stack gap="default">
         <Cabecera
           titulo="Proveedores"
-          apunte={`${locales} de ${PROVEEDORES.length} son del propio valle`}
+          apunte={`${locales} de ${propios.length} son de la propia comunidad`}
         />
 
         <ul className="grid gap-inset-md lg:grid-cols-2">
@@ -48,7 +51,7 @@ export default function ProveedoresPage() {
                         {p.rubro} · {p.lugar}
                       </Text>
                     </Stack>
-                    {p.local ? <Badge tono="brand">Del valle</Badge> : null}
+                    {p.local ? <Badge tono="brand">De la comunidad</Badge> : null}
                   </Inline>
 
                   <ul className="grid gap-inset-xs">
@@ -73,7 +76,7 @@ export default function ProveedoresPage() {
                       href={enlaceWhatsApp(
                         p.whatsapp,
                         [
-                          "Hola. Le escribe la cooperativa de El Valle. Queremos hacer un pedido:",
+                          `Hola. Le escribe ${c.coop.nombre}. Queremos hacer un pedido:`,
                           ...faltan.map(
                             (i) => `• ${i.minimo - i.existencias} ${i.unidad} de ${i.nombre.toLowerCase()}, para ${negocioPorSlug(i.emprendimiento)?.nombre}`,
                           ),

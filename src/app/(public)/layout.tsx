@@ -11,8 +11,8 @@ import { RUTAS_PORTAL } from "./_rutas";
 
 /** Lo que no está en las pestañas y aun así hace falta poder encontrar. */
 const ENLACES_PIE = [
-  { href: "/comunidad", etiqueta: "Quién organiza" },
-  { href: "/acceso", etiqueta: "Entrar como cooperativa" },
+  { href: "/comunidades", etiqueta: "Quién organiza" },
+  { href: "/acceso", etiqueta: "Entrar como cooperativa o consorcio" },
 ] as const;
 
 /**

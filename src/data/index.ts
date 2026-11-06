@@ -1,11 +1,12 @@
 import { CATEGORIAS, categoria } from "./categorias";
 import { NEGOCIOS } from "./negocios";
 import type { CategoriaId, Experiencia, Negocio, Zona, ZonaId } from "./tipos";
+import { experienciasDe } from "./experiencias";
 import { ZONAS, zona } from "./zonas";
 
 export { CATEGORIAS, categoria, NEGOCIOS, ZONAS, zona };
-export { ENTES, ente } from "./comunidad";
-export { EXPERIENCIAS, experiencia, precioPorPersona, repartoDelPrecio } from "./experiencias";
+export { ENTES, delEnte, elEnte, ente } from "./comunidad";
+export { EXPERIENCIAS, experiencia, experienciasDe, precioPorPersona, repartoDelPrecio } from "./experiencias";
 export { SOLICITUDES, personas, plazasOcupadas } from "./solicitudes";
 export { FINANZAS, INSUMOS, PROVEEDORES, cuentasDe, proveedor } from "./administracion";
 
@@ -25,6 +26,19 @@ export function emprendimientosDe(e: Experiencia): Negocio[] {
     if (!n) throw new Error(`La experiencia ${e.id} nombra un emprendimiento que no existe: ${s}`);
     return n;
   });
+}
+
+/**
+ * Los socios de un ente: quien atiende algún bloque de alguna de sus
+ * experiencias, sin repetir. No hay una lista de socios aparte que mantener —
+ * se es socio por estar en el recorrido.
+ */
+export function sociosDe(enteId: string): Negocio[] {
+  const socios: Negocio[] = [];
+  for (const e of experienciasDe(enteId)) {
+    for (const n of emprendimientosDe(e)) if (!socios.some((x) => x.slug === n.slug)) socios.push(n);
+  }
+  return socios;
 }
 export type * from "./tipos";
 

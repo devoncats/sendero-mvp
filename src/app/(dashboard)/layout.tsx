@@ -5,11 +5,12 @@ import { ArrowLeft, Compass } from "@/components/icons";
 import { Container, Inline } from "@/components/layout";
 import { MenuCuenta, Navegacion, ShellExperto } from "@/components/patterns";
 import { Text } from "@/components/ui";
+import { delEnte } from "@/data";
 import { modoPanel } from "@/lib/modo-panel";
 
 import { cambiarModo } from "./_acciones";
 import { ContenidoMenuCuenta } from "./_menu-cuenta";
-import { insumosBajos, loSiguiente, sesion, sociosPorSalud } from "./_cooperativa";
+import { cooperativa } from "./_cooperativa";
 import { RUTAS_PANEL, gruposLaterales } from "./_rutas-panel";
 
 
@@ -41,7 +42,8 @@ function Marca() {
  */
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const modo = await modoPanel();
-  const { coop } = sesion();
+  const c = await cooperativa();
+  const { coop } = c;
   const iniciales = coop.contacto.nombre
     .split(" ")
     .slice(0, 2)
@@ -61,9 +63,9 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           marca={<Marca />}
           cuenta={cuenta}
           grupos={gruposLaterales({
-            solicitudes: loSiguiente().filter((x) => x.tipo === "solicitud").length,
-            emprendimientos: sociosPorSalud().filter((x) => x.salud.nivel === "riesgo").length,
-            proveedores: insumosBajos().length,
+            solicitudes: c.loSiguiente().filter((x) => x.tipo === "solicitud").length,
+            emprendimientos: c.sociosPorSalud().filter((x) => x.salud.nivel === "riesgo").length,
+            proveedores: c.insumosBajos().length,
           })}
           pie={
             <form action={cambiarModo}>
@@ -95,7 +97,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
                   hacía nada y que encima se apagaba a partir de `md` para dejar
                   sitio a los cinco enlaces; ahora está en el menú de cuenta,
                   donde sí se puede hacer algo con él. */}
-              <Navegacion rutas={RUTAS_PANEL} etiqueta="Panel de la cooperativa" />
+              <Navegacion rutas={RUTAS_PANEL} etiqueta={`Panel ${delEnte(coop)}`} />
             </Inline>
             {cuenta}
           </Inline>

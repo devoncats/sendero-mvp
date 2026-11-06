@@ -9,7 +9,7 @@ import type { EstadoSolicitud, Solicitud } from "@/data";
 import { experiencia, personas } from "@/data";
 import { fechaConDia } from "@/lib/formato";
 
-import { solicitudesDeLaCooperativa, tareasDe } from "../../_cooperativa";
+import { cooperativa, tareasDe } from "../../_cooperativa";
 import { Cabecera, EstadoBadge } from "../../_piezas";
 
 export const metadata: Metadata = { title: "Solicitudes" };
@@ -62,8 +62,9 @@ function Fila({ s }: { s: Solicitud }) {
   );
 }
 
-export default function SolicitudesPage() {
-  const todas = solicitudesDeLaCooperativa().sort((a, b) => a.fecha.localeCompare(b.fecha));
+export default async function SolicitudesPage() {
+  const c = await cooperativa();
+  const todas = c.solicitudes().sort((a, b) => a.fecha.localeCompare(b.fecha));
   const historial = todas.filter((s) => s.estado === "atendida" || s.estado === "cancelada").reverse();
 
   if (todas.length === 0) {

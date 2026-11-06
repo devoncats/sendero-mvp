@@ -30,11 +30,11 @@ export default function SinConexionPage() {
         <EmptyState
           icono={WifiOff}
           titulo="Sin señal"
-          descripcion="Esta página no la tienes descargada. La experiencia y la comunidad sí siguen en este teléfono si ya las abriste una vez."
+          descripcion="Esta página no la tienes descargada. Las experiencias que ya abriste una vez sí siguen en este teléfono."
           accion={
             <Stack gap="default" align="center">
-              <Link href="/experiencia/fin-de-semana-el-valle" className={clasesDeBoton({})}>
-                Ver la experiencia
+              <Link href="/" className={clasesDeBoton({})}>
+                Ver las experiencias
               </Link>
               <Link href="/" className={clasesDeBoton({ variante: "ghost" })}>
                 Ir al inicio

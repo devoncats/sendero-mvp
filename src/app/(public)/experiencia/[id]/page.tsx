@@ -17,6 +17,9 @@ import { Badge, Button, Input, Media, Surface, Text } from "@/components/ui";
 import type { TipoBloque } from "@/data";
 import {
   EXPERIENCIAS,
+  delEnte,
+  elEnte,
+  emprendimientosDe,
   ente,
   experiencia,
   negocioPorSlug,
@@ -28,7 +31,10 @@ import { enlaceRuta, fechaConDia, hora, precio } from "@/lib/formato";
 import { proximosSabados } from "@/lib/reparto";
 import { ahoraEnPanama } from "@/lib/reloj";
 
+import { Derrame, Familias, nombreCorto } from "../../_experiencia";
 import { solicitar } from "./_acciones";
+
+const mayuscula = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export function generateStaticParams() {
   return EXPERIENCIAS.map((e) => ({ id: e.id }));
@@ -62,7 +68,7 @@ const ERRORES: Record<string, string> = {
   fecha: "Elige una fecha de llegada.",
   personas: "Tiene que ir al menos una persona adulta.",
   cupo: "No quedan tantas plazas para esa fecha. Elige otra o reduce el grupo.",
-  nombre: "Escribe tu nombre: es lo primero que va a ver la cooperativa.",
+  nombre: "Escribe tu nombre: es lo primero que va a ver quien te confirma.",
 };
 
 /** Cuántas salidas se ofrecen. Seis sábados son mes y medio: lo que se planea. */
@@ -92,6 +98,7 @@ export default async function ExperienciaPage({
   const z = zona(e.zona);
   const coop = ente(e.ente);
   const total = precioPorPersona(e);
+  const familias = emprendimientosDe(e);
   const salidas = proximosSabados(ahoraEnPanama(), SALIDAS).map((fecha) => ({
     fecha,
     quedan: Math.max(0, e.cupo - plazasOcupadas(e.id, fecha)),
@@ -117,7 +124,7 @@ export default async function ExperienciaPage({
         <Stack gap="default">
           <Stack gap="tight">
             <Text size="overline" tone="brand">
-              {z.nombre} · {e.dias} días, {e.noches} noche
+              {z.nombre} · {e.dias} días, {e.noches === 1 ? "1 noche" : `${e.noches} noches`}
             </Text>
             <Text
               as="h1"
@@ -136,8 +143,7 @@ export default async function ExperienciaPage({
             <strong className="font-semibold text-content-primary">
               {precio(total)} por persona
             </strong>{" "}
-            · de {e.minimo} a {e.cupo} personas · organiza{" "}
-            {coop.nombre.split(",")[0]}
+            · de {e.minimo} a {e.cupo} personas · organiza {nombreCorto(e.ente)}
           </Text>
         </Stack>
 
@@ -272,12 +278,39 @@ export default async function ExperienciaPage({
                 </Stack>
               </Stack>
             </Section>
+
+            {/*
+              A dónde va tu dinero, y quién te atiende. Estaba en la portada
+              cuando había una sola experiencia; con varias, es aquí donde se
+              decide, y es aquí donde tiene que estar.
+            */}
+            <Section espaciado="none">
+              <Stack>
+                <EncabezadoSeccion kicker="El derrame">
+                  De cada {precio(total)}, a quién le llega
+                </EncabezadoSeccion>
+                <Text size="body-md" tone="secondary" className="max-w-prose">
+                  El precio es la suma de lo que recibe cada familia del recorrido. {mayuscula(elEnte(coop))} no
+                  se queda con una comisión: se sostiene con la cuota de sus socios.
+                </Text>
+                <Derrame e={e} />
+              </Stack>
+            </Section>
+
+            <Section espaciado="none">
+              <Stack>
+                <EncabezadoSeccion kicker="Quién te atiende">
+                  {familias.length} familias de {z.nombre}
+                </EncabezadoSeccion>
+                <Familias negocios={familias} />
+              </Stack>
+            </Section>
           </Stack>
 
           {/*
             La solicitud. Un formulario de verdad con Server Action: sin
             JavaScript, sin cuenta y sin pago. Lo que sale es un WhatsApp a la
-            cooperativa con todo ya escrito.
+            ente económico con todo ya escrito.
           */}
           <Surface
             as="section"
@@ -296,9 +329,8 @@ export default async function ExperienciaPage({
                   Solicitar
                 </Text>
                 <Text size="body-sm" tone="secondary">
-                  No pagas nada ahora. {coop.contacto.nombre}, de la
-                  cooperativa, te confirma por WhatsApp y te dice cómo pagar a
-                  cada familia.
+                  No pagas nada ahora. {coop.contacto.nombre}, {delEnte(coop)}, te confirma por
+                  WhatsApp y te dice cómo pagar a cada familia.
                 </Text>
               </Stack>
 
@@ -350,8 +382,7 @@ export default async function ExperienciaPage({
                   );
                 })}
                 <Text size="caption" tone="tertiary">
-                  ¿Otro día? Pídelo en la nota y la cooperativa te dice si se
-                  puede.
+                  ¿Otro día? Pídelo en la nota y {elEnte(coop)} te dice si se puede.
                 </Text>
               </fieldset>
 
@@ -475,7 +506,7 @@ export default async function ExperienciaPage({
                 {coop.contacto.oficio} · {coop.nombre}
               </Text>
               <Link
-                href="/comunidad"
+                href={`/comunidad/${coop.id}`}
                 className="mt-inset-xs inline-flex min-h-touch-min items-center text-body-sm font-medium text-brand"
               >
                 Quién organiza y cómo se reparte

@@ -4,12 +4,12 @@ import Link from "next/link";
 import { ChevronRight } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
 import { Surface, Text } from "@/components/ui";
-import { cuentasDe } from "@/data";
+import { cuentasDe, delEnte } from "@/data";
 import { precio } from "@/lib/formato";
 import { ahoraEnPanama } from "@/lib/reloj";
 import { resultado } from "@/lib/salud";
 
-import { porAtender, sociosPorSalud } from "../../_cooperativa";
+import { cooperativa } from "../../_cooperativa";
 import { Cabecera, Nota, Semaforo } from "../../_piezas";
 
 export const metadata: Metadata = { title: "Emprendimientos" };
@@ -22,20 +22,21 @@ export const metadata: Metadata = { title: "Emprendimientos" };
  * desplazarse a lo ancho. La tabla con todas las cifras está en la portada del
  * modo experto, para quien la pidió.
  */
-export default function EmprendimientosPage() {
+export default async function EmprendimientosPage() {
+  const c = await cooperativa();
   const ahora = ahoraEnPanama();
-  const lista = sociosPorSalud();
+  const lista = c.sociosPorSalud();
 
   return (
     <Container ancho="md" as="main" className="py-stack lg:max-w-page-lg">
       <Stack gap="default">
-        <Cabecera titulo="Emprendimientos" apunte={`${lista.length} familias socias de la cooperativa`} />
+        <Cabecera titulo="Emprendimientos" apunte={`${lista.length} familias socias ${delEnte(c.coop)}`} />
 
         <Surface relleno="none" className="overflow-hidden">
           <ul className="divide-y divide-border-subtle">
             {lista.map(({ negocio, salud }) => {
               const m = cuentasDe(negocio.slug).at(-1);
-              const tareas = porAtender(negocio.slug, ahora);
+              const tareas = c.porAtender(negocio.slug, ahora);
               const gente = tareas.reduce((t, x) => t + x.personas, 0);
               return (
                 <li key={negocio.slug}>

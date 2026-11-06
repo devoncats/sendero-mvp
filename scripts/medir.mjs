@@ -18,9 +18,11 @@ const BASE = `http://localhost:${PUERTO}`;
 
 const RUTAS = [
   "/",
-  "/comunidad",
+  "/comunidades",
+  "/comunidad/coop-el-valle",
   // Por petición, con el formulario y el recorrido entero: la más pesada del portal.
   "/experiencia/fin-de-semana-el-valle",
+  "/experiencia/fin-de-semana-portobelo",
   "/dashboard",
   "/dashboard/solicitudes",
   // La ficha administrativa más cargada: alerta, serie, insumos y proveedores.

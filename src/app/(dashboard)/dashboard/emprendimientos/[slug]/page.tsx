@@ -5,23 +5,23 @@ import { notFound } from "next/navigation";
 import { AlertTriangle, ArrowLeft, CheckCircle, MessageCircle } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
 import { Badge, ButtonLink, Surface, Text } from "@/components/ui";
-import { INSUMOS, cuentasDe, proveedor } from "@/data";
+import { INSUMOS, cuentasDe, elEnte, proveedor } from "@/data";
 import { cn } from "@/lib/cn";
 import { enlaceWhatsApp, fechaConDia, hora, mesCorto, mesLargo, precio } from "@/lib/formato";
 import { ahoraEnPanama } from "@/lib/reloj";
 import { gastos, ingresos, resultado } from "@/lib/salud";
 
 import { AvisoMvp } from "../../../_aviso-mvp";
-import { porAtender, saludDe, sesion } from "../../../_cooperativa";
+import { cooperativa, saludDe } from "../../../_cooperativa";
 import { Barras } from "../../../_graficas";
 import { Cabecera, NUM, TD, TH, Tarjeta } from "../../../_piezas";
 
-function socio(slug: string) {
-  return sesion().socios.find((n) => n.slug === slug);
+async function socio(slug: string) {
+  return (await cooperativa()).socios.find((n) => n.slug === slug);
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  return { title: socio((await params).slug)?.nombre ?? "Emprendimiento" };
+  return { title: (await socio((await params).slug))?.nombre ?? "Emprendimiento" };
 }
 
 /**
@@ -36,13 +36,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
  * suyas, y la cooperativa las tiene porque la familia se las reporta.
  */
 export default async function EmprendimientoPage({ params }: { params: Promise<{ slug: string }> }) {
-  const n = socio((await params).slug);
+  const c = await cooperativa();
+  const n = await socio((await params).slug);
   if (!n) notFound();
 
   const s = saludDe(n.slug);
   const cuentas = cuentasDe(n.slug);
   const m = cuentas.at(-1);
-  const tareas = porAtender(n.slug, ahoraEnPanama());
+  const tareas = c.porAtender(n.slug, ahoraEnPanama());
   const insumos = INSUMOS.filter((i) => i.emprendimiento === n.slug);
 
   return (
@@ -61,7 +62,7 @@ export default async function EmprendimientoPage({ params }: { params: Promise<{
           apunte={`${n.persona.nombre} · ${n.persona.oficio} · ${n.plazas ?? "—"} ${n.unidadPlazas ?? "plazas"}`}
         >
           <ButtonLink
-            href={enlaceWhatsApp(n.whatsapp, `Hola, ${n.persona.nombre.split(" ")[0]}. Le escribe la cooperativa.`)}
+            href={enlaceWhatsApp(n.whatsapp, `Hola, ${n.persona.nombre.split(" ")[0]}. Le escribe ${elEnte(c.coop)}.`)}
             externo
             variante="secondary"
             tamano="sm"
@@ -214,7 +215,7 @@ export default async function EmprendimientoPage({ params }: { params: Promise<{
                         </Text>
                         {falta && p ? (
                           <a
-                            href={enlaceWhatsApp(p.whatsapp, `Hola. Le escribe la cooperativa de El Valle por ${n.nombre}. Necesitamos ${i.minimo - i.existencias} ${i.unidad} de ${i.nombre.toLowerCase()}.`)}
+                            href={enlaceWhatsApp(p.whatsapp, `Hola. Le escribe ${c.coop.nombre} por ${n.nombre}. Necesitamos ${i.minimo - i.existencias} ${i.unidad} de ${i.nombre.toLowerCase()}.`)}
                             rel="noopener noreferrer"
                             className="inline-flex min-h-control-sm items-center text-body-sm font-medium text-brand"
                           >
@@ -236,7 +237,7 @@ export default async function EmprendimientoPage({ params }: { params: Promise<{
 
         <AvisoMvp>
           Las cuentas son de muestra. Cuando haya servidor, cada familia las reportará desde su
-          teléfono y la cooperativa las verá aquí.
+          teléfono y {elEnte(c.coop)} las verá aquí.
         </AvisoMvp>
       </Stack>
     </Container>
