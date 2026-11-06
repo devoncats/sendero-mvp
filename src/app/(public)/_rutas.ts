@@ -11,5 +11,5 @@ import type { RutaNav } from "@/components/patterns";
  */
 export const RUTAS_PORTAL: readonly RutaNav[] = [
   { href: "/", etiqueta: "Experiencias" },
-  { href: "/comunidad", etiqueta: "La comunidad" },
+  { href: "/comunidades", etiqueta: "Comunidades" },
 ];

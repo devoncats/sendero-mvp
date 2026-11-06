@@ -5,17 +5,17 @@ import { notFound } from "next/navigation";
 import { AlertTriangle, ArrowLeft, MessageCircle } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
 import { ButtonLink, Surface, Text } from "@/components/ui";
-import { negocioPorSlug, personas } from "@/data";
+import { elEnte, negocioPorSlug, personas } from "@/data";
 import { cn } from "@/lib/cn";
 import { enlaceWhatsApp, fechaConDia, fechaLarga, hora, precio } from "@/lib/formato";
 import { abreEseDia, aviso, porEmprendimiento, sugerencia } from "@/lib/reparto";
 
 import { AvisoMvp } from "../../../_aviso-mvp";
-import { nivelDe, solicitud, tareasDe } from "../../../_cooperativa";
+import { cooperativa, nivelDe, tareasDe } from "../../../_cooperativa";
 import { Cabecera, EstadoBadge, NUM, Semaforo, TD, TH, Tarjeta } from "../../../_piezas";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const r = solicitud((await params).id);
+  const r = (await cooperativa()).solicitud((await params).id);
   return { title: r ? `Solicitud de ${r.s.nombre}` : "Solicitud" };
 }
 
@@ -34,7 +34,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
  *   apoyo. Es donde la alerta de riesgo se vuelve acción.
  */
 export default async function SolicitudPage({ params }: { params: Promise<{ id: string }> }) {
-  const r = solicitud((await params).id);
+  const c = await cooperativa();
+  const r = c.solicitud((await params).id);
   if (!r) notFound();
   const { s, e } = r;
 
@@ -48,7 +49,7 @@ export default async function SolicitudPage({ params }: { params: Promise<{ id: 
         ? undefined
         : sugerencia(b, nivelDe, (slug) => {
             const n = negocioPorSlug(slug);
-            return Boolean(n && abreEseDia(n, s.fecha, b.dia));
+            return Boolean(n && abreEseDia(n, s.fecha, b.dia) && (n.plazas ?? 0) >= personas(s));
           }),
     }))
     .filter((x) => x.sug);
@@ -103,7 +104,7 @@ export default async function SolicitudPage({ params }: { params: Promise<{ id: 
                       <a
                         href={enlaceWhatsApp(
                           t.negocio.whatsapp,
-                          `Hola, ${t.negocio.persona.nombre.split(" ")[0]}. Le escribe la cooperativa. Tenemos un grupo de ${personas(s)} personas el ${fechaConDia(t.fecha)}. ¿Podría abrir ese día a las ${hora(t.bloque.hora)}?`,
+                          `Hola, ${t.negocio.persona.nombre.split(" ")[0]}. Le escribe ${elEnte(c.coop)}. Tenemos un grupo de ${personas(s)} personas el ${fechaConDia(t.fecha)}. ¿Podría abrir ese día a las ${hora(t.bloque.hora)}?`,
                         )}
                         rel="noopener noreferrer"
                         className="font-semibold underline"
@@ -172,7 +173,7 @@ export default async function SolicitudPage({ params }: { params: Promise<{ id: 
                     <span className="block">{t.bloque.actividad.es}</span>
                     <span className="block text-body-sm text-content-tertiary">
                       {t.negocio.nombre}
-                      {s.asignaciones?.[t.indice] ? " · elegida por la cooperativa" : ""}
+                      {s.asignaciones?.[t.indice] ? ` · elegida por ${elEnte(c.coop)}` : ""}
                     </span>
                     {t.conflicto && activa ? (
                       <span className="mt-inset-xs flex items-center gap-icon-gap text-body-sm text-warning-content">

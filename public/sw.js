@@ -21,15 +21,15 @@ const MIOS = [PAGINAS, ESTATICO, RUTA];
 
 const CAIDA = "/sin-conexion";
 
-/* Lo mínimo para que la aplicación abra sin red: las pantallas a las que lleva
-   la navegación de primer nivel, la experiencia —que es lo que se vende—, y la
-   que explica qué pasa. La experiencia se sirve por petición por el cupo; la
-   copia enseña el cupo de cuando se guardó, y enviar la solicitud necesita red
-   de todos modos.
+/* Lo mínimo para que la aplicación abra sin red: las dos pantallas de primer
+   nivel y la que explica qué pasa. Las experiencias **no** van aquí: con una
+   lista escrita a mano, cada experiencia nueva obligaría a tocar este archivo.
+   Se guardan solas la primera vez que se abren, por `navegacion()`, y la
+   portada ya enlaza a todas.
 
    La versión subió a v2 con la experiencia comunitaria: así se borran las
    copias del directorio, que ahora responde 404. */
-const SEMILLA = ["/", "/comunidad", "/experiencia/fin-de-semana-el-valle", CAIDA];
+const SEMILLA = ["/", "/comunidades", CAIDA];
 
 /* El techo de paciencia en 3G. Pasados estos milisegundos se sirve la copia en
    vez de dejar a alguien mirando una pantalla en blanco. */

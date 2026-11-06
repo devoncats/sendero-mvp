@@ -8,7 +8,7 @@ import { mesCorto, mesLargo, precio } from "@/lib/formato";
 import { ingresos } from "@/lib/salud";
 
 import { AvisoMvp } from "../_aviso-mvp";
-import { insumosBajos, resumenDelMes, sesion, sociosPorSalud, solicitudesDeLaCooperativa, ultimoMes } from "../_cooperativa";
+import { cooperativa } from "../_cooperativa";
 import { Barras } from "../_graficas";
 import { Cabecera, Cifra, NUM, Semaforo, TD, TH, Tarjeta } from "../_piezas";
 
@@ -23,12 +23,13 @@ import { Cabecera, Cifra, NUM, Semaforo, TD, TH, Tarjeta } from "../_piezas";
  * Mismo contrato que antes: SVG desde el servidor, tablas de HTML, cero
  * JavaScript de cliente.
  */
-export function PantallaMetricas() {
-  const { coop, socios } = sesion();
-  const mes = ultimoMes();
-  const resumen = resumenDelMes(mes);
-  const lista = sociosPorSalud();
-  const nuevas = solicitudesDeLaCooperativa().filter((s) => s.estado === "nueva").length;
+export async function PantallaMetricas() {
+  const c = await cooperativa();
+  const { coop, socios } = c;
+  const mes = c.ultimoMes();
+  const resumen = c.resumenDelMes(mes);
+  const lista = c.sociosPorSalud();
+  const nuevas = c.solicitudes().filter((s) => s.estado === "nueva").length;
   const enApoyo = lista.filter((x) => x.salud.nivel === "riesgo").length;
   const enAtencion = lista.filter((x) => x.salud.nivel === "atencion").length;
 
@@ -120,9 +121,9 @@ export function PantallaMetricas() {
 
           <div className="grid gap-inset-md">
             <Tarjeta titulo="Insumos por debajo del mínimo">
-              {insumosBajos().length > 0 ? (
+              {c.insumosBajos().length > 0 ? (
                 <ul className="grid gap-inset-sm">
-                  {insumosBajos().map((i) => (
+                  {c.insumosBajos().map((i) => (
                     <li key={i.emprendimiento + i.nombre}>
                       <Text size="body-md">{i.nombre}</Text>
                       <Text size="caption" tone="tertiary">

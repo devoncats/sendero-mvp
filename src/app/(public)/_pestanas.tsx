@@ -14,7 +14,7 @@ import { RUTAS_PORTAL } from "./_rutas";
 /** El icono de cada sección. Las etiquetas y las rutas viven en `_rutas`. */
 const ICONO: Record<string, typeof Compass> = {
   "/": Compass,
-  "/comunidad": Comunidad,
+  "/comunidades": Comunidad,
 };
 
 /**

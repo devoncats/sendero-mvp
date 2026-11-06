@@ -8,7 +8,7 @@ import { fechaConDia, mesLargo, precio } from "@/lib/formato";
 import { iso } from "@/lib/reparto";
 import { ahoraEnPanama } from "@/lib/reloj";
 
-import { loSiguiente, resumenDelMes, sesion, solicitudesDeLaCooperativa, ultimoMes } from "../_cooperativa";
+import { cooperativa } from "../_cooperativa";
 
 /**
  * La portada del modo guiado, para quien administra la cooperativa.
@@ -32,16 +32,18 @@ const ACCIONES = [
   { href: "/dashboard/emprendimientos", titulo: "Ver cómo están las familias" },
 ] as const;
 
-export function PanelGuiado() {
-  const { coop, experiencia: e } = sesion();
-  const [siguiente, ...resto] = loSiguiente();
+export async function PanelGuiado() {
+  const c = await cooperativa();
+  const { coop } = c;
+  const [siguiente, ...resto] = c.loSiguiente();
   const nombre = coop.contacto.nombre.split(" ")[0];
   const Icono = siguiente ? ICONO[siguiente.tipo] : CheckCircle;
-  const mes = ultimoMes();
-  const resumen = resumenDelMes(mes);
+  const mes = c.ultimoMes();
+  const resumen = c.resumenDelMes(mes);
 
   const hoy = iso(ahoraEnPanama());
-  const proximos = solicitudesDeLaCooperativa()
+  const proximos = c
+    .solicitudes()
     .filter((s) => (s.estado === "confirmada" || s.estado === "repartida") && s.fecha >= hoy)
     .sort((a, b) => a.fecha.localeCompare(b.fecha))
     .slice(0, 4);
@@ -110,8 +112,8 @@ export function PanelGuiado() {
               <Text size="body-lg" tone="secondary" className="max-w-prose">
                 Ninguna solicitud espera respuesta y todas las familias están bien de cuentas.
               </Text>
-              <ButtonLink href={`/experiencia/${e.id}`} variante="secondary" tamano="lg">
-                Ver la experiencia como la ven ellos
+              <ButtonLink href={`/experiencia/${c.experiencias[0].id}`} variante="secondary" tamano="lg">
+                Ver {c.experiencias.length === 1 ? "la experiencia" : "las experiencias"} como las ven ellos
                 <ExternalLink className="size-icon-md" aria-hidden />
               </ButtonLink>
             </Stack>

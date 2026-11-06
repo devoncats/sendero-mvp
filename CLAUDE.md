@@ -14,13 +14,14 @@ por ESLint. La disciplina la sostiene este archivo.
 
 ## Qué es y qué no es
 
-Es la **vitrina de una experiencia comunitaria** y el **panel administrativo del ente
-económico** que la organiza. Así lo pidió el PO en noviembre de 2026; antes era un
+Es la **vitrina de experiencias comunitarias** y el **panel administrativo de cada ente
+económico** que las organiza. Así lo pidió el PO en noviembre de 2026; antes era un
 directorio de negocios sueltos, y ese cambio es la decisión que ordena todo lo demás.
 
-- El portal vende **una experiencia** —hoy, «Un fin de semana dentro del cráter», en El
-  Valle de Antón—, no negocios uno por uno. Los emprendimientos salen **dentro** de ella,
-  con nombre de persona, pero sin ficha, horario ni WhatsApp propios.
+- El portal vende **experiencias** —hoy dos: «Un fin de semana dentro del cráter», en El
+  Valle de Antón, y «La bahía de los congos», en Portobelo—, no negocios uno por uno. Los
+  emprendimientos salen **dentro** de ellas, con nombre de persona, pero sin ficha,
+  horario ni WhatsApp propios. Añadir una tercera es seguir «Cómo añadir una experiencia».
 - El visitante **solicita**; no reserva ni paga. La solicitud sale por WhatsApp al ente
   económico (cooperativa, consorcio o sociedad), que confirma y **reparte** el trabajo
   entre sus socios.
@@ -51,28 +52,37 @@ Dos áreas:
 
 **Visitante.** Turista con datos móviles caros o roaming. De pie, una mano, sol en la pantalla.
 
-**Quien administra la cooperativa.** Mismo perfil que tenía el dueño del negocio: 45–65
-años, Android de gama media (referencia: Moto G Power, Android 11), conectividad
-intermitente, poca costumbre con interfaces. Lo que cambió es la escala: ya no cuida una
-ficha, coordina a diez familias. Necesita que cada pantalla diga qué hacer ahora.
+**Quien administra el ente** —la cooperativa, el consorcio—. Mismo perfil que tenía el
+dueño del negocio: 45–65 años, Android de gama media (referencia: Moto G Power, Android
+11), conectividad intermitente, poca costumbre con interfaces. Lo que cambió es la escala:
+ya no cuida una ficha, coordina a ocho o diez familias. Necesita que cada pantalla diga qué
+hacer ahora.
 
 ---
 
 ## La experiencia y el reparto
 
-`data/experiencias.ts` describe el recorrido en **bloques**: día, hora, tipo, actividad,
-quién lo atiende y **cuánto recibe por visitante**. El precio es la suma de los bloques, y
-por eso la portada puede decir a quién le llega cada balboa sin inventar un porcentaje. La
-cooperativa no cobra comisión: se sostiene con la cuota de sus socios.
+Cada experiencia vive en su archivo de `data/experiencias/` y describe el recorrido en
+**bloques**: día, hora, tipo, actividad, quién lo atiende y **cuánto recibe por
+visitante**. El precio es la suma de los bloques, y por eso la página de cada experiencia
+puede decir a quién le llega cada balboa sin inventar un porcentaje. El ente no cobra
+comisión: se sostiene con la cuota de sus socios.
+
+**Se es socio de un ente por estar en el recorrido** de alguna de sus experiencias, como
+titular o como alternativa (`sociosDe()`). No hay una lista de socios aparte que se pueda
+desincronizar.
 
 Un bloque puede tener **alternativas** —dos fondas que sirven el mismo almuerzo, dos
 hospedajes—. Es lo que permite repartir con criterio, y es donde la alerta de riesgo se
 vuelve acción: `sugerencia()` (`lib/reparto.ts`) propone mandar el grupo a la alternativa
-que necesita apoyo, **solo si abre ese día**. Una puerta cerrada no ayuda a nadie.
+que necesita apoyo, **solo si abre ese día y si el grupo cabe**. Una puerta cerrada, o una
+casa de seis camas para un grupo de diez, no ayuda a nadie.
 
 `repartir()` convierte una solicitud en tareas por emprendimiento, marca los **conflictos**
 (un bloque que cae en un día que esa familia no abre) y `aviso()` escribe el WhatsApp de
-cada una. La solicitud `s-1109` llega un lunes a propósito, para que el conflicto se vea.
+cada una. Las solicitudes `s-1109` (El Valle, un lunes) y `p-1117` (Portobelo, un martes)
+tienen conflictos a propósito, y `p-1121` es un grupo de diez para que se vea que la
+Posada Isla Drake, en riesgo y con seis camas, no se sugiere.
 
 Las salidas que ofrece el portal son **los próximos seis sábados**, con su cupo descontando
 lo confirmado. Es convención de la cooperativa, no del recorrido: otra fecha se pide en la
@@ -95,9 +105,48 @@ con umbrales que son **convenciones para discutir con la cooperativa**, no datos
 | Deuda | más de 30 días de atraso con un proveedor |
 | Ocupación | menos del 20 % de las plazas |
 
-Una señal es «atención»; dos o más, «necesita apoyo». En los datos hay **dos en riesgo y uno
-en atención a propósito** —Cocina de Yolanda, Cabañas La Pintada y Sombreros del Valle—, por
-razones distintas, para que la alerta no sea código muerto.
+Una señal es «atención»; dos o más, «necesita apoyo». En los datos hay casos de los dos a
+propósito, por razones distintas, para que la alerta no sea código muerto: en El Valle,
+Cocina de Yolanda y Cabañas La Pintada en riesgo y Sombreros del Valle en atención; en
+Portobelo, la Posada Isla Drake en riesgo y el Taller Diablos y Congos en atención.
+
+---
+
+## Cómo añadir una experiencia
+
+El patrón es que **una experiencia nueva no toca ni una pantalla**. La portada, su página,
+la de su comunidad y el panel la dibujan solas desde los datos. Lo que hay que escribir:
+
+1. **Los emprendimientos**, en `data/negocios.ts`, con nombre de persona, horario de verdad
+   y `plazas` + `unidadPlazas`. Si ya existen en el directorio dormido, se les añaden las
+   plazas y nada más.
+2. **El ente**, en `data/comunidad.ts`, si la comunidad es nueva: tipo, contacto con
+   nombre, WhatsApp. Un ente por zona.
+3. **La experiencia**, en `data/experiencias/<id>.ts`, copiando la forma de una que exista,
+   y **registrada** en `data/experiencias/index.ts`. El orden del registro es el de la
+   portada.
+4. **Lo administrativo**, aunque sea simulado: seis meses de cuentas por socio en
+   `data/administracion.ts` (sin cuentas no hay semáforo), sus insumos y proveedores, y
+   algunas solicitudes en `data/solicitudes.ts` para que el panel no salga vacío.
+
+`validar()` (`data/experiencias/validar.ts`) corre al importar el registro y **para
+`pnpm build`** si algo está mal, con un mensaje por error. Aquí no hay tests, así que el
+build es la red. Comprueba:
+
+- el ente existe y es de la misma zona que la experiencia y que todos sus emprendimientos;
+- todo emprendimiento existe y declara plazas, y **ningún titular tiene menos plazas que el
+  cupo** (una alternativa sí puede: el reparto comprueba si cabe cada grupo);
+- toda alternativa es de la misma categoría que su titular, y no se repite con él;
+- los bloques van en orden, dentro de los días, y cada uno le paga algo a alguien;
+- hay un bloque de alojamiento por cada noche, y el mínimo está entre 1 y el cupo.
+
+Se probó rompiendo Portobelo a propósito —cupo 30 y una alternativa de El Valle—: el build
+paró con ocho mensajes: siete por emprendimientos sin plazas suficientes y uno por la
+zona equivocada.
+
+**Lo que no se hace:** una página a medida para una experiencia, o un `if` por id en una
+pantalla. Si una experiencia necesita algo que las piezas de `(public)/_experiencia.tsx` no
+tienen, la pieza se añade ahí para todas.
 
 ---
 
@@ -113,9 +162,22 @@ El panel se ve de dos maneras, y la elige quien lo usa.
 | Las cifras | una frase | tarjetas, ingresos por mes y tabla de familias |
 
 Las cinco pantallas son Panel, Solicitudes, Emprendimientos, Visitantes y Proveedores.
-«Lo siguiente» sale de `loSiguiente()` (`(dashboard)/_cooperativa.ts`), en este orden: una
-solicitud nueva con conflicto de horario, las demás nuevas, un socio que necesita apoyo y un
-insumo bajo mínimo.
+Todas piden `await cooperativa()` (`(dashboard)/_cooperativa.ts`), que devuelve el ente de
+la sesión con las consultas **ya acotadas a él**: sus experiencias, socios, solicitudes,
+insumos y proveedores. Ninguna pantalla filtra por su cuenta, y por eso desde el consorcio
+de Portobelo una solicitud o una familia de El Valle dan 404.
+
+La sesión es simulada: el ente sale de la cookie `sendero-ente`, y el menú de cuenta tiene
+un bloque «Demostración: ver el panel de» que la cambia con la Server Action `cambiarEnte`.
+**Existe solo porque no hay cuentas**; con autenticación, `enteDeLaSesion()` lee la de
+verdad y ese bloque y la acción se borran.
+
+«Lo siguiente» sale de `loSiguiente()`, en este orden: una solicitud nueva con conflicto de
+horario, las demás nuevas, un socio que necesita apoyo y un insumo bajo mínimo.
+
+El copy no da por hecho que el ente es una cooperativa: `elEnte()` y `delEnte()`
+(`data/comunidad.ts`) dicen «la cooperativa» / «el consorcio» y «de la cooperativa» /
+«del consorcio». «De el consorcio» no se dice.
 
 **La regla de que el guiado no cambiara ni un píxel se rompió a propósito** con la
 experiencia comunitaria: el panel cambió de dueño, y su portada con él. Lo que se mantiene
@@ -132,7 +194,7 @@ está anotado a propósito: es lo único que la cookie se llevó por delante.
 En el teléfono el modo experto es el mismo marcado con la barra lateral en un cajón detrás
 de la hamburguesa. No hay una vista móvil aparte, ni un enlace duplicado.
 
-Medido, brotli, con el panel de la cooperativa: **guiado 225,8 KB · experto 228,5 KB**
+Medido, brotli, con el panel de la cooperativa: **guiado 226,3 KB · experto 228,9 KB**
 (ver «Cómo medir» para el método, que no es el de las cifras antiguas). La diferencia
 siguen siendo HTML —la barra y los SVG—; los trozos de JavaScript son los mismos.
 
@@ -250,12 +312,13 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   los de la Fase 4**, que salieron de Lighthouse y cuentan de otra manera; lo que vale de
   ellos es la diferencia, que sí se midió con la misma vara a ambos lados.
   **La experiencia comunitaria** se midió con esa misma vara —HTML más todo `_next` que
-  la página referencia, brotli 11, las fuentes precargadas tal cual—: **portada 226,6 KB ·
-  `/comunidad` 226,6 KB · `/experiencia/fin-de-semana-el-valle` 227,7 KB**, que es la más
-  pesada del portal por el recorrido y el formulario. El panel: guiado 225,8 KB, experto
-  228,5 KB, una solicitud 228,1 KB y la ficha de un emprendimiento 227,6 KB. Esta vez **no
-  hay medida del árbol anterior** con la misma vara, así que son cifras absolutas, no
-  diferencias. `scripts/medir.mjs` ya apunta a las rutas nuevas.
+  la página referencia, brotli 11, las fuentes precargadas tal cual—. Con la segunda
+  experiencia: **portada 224,8 KB · `/comunidades` 224,1 KB · `/comunidad/[id]` 226,7 KB
+  · `/experiencia/fin-de-semana-el-valle` 230,2 KB · Portobelo 229,8 KB**. La página de
+  una experiencia es la más pesada del portal: con varias, el derrame y las familias se
+  mudaron de la portada a ella (+2,5 KB de HTML), y la portada bajó 1,8 KB. El panel:
+  guiado 226,3 KB, experto 228,9 KB. Cada experiencia que entre se mide —`medir.mjs` ya
+  tiene las dos—, porque su HTML crece con sus bloques y sus familias.
 - **LCP objetivo < 2.5 s en 4G lenta; el portal está en 2,65 s y se acepta.**
   Esos 150 ms son el precio de Source Serif en los titulares, y esa identidad editorial
   se decidió a conciencia. El dashboard, que no la usa, cumple con 2,34 s.
@@ -330,8 +393,10 @@ dirección, y los campos se rellenan otra vez. Es el precio de no tener JavaScri
 servidor donde dejar un borrador, y está aceptado.
 
 Y «sin conexión» dejó de ser solo un aviso. Hay un **service worker escrito a mano** en
-`public/sw.js` —sin next-pwa, sin workbox— que precachea la portada, `/comunidad`, la
-experiencia y `/sin-conexion` (versión `v2`: subirla borró las copias del directorio); sirve `/_next/static/**` desde caché sin revalidar, porque va con hash;
+`public/sw.js` —sin next-pwa, sin workbox— que precachea la portada, `/comunidades` y
+`/sin-conexion` (versión `v2`: subirla borró las copias del directorio). **Las experiencias
+no están en esa lista a propósito**: con una lista escrita a mano, cada experiencia nueva
+obligaría a tocar el worker. Se guardan solas la primera vez que se abren; sirve `/_next/static/**` desde caché sin revalidar, porque va con hash;
 y resuelve las navegaciones con red primero y una carrera de 3 segundos, que es el techo
 de paciencia en 3G. Al guardar una ruta, la página le manda al worker el plan, su zona,
 las fichas de sus paradas **y la lista de estáticos que acaba de usar** — sin eso el HTML
@@ -489,7 +554,7 @@ lo que dibuja, y prefiere una entrada existente.
 
 Guardar es `Bookmark`, **nunca un corazón**.
 
-Son 39 entradas. Seis las trajo el modo experto —`Metricas`, `Ficha`, `Producto`,
+Son 39 entradas; la segunda experiencia no añadió ninguna. Seis las trajo el modo experto —`Metricas`, `Ficha`, `Producto`,
 `Ajustes`, `Idioma`, `CerrarSesion`—, y están renombradas por lo que significan en
 este producto, no por lo que dibuja Lucide.
 
@@ -518,7 +583,8 @@ src/
 │  ├─ patterns/         BusinessCard, CategoryChip, EncabezadoSeccion, EmptyState…
 │  └─ icons.ts          el re-export curado de Lucide
 ├─ data/                datos estáticos tipados — zonas, negocios, categorías,
-│                       comunidad, experiencias, solicitudes, administracion
+│                       comunidad, solicitudes, administracion, y experiencias/:
+│                       un archivo por experiencia, el registro y validar()
 ├─ lib/                 utilidades (cn, formatters, marcador) y la lógica pura:
 │                       salud (semáforo), reparto, itinerario, directorio
 └─ styles/
@@ -544,10 +610,20 @@ Categorías: Artesanía · Comida · Hospedaje · Experiencias · Transporte loc
 
 Los negocios son inventados pero plausibles, siempre **con el nombre de la persona detrás**.
 
-La comunidad piloto es **El Valle de Antón**, con la *Cooperativa de Servicios Turísticos El
-Valle, R.L.* —inventada, con la forma de las que existen— y diez familias socias. Siete de
-ellas entraron con la experiencia; las tres que ya había en El Valle se sumaron. Las otras
-ocho zonas y sus negocios siguen en los datos para cuando vuelva el directorio.
+Hay dos comunidades, inventadas pero con la forma de lo que existe:
+
+- **El Valle de Antón**, con la *Cooperativa de Servicios Turísticos El Valle, R.L.* y diez
+  familias socias.
+- **Portobelo**, con el *Consorcio Turístico Congo de Portobelo* y ocho. Es un consorcio y
+  no una cooperativa a propósito: el modelo tiene que servir para los tipos de ente que
+  nombró el PO.
+
+En las dos, los negocios que ya había en el directorio se sumaron como socios. Las otras
+siete zonas y sus negocios siguen en los datos para cuando vuelva el directorio.
+
+Las secciones del portal son **Experiencias** (`/`) y **Comunidades** (`/comunidades`, y
+`/comunidad/[id]` por ente). `/comunidad` a secas redirige a la lista, por los enlaces que
+ya se compartieron.
 
 La referencia que trajo el PO es el catálogo de la cooperativa Copejaay, en Guatemala: un
 ERP de cooperativa con un catálogo encima. Es la forma, no el modelo a copiar.

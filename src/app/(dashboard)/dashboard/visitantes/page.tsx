@@ -7,7 +7,7 @@ import { personas } from "@/data";
 import { cn } from "@/lib/cn";
 import { fechaLarga } from "@/lib/formato";
 
-import { solicitudesDeLaCooperativa } from "../../_cooperativa";
+import { cooperativa } from "../../_cooperativa";
 import { Cabecera, Cifra, EstadoBadge, NUM, TD, TH, Tarjeta } from "../../_piezas";
 
 export const metadata: Metadata = { title: "Visitantes" };
@@ -21,8 +21,10 @@ export const metadata: Metadata = { title: "Visitantes" };
  * a una hoja de cálculo, que es lo primero que va a querer hacer una
  * cooperativa que rinde cuentas a sus socios.
  */
-export default function VisitantesPage() {
-  const registro = solicitudesDeLaCooperativa()
+export default async function VisitantesPage() {
+  const c = await cooperativa();
+  const registro = c
+    .solicitudes()
     .filter((s) => s.estado !== "nueva" && s.estado !== "cancelada")
     .sort((a, b) => b.fecha.localeCompare(a.fecha));
 

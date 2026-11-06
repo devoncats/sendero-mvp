@@ -114,17 +114,19 @@ export function aviso(s: Solicitud, grupo: { negocio: Negocio; tareas: Tarea[]; 
  * mismo almuerzo y una de ellas necesita apoyo, la sugerencia es ella. Si
  * ninguna lo necesita, se queda el titular — no se mueve a nadie sin razón.
  *
- * Una alternativa que no abre ese día no es alternativa: mandarle un grupo a
- * una puerta cerrada no ayuda a nadie, por mucho que necesite el trabajo.
+ * Una alternativa que no abre ese día, o donde el grupo no cabe, no es
+ * alternativa: mandarle un grupo a una puerta cerrada o a una casa de seis
+ * camas con ocho personas no ayuda a nadie, por mucho que necesite el trabajo.
+ * `disponible` responde las dos cosas.
  */
 export function sugerencia(
   bloque: Bloque,
   nivelDe: (slug: string) => NivelSalud,
-  abre: (slug: string) => boolean,
+  disponible: (slug: string) => boolean,
 ): { slug: string; porque: string } | undefined {
   if (!bloque.alternativas?.length) return undefined;
   const orden: Record<NivelSalud, number> = { riesgo: 0, atencion: 1, estable: 2 };
-  const candidatos = bloque.alternativas.filter(abre);
+  const candidatos = bloque.alternativas.filter(disponible);
   const mejor = [...candidatos].sort((a, b) => orden[nivelDe(a)] - orden[nivelDe(b)])[0];
   if (!mejor || orden[nivelDe(mejor)] >= orden[nivelDe(bloque.emprendimiento)]) return undefined;
   return {

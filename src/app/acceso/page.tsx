@@ -7,7 +7,7 @@ import { Input, Surface, Text } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Entrar",
-  description: "Entra al panel de tu cooperativa con tu número de teléfono. Sin contraseñas.",
+  description: "Entra al panel de tu cooperativa o consorcio con tu número de teléfono. Sin contraseñas.",
 };
 
 /**
@@ -46,7 +46,7 @@ export default function AccesoPage() {
             <Stack gap="loose">
               <Stack gap="tight">
                 <Text as="h1" size="heading-lg" weight="semibold">
-                  Entra al panel de tu cooperativa
+                  Entra al panel de tu comunidad
                 </Text>
                 <Text size="body-lg" tone="secondary">
                   Sin contraseñas. Te mandamos un código por mensaje al número que ya usas.
@@ -112,8 +112,8 @@ export default function AccesoPage() {
 
           <Text size="body-md" tone="secondary" className="mx-auto max-w-page-sm text-center">
             ¿Tu comunidad quiere estar en Sendero?{" "}
-            <Link href="/comunidad" className="font-medium text-brand">
-              Mira cómo trabaja la de El Valle
+            <Link href="/comunidades" className="font-medium text-brand">
+              Mira cómo trabajan las que ya están
             </Link>
           </Text>
         </Stack>

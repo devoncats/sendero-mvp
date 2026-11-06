@@ -17,7 +17,7 @@ function semana(franja: DiaHorario, extra?: Partial<Semana>): Semana {
 }
 
 /**
- * Treinta y siete negocios inventados pero plausibles, repartidos entre las nueve zonas
+ * Cuarenta y dos negocios inventados pero plausibles, repartidos entre las nueve zonas
  * y las seis categorías. Todos llevan el nombre de la persona detrás: es la
  * tesis del proyecto, no un adorno.
  *
@@ -250,6 +250,8 @@ export const NEGOCIOS: readonly Negocio[] = [
     confirmadoEl: "2026-08-24",
     estadoDato: "verificado",
     fotos: 5,
+    plazas: 20,
+    unidadPlazas: "cubiertos",
   },
   {
     slug: "taller-diablos-y-congos",
@@ -279,6 +281,8 @@ export const NEGOCIOS: readonly Negocio[] = [
     confirmadoEl: "2026-08-27",
     estadoDato: "verificado",
     fotos: 7,
+    plazas: 10,
+    unidadPlazas: "personas en el taller",
   },
   {
     slug: "lanchas-playa-blanca",
@@ -301,6 +305,139 @@ export const NEGOCIOS: readonly Negocio[] = [
     confirmadoEl: "2026-05-18",
     estadoDato: "desactualizado",
     fotos: 2,
+    plazas: 12,
+    unidadPlazas: "personas por lancha",
+  },
+  /*
+    Los cinco que siguen entraron con la experiencia de Portobelo, junto con los
+    tres de arriba. La Fonda El Malecón y la Posada Isla Drake son la alternativa
+    de la Cocina Congo y de la Casa La Aduana.
+  */
+  {
+    slug: "guias-de-los-fuertes",
+    nombre: "Guías de los Fuertes",
+    persona: {
+      nombre: "Aurelio Jiménez",
+      oficio: "Guía de patrimonio",
+      anos: 22,
+      cita: "Estas piedras las pusieron esclavos traídos de África. Si no lo cuento yo, el fuerte se queda en postal.",
+    },
+    categoria: "experiencias",
+    zona: "portobelo",
+    descripcion: {
+      es: "Recorrido a pie por Santiago, San Jerónimo, la Aduana y la iglesia del Cristo Negro. Cuenta la historia de los cimarrones, que es la que no está en los letreros.",
+    },
+    productos: [{ nombre: "Recorrido por el centro histórico", precio: 12, detalle: "Por persona, dos horas" }],
+    horario: semana(h("08:00", "16:00")),
+    referencia: "Frente a la Real Aduana, junto a la parada de buses. Lleva camisa amarilla.",
+    coordenadas: { lat: 9.5529, lng: -79.6534 },
+    whatsapp: "50762874410",
+    pagos: ["Efectivo", "Yappy"],
+    idiomas: ["Español", "Inglés"],
+    confirmadoEl: "2026-10-27",
+    estadoDato: "verificado",
+    fotos: 5,
+    plazas: 15,
+    unidadPlazas: "personas por grupo",
+  },
+  {
+    slug: "congos-reyes-de-la-bahia",
+    nombre: "Congos Reyes de la Bahía",
+    persona: {
+      nombre: "Celedonia Molina",
+      oficio: "Reina congo",
+      anos: 40,
+      cita: "El congo es burla del amo. Se baila riéndose, y quien no se ríe no lo entendió.",
+    },
+    categoria: "experiencias",
+    zona: "portobelo",
+    descripcion: {
+      es: "Tambores, cantos de pregón y respuesta y el baile congo en el patio de la casa de la reina. Al final, los diablos salen a buscar a quien no baila.",
+    },
+    productos: [{ nombre: "Noche congo", precio: 10, detalle: "Por persona, hora y media" }],
+    horario: semana("cerrado", { vie: h("18:00", "22:00"), sab: h("18:00", "22:00"), dom: h("16:00", "20:00") }),
+    referencia: "Barrio de Cacique, la casa con el patio de tierra y las banderas de colores.",
+    coordenadas: { lat: 9.5548, lng: -79.6571 },
+    whatsapp: "50765098132",
+    pagos: ["Efectivo"],
+    idiomas: ["Español"],
+    confirmadoEl: "2026-10-19",
+    estadoDato: "verificado",
+    fotos: 6,
+    plazas: 25,
+    unidadPlazas: "personas por función",
+  },
+  {
+    slug: "fonda-el-malecon",
+    nombre: "Fonda El Malecón",
+    persona: { nombre: "Gilma Barrios", oficio: "Cocinera", anos: 15 },
+    categoria: "comida",
+    zona: "portobelo",
+    descripcion: {
+      es: "Pescado frito, patacones y saus de patas en un rancho sobre el agua. Compra el pescado a los de la bahía cuando llegan, a media mañana.",
+    },
+    productos: [
+      { nombre: "Pescado frito con patacones", precio: 9 },
+      { nombre: "Saus", precio: 3 },
+    ],
+    horario: semana(h("10:00", "18:00"), { lun: "cerrado" }),
+    referencia: "Malecón de Portobelo, el último rancho antes del muelle de las lanchas.",
+    coordenadas: { lat: 9.5535, lng: -79.6559 },
+    whatsapp: "50769351276",
+    pagos: ["Efectivo", "Yappy"],
+    idiomas: ["Español"],
+    confirmadoEl: "2026-10-22",
+    estadoDato: "verificado",
+    fotos: 3,
+    plazas: 18,
+    unidadPlazas: "cubiertos",
+  },
+  {
+    slug: "casa-la-aduana",
+    nombre: "Casa de Huéspedes La Aduana",
+    persona: { nombre: "Marcelina Ávila", oficio: "Anfitriona", anos: 13 },
+    categoria: "hospedaje",
+    zona: "portobelo",
+    descripcion: {
+      es: "Cinco cuartos en una casa de madera de dos pisos frente a la bahía. Desayuno de bollo de coco y café, y la terraza de arriba para ver salir las lanchas.",
+    },
+    productos: [
+      { nombre: "Cuarto doble", precio: 35, detalle: "Por noche, con desayuno" },
+      { nombre: "Cuarto familiar", precio: 55, detalle: "Por noche, hasta cuatro" },
+    ],
+    horario: semana(h("07:00", "21:00")),
+    referencia: "Calle de la Aduana, la casa azul de dos pisos con balcón de madera.",
+    coordenadas: { lat: 9.5524, lng: -79.6541 },
+    whatsapp: "50764772093",
+    pagos: ["Efectivo", "Transferencia", "Yappy"],
+    idiomas: ["Español", "Inglés"],
+    confirmadoEl: "2026-10-29",
+    estadoDato: "verificado",
+    fotos: 4,
+    plazas: 10,
+    unidadPlazas: "camas",
+  },
+  {
+    slug: "posada-isla-drake",
+    nombre: "Posada Isla Drake",
+    persona: { nombre: "Rubén Molinar", oficio: "Anfitrión", anos: 4 },
+    categoria: "hospedaje",
+    zona: "portobelo",
+    descripcion: {
+      es: "Tres cuartos sencillos con ventilador y vista a la isla donde dicen que está enterrado Drake. Rubén la abrió con la indemnización de la pesquera.",
+    },
+    productos: [{ nombre: "Cuarto doble", precio: 30, detalle: "Por noche, con desayuno" }],
+    horario: semana(h("07:00", "21:00")),
+    referencia: "Entrada del pueblo, después de la gasolinera. Casa amarilla con un ancla en la puerta.",
+    coordenadas: { lat: 9.5561, lng: -79.6602 },
+    whatsapp: "50766612485",
+    pagos: ["Efectivo"],
+    idiomas: ["Español"],
+    confirmadoEl: "2026-09-14",
+    estadoDato: "verificado",
+    fotos: 2,
+    plazas: 6,
+    unidadPlazas: "camas",
   },
 
   /* --------------------------------------------------------- Guna Yala */
