@@ -4,6 +4,7 @@ import { Check, Clock, MessageCircle, Photo } from "@/components/icons";
 import { Container, Inline, Section, Stack } from "@/components/layout";
 import { ButtonLink, Media, Surface, Text } from "@/components/ui";
 import { NEGOCIOS, ZONAS, negocioPorSlug } from "@/data";
+import { soloConDirectorio } from "@/lib/directorio";
 
 export const metadata: Metadata = {
   title: "Para tu negocio",
@@ -37,6 +38,7 @@ const REQUISITOS = [
 ];
 
 export default function ParaTuNegocioPage() {
+  soloConDirectorio();
   // Cifras reales del propio directorio, no inventadas.
   const delia = negocioPorSlug("artesanias-delia-quintero");
 

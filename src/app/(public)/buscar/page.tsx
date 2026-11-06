@@ -88,10 +88,10 @@ export default async function BuscarPage({
       >
         <Text
           as="h1"
-          size="heading-lg"
+          size="display-sm"
           serif
           weight="semibold"
-          className="lg:col-start-2 lg:col-span-3"
+          className="text-balance lg:col-start-2 lg:col-span-3"
         >
           {encabezado}
         </Text>
@@ -110,12 +110,12 @@ export default async function BuscarPage({
               type="search"
               defaultValue={q}
               placeholder="Buscar zona, negocio o producto"
-              className="h-control-md w-full min-w-0 flex-1 rounded-control border border-border-default bg-surface px-inset-md text-body-md text-content-primary placeholder:text-content-tertiary"
+              className="h-control-lg w-full min-w-0 flex-1 rounded-control border border-border-default bg-surface px-inset-md text-body-md text-content-primary placeholder:text-content-tertiary"
             />
             <button
               type="submit"
               aria-label="Buscar"
-              className="flex size-control-md shrink-0 items-center justify-center rounded-control bg-action-primary text-action-primary-content"
+              className="flex size-control-lg shrink-0 items-center justify-center rounded-control bg-action-primary text-action-primary-content active:bg-action-primary-active"
             >
               <Search className="size-icon-md" aria-hidden />
             </button>

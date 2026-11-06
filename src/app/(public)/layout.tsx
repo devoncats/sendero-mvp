@@ -1,13 +1,19 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { Compass, Search } from "@/components/icons";
-import { Container, Inline } from "@/components/layout";
+import { Compass } from "@/components/icons";
+import { Container, Inline, Stack } from "@/components/layout";
 import { AvisoSinConexion, Navegacion } from "@/components/patterns";
 import { Text } from "@/components/ui";
 
 import { Pestanas } from "./_pestanas";
 import { RUTAS_PORTAL } from "./_rutas";
+
+/** Lo que no está en las pestañas y aun así hace falta poder encontrar. */
+const ENLACES_PIE = [
+  { href: "/comunidad", etiqueta: "Quién organiza" },
+  { href: "/acceso", etiqueta: "Entrar como cooperativa" },
+] as const;
 
 /**
  * El portal. `data-density="editorial"` es todo el mecanismo: de aquí para
@@ -30,17 +36,10 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
               </Text>
             </Link>
 
-            {/* A partir de md las pestañas suben aquí y la de abajo se apaga */}
+            {/* A partir de md las pestañas suben aquí y la de abajo se apaga.
+                El atajo de buscar se fue con el directorio: con una sola
+                comunidad no hay nada que buscar. */}
             <Navegacion rutas={RUTAS_PORTAL} />
-
-            {/* El atajo del teléfono. Arriba de md lo dice la navegación. */}
-            <Link
-              href="/buscar"
-              aria-label="Buscar"
-              className="flex size-control-sm items-center justify-center rounded-full md:hidden"
-            >
-              <Search className="size-icon-md" aria-hidden />
-            </Link>
           </Inline>
         </Container>
       </header>
@@ -49,6 +48,46 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <AvisoSinConexion />
 
       <div className="flex-1">{children}</div>
+
+      {/*
+        El portal se acababa en seco: el último negocio de la lista y nada más.
+        Un pie corto es lo que dice que la página terminó y no que se quedó a
+        medio cargar.
+
+        Dos enlaces y una frase, y ni uno más. Repetir aquí las nueve zonas
+        sería un mapa del sitio, y un mapa del sitio es peso en un Moto G Power
+        para decir lo que ya dicen el encabezado y las pestañas.
+      */}
+      <footer className="border-t border-border-subtle bg-surface-sunken py-stack">
+        <Container ancho="sm" className="lg:max-w-page-xl">
+          <Stack gap="default">
+            <Stack gap="tight">
+              <Inline gap="icon" wrap={false}>
+                <Compass className="size-icon-md text-brand" aria-hidden />
+                <Text as="span" size="heading-sm" serif weight="semibold">
+                  Sendero
+                </Text>
+              </Inline>
+              <Text size="body-sm" tone="secondary" className="max-w-prose">
+                Experiencias organizadas por las propias comunidades de Panamá. Lo que pagas
+                llega entero a las familias que te atienden.
+              </Text>
+            </Stack>
+
+            <Inline gap="lg" as="nav" aria-label="Enlaces del pie">
+              {ENLACES_PIE.map(({ href, etiqueta }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="inline-flex min-h-touch-min items-center text-body-sm font-medium text-brand"
+                >
+                  {etiqueta}
+                </Link>
+              ))}
+            </Inline>
+          </Stack>
+        </Container>
+      </footer>
 
       <Pestanas />
     </div>

@@ -24,10 +24,16 @@ const DIAS_CORTOS = ["L", "M", "M", "J", "V", "S", "D"] as const;
 export function Barras({
   serie,
   etiqueta,
+  ejes,
 }: {
   serie: SerieDiaria;
   /** Lo que la gráfica dice en palabras, para quien no la ve. */
   etiqueta: string;
+  /**
+   * El nombre de cada barra, cuando no son días. Con seis meses caben todos;
+   * con treinta días se rotulan tres, como siempre.
+   */
+  ejes?: readonly string[];
 }) {
   const max = Math.max(...serie, 1);
   const pico = serie.indexOf(max);
@@ -99,7 +105,7 @@ export function Barras({
         {max}
       </text>
 
-      {[0, Math.floor(serie.length / 2), serie.length - 1].map((i) => (
+      {(ejes ? serie.map((_, i) => i) : [0, Math.floor(serie.length / 2), serie.length - 1]).map((i) => (
         <text
           key={i}
           x={x0 + i * paso + paso / 2}
@@ -108,7 +114,7 @@ export function Barras({
           fontSize={10}
           className="fill-content-tertiary"
         >
-          {i + 1}
+          {ejes ? ejes[i] : i + 1}
         </text>
       ))}
     </svg>

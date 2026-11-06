@@ -1,9 +1,31 @@
 import { CATEGORIAS, categoria } from "./categorias";
 import { NEGOCIOS } from "./negocios";
-import type { CategoriaId, Negocio, Zona, ZonaId } from "./tipos";
+import type { CategoriaId, Experiencia, Negocio, Zona, ZonaId } from "./tipos";
 import { ZONAS, zona } from "./zonas";
 
 export { CATEGORIAS, categoria, NEGOCIOS, ZONAS, zona };
+export { ENTES, ente } from "./comunidad";
+export { EXPERIENCIAS, experiencia, precioPorPersona, repartoDelPrecio } from "./experiencias";
+export { SOLICITUDES, personas, plazasOcupadas } from "./solicitudes";
+export { FINANZAS, INSUMOS, PROVEEDORES, cuentasDe, proveedor } from "./administracion";
+
+/**
+ * Los emprendimientos de una experiencia, sin repetir y en el orden en que
+ * aparecen en el recorrido — titulares y alternativas. Es la lista de socios
+ * que ve la cooperativa y la de familias que ve el visitante.
+ */
+export function emprendimientosDe(e: Experiencia): Negocio[] {
+  const slugs = new Set<string>();
+  for (const b of e.bloques) {
+    slugs.add(b.emprendimiento);
+    for (const a of b.alternativas ?? []) slugs.add(a);
+  }
+  return [...slugs].map((s) => {
+    const n = negocioPorSlug(s);
+    if (!n) throw new Error(`La experiencia ${e.id} nombra un emprendimiento que no existe: ${s}`);
+    return n;
+  });
+}
 export type * from "./tipos";
 
 /**

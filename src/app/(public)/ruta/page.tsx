@@ -7,6 +7,7 @@ import { Container, Grid, Inline, Stack } from "@/components/layout";
 import { EmptyState } from "@/components/patterns";
 import { Surface, Text, clasesDeBoton } from "@/components/ui";
 import { ZONAS, cuantasParadasPosibles, zonasConRuta } from "@/data";
+import { soloConDirectorio } from "@/lib/directorio";
 
 /**
  * Dos cosas en una ruta, y la segunda es la que la justifica.
@@ -32,6 +33,7 @@ export default async function ArmarUnaRuta({
 }: {
   searchParams: Promise<{ zona?: string }>;
 }) {
+  soloConDirectorio();
   const { zona } = await searchParams;
 
   if (zona) {

@@ -43,6 +43,14 @@
   --color-action-secondary-content: var(--sd-color-action-secondary-content);
   --color-action-danger: var(--sd-color-action-danger);
   --color-action-danger-content: var(--sd-color-action-danger-content);
+  /* Los estados de pulsado. Estaban en tokens.css desde el primer día y ningún
+     botón los usaba: el portal entero respondía al puntero y no al dedo, que es
+     justo al revés de para quién se hizo esto. */
+  --color-action-secondary-active: var(--sd-color-action-secondary-active);
+  --color-action-danger-hover: var(--sd-color-action-danger-hover);
+  --color-action-danger-active: var(--sd-color-action-danger-active);
+  --color-action-ghost-hover: var(--sd-color-action-ghost-hover);
+  --color-action-ghost-active: var(--sd-color-action-ghost-active);
   --color-focus: var(--sd-color-focus);
 
   /* Marca y acento */
@@ -181,10 +189,88 @@
      y el trabajo lo hace la superficie más clara. */
   --shadow-raised: 0 1px 3px var(--sd-color-shadow-ambient);
   --shadow-sticky: 0 -1px 3px var(--sd-color-shadow-tight);
+  /* El escalón que faltaba: una tarjeta levantada por el puntero no pesa lo
+     mismo que un botón flotante. Más difusa y más baja que `raised`, para que
+     la diferencia se lea como distancia y no como un borde más oscuro. */
+  --shadow-card: 0 2px 8px var(--sd-color-shadow-tight);
 
   /* Movimiento */
   --animate-duration-feedback: var(--sd-duration-feedback);
   --ease-standard: var(--sd-easing-standard);
+}
+
+/* ============================================================================
+ * El pulsado.
+ *
+ * `--sd-motion-scale-press` estaba en tokens.css desde el principio y no lo
+ * usaba nadie: no hay espacio de nombres `--scale-*` en Tailwind, así que el
+ * puente del @theme no podía traerlo y hacía falta una utilidad.
+ *
+ * `scale` como propiedad suelta —no `transform`— para no pisar ninguna otra
+ * transformación, y porque encogerse no reflujo nada: los límites de layout se
+ * quedan donde estaban, que es lo que pide la regla.
+ *
+ * Bajo `no-preference` a propósito. Quien pidió menos movimiento no se queda
+ * sin respuesta al tocar: todo lo que lleva esta utilidad lleva además un
+ * cambio de color o de elevación, que no es movimiento.
+ * ========================================================================== */
+@utility scale-press {
+  @media (prefers-reduced-motion: no-preference) {
+    scale: var(--sd-motion-scale-press);
+  }
+}
+
+/* ============================================================================
+ * El lavado de la portada.
+ *
+ * Es la primera degradación del proyecto, y entra con condiciones: va servida,
+ * es estática, no cuesta un byte de JavaScript y sus dos extremos son tokens —
+ * así que en oscuro se invierte sola. No hay ninguna más y no hace falta.
+ *
+ * Los 20 rem son una decisión de composición, no un valor que exista como
+ * token: es hasta dónde llega el aire de la cabecera antes de que empiece la
+ * rejilla de zonas. Vive aquí, con su explicación, y no suelta en el marcado.
+ *
+ * Nada de `100vw` para sangrar: con barra de desplazamiento visible eso mete
+ * scroll horizontal, que es de las pocas cosas que este proyecto no admite. El
+ * ancho lo da el contenedor de bloque, que ya es el del documento.
+ * ========================================================================== */
+@utility lavado-superior {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  block-size: 20rem;
+  z-index: -1;
+  background-image: linear-gradient(
+    to bottom,
+    var(--sd-color-brand-surface),
+    var(--sd-color-background)
+  );
+}
+
+/* ============================================================================
+ * El monograma del marcador.
+ *
+ * Las iniciales tienen que verse igual de bien en la miniatura de 80 px de una
+ * fila y en la cabecera a sangre de una zona. Ningún tamaño de la escala
+ * tipográfica sirve para las dos: la escala mide en rem —la decide el
+ * documento— y aquí el que manda es el hueco.
+ *
+ * `cqmin` lo resuelve sin JavaScript y sin un prop de tamaño que cada pantalla
+ * tendría que acertar. No es un valor mágico: es una proporción del elemento,
+ * como el `aspect-ratio` que ya declara el marco.
+ *
+ * `container-type: size` y no `inline-size` porque hace falta el lado corto, y
+ * puede pedirse sin riesgo: el alto del marco sale de su proporción, nunca de
+ * lo que lleva dentro.
+ * ========================================================================== */
+@utility marco-marcador {
+  container-type: size;
+}
+
+@utility monograma {
+  font-size: 34cqmin;
+  line-height: 1;
 }
 
 /* ============================================================================

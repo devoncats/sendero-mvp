@@ -10,24 +10,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * La portada del panel, que es distinta en cada modo.
+ * La portada del panel de la cooperativa, distinta en cada modo.
  *
- * Guiado: «Lo siguiente», una sola cosa que hacer. Experto: las métricas.
+ * Guiado: «Lo siguiente», una sola cosa que hacer. Experto: la comunidad
+ * entera de un vistazo.
  *
  * Una sola ruta y no dos porque el modo no es un sitio distinto, es la misma
- * puerta abierta de otra manera: el logo, los enlaces de vuelta y los favoritos
- * del navegador siguen apuntando a `/dashboard` sea cual sea el modo.
- *
- * Cada rama manda su propio marcado. Quien está en guiado no descarga ni una
- * gráfica.
+ * puerta abierta de otra manera. Cada rama manda su propio marcado: quien está
+ * en guiado no descarga ni una gráfica.
  */
-export default async function PanelPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ dias?: string }>;
-}) {
-  if ((await modoPanel()) === "experto") {
-    return <PantallaMetricas searchParams={searchParams} />;
-  }
+export default async function PanelPage() {
+  if ((await modoPanel()) === "experto") return <PantallaMetricas />;
   return <PanelGuiado />;
 }

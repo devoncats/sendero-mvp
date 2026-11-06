@@ -3,12 +3,19 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
 
+/*
+ * Cada variante trae su hover **y su active**. El active faltaba en las cuatro
+ * aunque los tokens existían: en un teléfono no hay puntero, así que el único
+ * estado que el dueño del negocio llega a ver es el que no estaba.
+ */
 const VARIANTES = {
-  primary: "bg-action-primary text-action-primary-content hover:bg-action-primary-hover",
+  primary:
+    "bg-action-primary text-action-primary-content hover:bg-action-primary-hover active:bg-action-primary-active",
   secondary:
-    "bg-action-secondary text-action-secondary-content border border-border-default hover:bg-action-secondary-hover",
-  ghost: "text-content-primary hover:bg-action-secondary-hover",
-  danger: "bg-action-danger text-action-danger-content",
+    "bg-action-secondary text-action-secondary-content border border-border-default hover:bg-action-secondary-hover active:bg-action-secondary-active",
+  ghost: "text-content-primary hover:bg-action-ghost-hover active:bg-action-ghost-active",
+  danger:
+    "bg-action-danger text-action-danger-content hover:bg-action-danger-hover active:bg-action-danger-active",
 } as const;
 
 const TAMANOS = {
@@ -60,6 +67,7 @@ export function clasesDeBoton({
   return cn(
     "inline-flex items-center justify-center gap-icon-gap rounded-control font-semibold",
     "transition-colors motion-reduce:transition-none",
+    "active:scale-press",
     VARIANTES[variante],
     soloIcono ? SOLO_ICONO[tamano] : TAMANOS[tamano],
     anchoCompleto && "w-full",

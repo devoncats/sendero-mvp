@@ -34,10 +34,10 @@ export default function NoEncontrado() {
           <EmptyState
             icono={MapPin}
             titulo="Esta página ya no está"
-            descripcion="Puede que el negocio se haya dado de baja, o que el enlace venga con un error. Los treinta que sí están se encuentran por zona."
+            descripcion="Puede que el enlace venga con un error, o que sea de cuando Sendero era un directorio de negocios sueltos. Hoy lo que ofrecemos son experiencias de la comunidad."
             accion={
               <Link href="/" className={clasesDeBoton({})}>
-                Ver las nueve zonas
+                Ver las experiencias
               </Link>
             }
           />
