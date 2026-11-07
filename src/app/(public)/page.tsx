@@ -1,7 +1,7 @@
 import { Container, Grid, Inline, Section, Stack } from "@/components/layout";
 import { EncabezadoSeccion } from "@/components/patterns";
-import { Surface, Text } from "@/components/ui";
-import { ENTES, EXPERIENCIAS } from "@/data";
+import { ButtonLink, Surface, Text } from "@/components/ui";
+import { ENTES, EXPERIENCIAS, NEGOCIOS, ZONAS } from "@/data";
 
 import { TarjetaExperiencia } from "./_experiencia";
 
@@ -82,6 +82,28 @@ export default function ExperienciasPage() {
               </Grid>
             </Stack>
           </Surface>
+
+          {/*
+            El directorio, como secundario. Va después de las experiencias y de
+            cómo funcionan, sin tarjetas ni fotos: una frase y un botón
+            secundario. Quien llega a la portada tiene que ver primero lo que
+            organiza la comunidad; quien prefiere ir por su cuenta encuentra
+            aquí, y en la tercera pestaña, por dónde seguir.
+          */}
+          <Section espaciado="none">
+            <Inline gap="lg" align="center" wrap={false} className="max-sm:flex-col max-sm:items-stretch">
+              <Stack gap="tight" className="flex-1">
+                <EncabezadoSeccion kicker="Por tu cuenta">¿Prefieres armar tu propio viaje?</EncabezadoSeccion>
+                <Text size="body-md" tone="secondary" className="max-w-prose">
+                  {NEGOCIOS.length} artesanos, fondas y hospedajes familiares en {ZONAS.length} zonas, con su
+                  horario y su WhatsApp. Les escribes directo.
+                </Text>
+              </Stack>
+              <ButtonLink href="/negocios" variante="secondary" className="shrink-0 max-sm:w-full">
+                Ver los negocios
+              </ButtonLink>
+            </Inline>
+          </Section>
 
           {/*
             Lo que viene. El PO quiere que el pase de día y los sitios sueltos

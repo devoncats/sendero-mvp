@@ -37,7 +37,7 @@ export type NegocioResumen = {
 };
 
 /**
- * El patrón más repetido del portal: aparece en Descubrir, Zona, Resultados y
+ * El patrón más repetido del portal: aparece en Negocios, Zona, Resultados y
  * Guardados. Toda la tarjeta es un enlace, así que el objetivo táctil es la
  * fila entera y no un texto de 14 px.
  *

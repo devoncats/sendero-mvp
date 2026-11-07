@@ -62,7 +62,7 @@ export function ListaGuardados({ negocios }: { negocios: (NegocioResumen & { slu
           titulo="Guarda antes de perder la señal"
           descripcion="En la montaña y en las islas casi no hay datos. Lo que guardes se queda en este teléfono, con su teléfono y su dirección."
           accion={
-            <Link href="/" className={clasesDeBoton({})}>
+            <Link href="/negocios" className={clasesDeBoton({})}>
               Explorar zonas
             </Link>
           }

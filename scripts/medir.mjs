@@ -23,6 +23,15 @@ const RUTAS = [
   // Por petición, con el formulario y el recorrido entero: la más pesada del portal.
   "/experiencia/fin-de-semana-el-valle",
   "/experiencia/fin-de-semana-portobelo",
+  // El directorio, como sección secundaria.
+  "/negocios",
+  "/buscar",
+  "/zona/santa-fe",
+  // El peor caso del planificador: la zona con más negocios y tres días, que es
+  // el HTML máximo. Medir el caso por defecto daría un número bonito y falso.
+  "/zona/santa-fe/ruta?dias=3",
+  "/negocio/artesanias-delia-quintero",
+  "/guardados",
   "/dashboard",
   "/dashboard/solicitudes",
   // La ficha administrativa más cargada: alerta, serie, insumos y proveedores.

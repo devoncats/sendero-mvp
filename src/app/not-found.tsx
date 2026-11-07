@@ -34,7 +34,7 @@ export default function NoEncontrado() {
           <EmptyState
             icono={MapPin}
             titulo="Esta página ya no está"
-            descripcion="Puede que el enlace venga con un error, o que sea de cuando Sendero era un directorio de negocios sueltos. Hoy lo que ofrecemos son experiencias de la comunidad."
+            descripcion="Puede que el enlace venga con un error, o que la página ya no esté en Sendero. Las experiencias de la comunidad siguen aquí."
             accion={
               <Link href="/" className={clasesDeBoton({})}>
                 Ver las experiencias

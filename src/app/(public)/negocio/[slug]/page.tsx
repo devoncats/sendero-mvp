@@ -15,7 +15,15 @@ import {
 import { Container, Grid, Inline, Stack } from "@/components/layout";
 import { BotonGuardar, EncabezadoSeccion, EstadoApertura } from "@/components/patterns";
 import { Badge, ButtonLink, Media, Surface, Text } from "@/components/ui";
-import { NEGOCIOS, categoria, negocioPorSlug, zona } from "@/data";
+import {
+  EXPERIENCIAS,
+  NEGOCIOS,
+  categoria,
+  emprendimientosDe,
+  ente,
+  negocioPorSlug,
+  zona,
+} from "@/data";
 import {
   enlaceLlamada,
   enlaceMapa,
@@ -56,6 +64,10 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
   const cat = categoria(negocio.categoria);
   const semana = resumenSemana(negocio.horario);
   const nombreCorto = negocio.persona.nombre.split(" ")[0];
+  // Las experiencias en las que atiende, como titular o como alternativa.
+  const enExperiencias = EXPERIENCIAS.filter((e) =>
+    emprendimientosDe(e).some((n) => n.slug === negocio.slug),
+  );
 
   const mensaje = `Hola, le escribo desde Sendero. Quisiera preguntarle por ${negocio.nombre}.`;
 
@@ -78,8 +90,8 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
             aria-label="Migas de pan"
             className="hidden items-center gap-inset-xs lg:col-span-3 lg:flex"
           >
-            <Link href="/" className="text-body-sm text-content-tertiary">
-              Descubrir
+            <Link href="/negocios" className="text-body-sm text-content-tertiary">
+              Negocios
             </Link>
             <ChevronRight className="size-icon-sm text-content-tertiary" aria-hidden />
             <Link href={`/zona/${z.id}`} className="text-body-sm text-content-tertiary">
@@ -117,8 +129,8 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
                 className="absolute inset-x-inset-md top-inset-md lg:hidden"
               >
                 <Link
-                  href="/"
-                  aria-label="Volver"
+                  href="/negocios"
+                  aria-label="Volver a Negocios"
                   className="flex size-control-sm items-center justify-center rounded-full bg-surface shadow-raised"
                 >
                   <ArrowLeft className="size-icon-md" aria-hidden />
@@ -169,6 +181,39 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
           <Text size="body-md" tone="secondary" className="max-w-prose lg:col-span-2">
             {negocio.descripcion.es}
           </Text>
+
+          {/*
+            La experiencia va antes que el contacto directo: es lo principal del
+            portal, y a través de ella el trabajo se reparte entre las familias.
+            Solo para los socios; el resto del directorio no lleva este bloque.
+          */}
+          {enExperiencias.length > 0 ? (
+            <Surface nivel="none" relleno="lg" borde={false} className="bg-brand-surface lg:col-span-2">
+              <Stack gap="tight">
+                <Text size="body-md" weight="semibold" className="text-brand-content">
+                  {nombreCorto} también te atiende en{" "}
+                  {enExperiencias.length === 1 ? "una experiencia" : "experiencias"} de la comunidad
+                </Text>
+                <Text size="body-md" className="text-brand-content">
+                  {ente(enExperiencias[0].ente).nombre} organiza el recorrido y reparte el trabajo entre
+                  las familias.
+                </Text>
+                <Stack gap="none" as="ul">
+                  {enExperiencias.map((e) => (
+                    <li key={e.id}>
+                      <Link
+                        href={`/experiencia/${e.id}`}
+                        className="inline-flex min-h-touch-min items-center gap-icon-gap text-body-md font-semibold text-brand"
+                      >
+                        {e.nombre}
+                        <ChevronRight className="size-icon-sm" aria-hidden />
+                      </Link>
+                    </li>
+                  ))}
+                </Stack>
+              </Stack>
+            </Surface>
+          ) : null}
 
           {/* Qué encuentras — la lista vertical de la dirección A */}
           <Stack gap="default" className="lg:col-span-2">

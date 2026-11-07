@@ -28,9 +28,16 @@ directorio de negocios sueltos, y ese cambio es la decisión que ordena todo lo 
 - El panel es **del ente**, no de una familia: solicitudes, reparto, registro de
   visitantes, cuentas de cada emprendimiento, proveedores e insumos, y la **alerta de
   riesgo**.
-- Después vendrán el pase de día y los sitios sueltos (mercado, cascada, mirador). Por eso
-  el directorio **está dormido, no borrado** (`lib/directorio.ts`): sus rutas dan 404 y
-  salen de toda navegación, y vuelven cambiando una constante.
+- **El directorio de negocios sueltos volvió, como sección secundaria** (`/negocios`,
+  `DIRECTORIO_VISIBLE = true` en `lib/directorio.ts`). Es para quien prefiere ir por su
+  cuenta: zonas, fichas con WhatsApp propio, buscador, planificador y guardados. La
+  jerarquía no se negocia: **la experiencia va primero** —primera pestaña, toda la
+  portada—, y el directorio la devuelve a ella: la página de una zona abre con sus
+  experiencias antes que los negocios, y la ficha de un socio dice en qué experiencia
+  atiende y la enlaza. En la portada el directorio es un bloque sin fotos ni tarjetas, con
+  un botón secundario. Volver a dormirlo es poner la constante en `false` y quitar ese
+  bloque y la pestaña.
+- Después vendrán el pase de día y los sitios sueltos (mercado, cascada, mirador).
 
 **Sigue sin haber backend, pagos ni cuentas de visitante.** Todo lo administrativo
 —solicitudes, cuentas, insumos— está **simulado** en `src/data` y lo dice cada pantalla
@@ -202,18 +209,17 @@ siguen siendo HTML —la barra y los SVG—; los trozos de JavaScript son los mi
 
 ## El planificador de rutas
 
-> **Dormido con el directorio** (`DIRECTORIO_VISIBLE = false`). Sus rutas dan 404 y no
-> salen en ninguna navegación; lo que sigue describe cómo funciona para cuando vuelva con
-> el pase de día. La experiencia comunitaria **no** lo usa: su recorrido lo arma la
-> cooperativa, no un algoritmo. Sí reutiliza `enlaceRuta` para abrir las paradas en la
-> app de mapas.
+> **Vive dentro del directorio**, que es secundario: ya no está en la barra de pestañas,
+> se entra desde `/negocios`, desde la ficha de la zona y desde la de un negocio. La
+> experiencia comunitaria **no** lo usa: su recorrido lo arma la cooperativa, no un
+> algoritmo. Sí reutiliza `enlaceRuta` para abrir las paradas en la app de mapas.
 
 El directorio dice qué hay. El planificador dice **qué cabe en el tiempo que tienes, en qué
 orden, y qué va a estar abierto cuando pases** — la pregunta que queda cuando el visitante
 ya encontró los negocios.
 
-Se entra desde la navegación —«Rutas», en el encabezado y en las pestañas—, desde la
-portada, desde la ficha de la zona y desde la de un negocio.
+Se entra desde `/negocios` —que heredó el selector de zona de la antigua portada—, desde
+la ficha de la zona y desde la de un negocio.
 
 `/ruta` hace dos cosas, y la segunda es la que la justifica. Con `?zona=` redirige y no
 se renderiza. Sin zona es una pantalla que lista las zonas: un enlace de primer nivel
@@ -319,6 +325,12 @@ Estas no son preferencias. Rompen la propuesta del proyecto si se ignoran.
   mudaron de la portada a ella (+2,5 KB de HTML), y la portada bajó 1,8 KB. El panel:
   guiado 226,3 KB, experto 228,9 KB. Cada experiencia que entre se mide —`medir.mjs` ya
   tiene las dos—, porque su HTML crece con sus bloques y sus familias.
+  **El directorio como sección secundaria** costó **+0,2 a +0,9 KB por ruta**: la tercera
+  pestaña lleva el icono `Ficha` al bundle cliente, y la portada suma el bloque «Por tu
+  cuenta». Medido con la misma vara: **portada 225,7 · `/comunidades` 224,8 ·
+  `/experiencia/fin-de-semana-el-valle` 230,6 · `/negocios` 228,0 · `/buscar` 230,6 ·
+  `/zona/santa-fe/ruta?dias=3` 229,0 · ficha de un socio 226,9 · `/guardados` 227,8 ·
+  panel guiado 226,5 KB**. Las rutas del directorio volvieron a `medir.mjs`.
 - **LCP objetivo < 2.5 s en 4G lenta; el portal está en 2,65 s y se acepta.**
   Esos 150 ms son el precio de Source Serif en los titulares, y esa identidad editorial
   se decidió a conciencia. El dashboard, que no la usa, cumple con 2,34 s.
@@ -393,8 +405,9 @@ dirección, y los campos se rellenan otra vez. Es el precio de no tener JavaScri
 servidor donde dejar un borrador, y está aceptado.
 
 Y «sin conexión» dejó de ser solo un aviso. Hay un **service worker escrito a mano** en
-`public/sw.js` —sin next-pwa, sin workbox— que precachea la portada, `/comunidades` y
-`/sin-conexion` (versión `v2`: subirla borró las copias del directorio). **Las experiencias
+`public/sw.js` —sin next-pwa, sin workbox— que precachea la portada, `/comunidades`,
+`/negocios`, `/guardados` y `/sin-conexion` (versión `v3`: la `v2` borró las copias del directorio
+dormido, y la `v3` instaló la semilla cuando volvió). **Las experiencias
 no están en esa lista a propósito**: con una lista escrita a mano, cada experiencia nueva
 obligaría a tocar el worker. Se guardan solas la primera vez que se abren; sirve `/_next/static/**` desde caché sin revalidar, porque va con hash;
 y resuelve las navegaciones con red primero y una carrera de 3 segundos, que es el techo
@@ -619,11 +632,14 @@ Hay dos comunidades, inventadas pero con la forma de lo que existe:
   nombró el PO.
 
 En las dos, los negocios que ya había en el directorio se sumaron como socios. Las otras
-siete zonas y sus negocios siguen en los datos para cuando vuelva el directorio.
+siete zonas y sus negocios salen en el directorio.
 
-Las secciones del portal son **Experiencias** (`/`) y **Comunidades** (`/comunidades`, y
-`/comunidad/[id]` por ente). `/comunidad` a secas redirige a la lista, por los enlaces que
-ya se compartieron.
+Las secciones del portal son, en este orden, **Experiencias** (`/`), **Comunidades**
+(`/comunidades`, y `/comunidad/[id]` por ente) y **Negocios** (`/negocios`, el directorio).
+`/comunidad` a secas redirige a la lista, por los enlaces que ya se compartieron. Buscar,
+Rutas y Guardados no tienen pestaña: son del directorio y se entra desde `/negocios`;
+Guardados y «¿Tienes un negocio?» están además en el pie. La pestaña de Negocios usa
+`Ficha` (Store), que ya significaba «un negocio»: no se añadió icono.
 
 La referencia que trajo el PO es el catálogo de la cooperativa Copejaay, en Guatemala: un
 ERP de cooperativa con un catálogo encima. Es la forma, no el modelo a copiar.

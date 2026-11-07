@@ -12,7 +12,7 @@
  * `/` sin tocar cabeceras ni `next.config.ts`.
  */
 
-const VERSION = "v2";
+const VERSION = "v3";
 
 const PAGINAS = `sendero-paginas-${VERSION}`;
 const ESTATICO = `sendero-estatico-${VERSION}`;
@@ -21,15 +21,16 @@ const MIOS = [PAGINAS, ESTATICO, RUTA];
 
 const CAIDA = "/sin-conexion";
 
-/* Lo mínimo para que la aplicación abra sin red: las dos pantallas de primer
-   nivel y la que explica qué pasa. Las experiencias **no** van aquí: con una
+/* Lo mínimo para que la aplicación abra sin red: las tres pantallas de primer
+   nivel, la de lo guardado y la que explica qué pasa. Las experiencias **no** van aquí: con una
    lista escrita a mano, cada experiencia nueva obligaría a tocar este archivo.
    Se guardan solas la primera vez que se abren, por `navegacion()`, y la
    portada ya enlaza a todas.
 
    La versión subió a v2 con la experiencia comunitaria: así se borran las
-   copias del directorio, que ahora responde 404. */
-const SEMILLA = ["/", "/comunidades", CAIDA];
+   copias del directorio, que entonces respondía 404. Subió a v3 cuando volvió
+   como sección secundaria, para que se instale la semilla nueva. */
+const SEMILLA = ["/", "/comunidades", "/negocios", "/guardados", CAIDA];
 
 /* El techo de paciencia en 3G. Pasados estos milisegundos se sirve la copia en
    vez de dejar a alguien mirando una pantalla en blanco. */

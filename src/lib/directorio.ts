@@ -2,15 +2,17 @@ import { notFound } from "next/navigation";
 
 /**
  * El directorio de negocios sueltos —zonas, fichas, buscador, planificador y
- * guardados— está apagado.
+ * guardados—, encendido como sección **secundaria** del portal.
  *
- * El PO cambió lo que vende el portal: una experiencia de la comunidad, no
- * negocios uno por uno. El directorio no se borró porque vuelve con el pase de
- * día y los sitios sueltos (el mercado, la cascada, el mirador), y rehacerlo
- * costaría más que tenerlo dormido. Mientras esté en `false`, sus rutas
- * responden 404 y no salen en ninguna navegación.
+ * Lo que se vende sigue siendo la experiencia de la comunidad: va primera en la
+ * navegación, ocupa la portada, y la zona y la ficha de un socio llevan a ella.
+ * El directorio es para quien va por su cuenta, y vive bajo «Negocios»
+ * (`/negocios`).
+ *
+ * Si se vuelve a poner en `false`, sus rutas responden 404 y hay que quitar
+ * «Negocios» de `_rutas.ts` y el bloque de la portada que enlaza a él.
  */
-export const DIRECTORIO_VISIBLE = false;
+export const DIRECTORIO_VISIBLE = true;
 
 /** Primera línea de cada página del directorio. */
 export function soloConDirectorio(): void {
