@@ -49,8 +49,8 @@ export default async function ArmarUnaRuta({
     <Container ancho="sm" as="main" className="lg:max-w-page-xl">
       <Stack gap="loose" className="py-stack">
         <nav aria-label="Migas de pan" className="hidden items-center gap-inset-xs lg:flex">
-          <Link href="/" className="text-body-sm text-content-tertiary">
-            Descubrir
+          <Link href="/negocios" className="text-body-sm text-content-tertiary">
+            Negocios
           </Link>
           <ChevronRight className="size-icon-sm text-content-tertiary" aria-hidden />
           <Text as="span" size="body-sm">
@@ -105,9 +105,9 @@ export default async function ArmarUnaRuta({
           <EmptyState
             icono={Compass}
             titulo="Todavía no hay ninguna zona con ruta"
-            descripcion="Hacen falta al menos dos negocios con su punto en el mapa para que haya un orden que armar. Mientras tanto, las zonas están todas en Descubrir con sus horarios y teléfonos."
+            descripcion="Hacen falta al menos dos negocios con su punto en el mapa para que haya un orden que armar. Mientras tanto, las zonas están todas en Negocios con sus horarios y teléfonos."
             accion={
-              <Link href="/" className={clasesDeBoton({})}>
+              <Link href="/negocios" className={clasesDeBoton({})}>
                 Ver las zonas
               </Link>
             }

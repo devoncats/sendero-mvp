@@ -7,9 +7,17 @@ import { Container, Grid, Inline, Stack } from "@/components/layout";
 import { BusinessCard, CategoryChip, EncabezadoSeccion } from "@/components/patterns";
 import { ButtonLink, Media, Surface, Text } from "@/components/ui";
 import type { ZonaId } from "@/data";
-import { ZONAS, categoria, categoriasDeZona, cuantasParadasPosibles, negociosDeZona } from "@/data";
+import {
+  EXPERIENCIAS,
+  ZONAS,
+  categoria,
+  categoriasDeZona,
+  cuantasParadasPosibles,
+  negociosDeZona,
+} from "@/data";
 import { enlaceMapa } from "@/lib/formato";
 
+import { TarjetaExperiencia } from "../../_experiencia";
 import { resumir } from "../../_resumen";
 import { soloConDirectorio } from "@/lib/directorio";
 
@@ -48,6 +56,9 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
   // Hacen falta dos sitios para que exista un orden. Con uno no hay recorrido,
   // solo una ficha — y para eso ya está la tarjeta de abajo.
   const paradas = cuantasParadasPosibles(zonaId);
+  // La experiencia es lo principal del portal, también dentro del directorio:
+  // si la comunidad de esta zona organiza una, se ofrece antes que los negocios.
+  const experiencias = EXPERIENCIAS.filter((e) => e.zona === zonaId);
 
   return (
     <Container ancho="sm" as="main" className="lg:max-w-page-xl">
@@ -77,8 +88,8 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
           {/* En escritorio esto lo dice la miga de pan, y el navegador ya trae
               su propio botón de volver justo encima. */}
           <Link
-            href="/"
-            aria-label="Volver a Descubrir"
+            href="/negocios"
+            aria-label="Volver a Negocios"
             className="absolute left-inset-md top-inset-md flex size-control-sm items-center justify-center rounded-full bg-surface shadow-raised lg:hidden"
           >
             <ArrowLeft className="size-icon-md" aria-hidden />
@@ -90,8 +101,8 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
           aria-label="Migas de pan"
           className="hidden items-center gap-inset-xs lg:col-span-2 lg:flex"
         >
-          <Link href="/" className="text-body-sm text-content-tertiary">
-            Descubrir
+          <Link href="/negocios" className="text-body-sm text-content-tertiary">
+            Negocios
           </Link>
           <ChevronRight className="size-icon-sm text-content-tertiary" aria-hidden />
           <Text as="span" size="body-sm">
@@ -110,6 +121,21 @@ export default async function ZonaPage({ params }: { params: Promise<{ id: strin
             {z.descripcion.es}
           </Text>
         </Stack>
+
+        {experiencias.length > 0 ? (
+          <Stack gap="default" className="lg:col-span-2">
+            <Text size="overline" tone="brand">
+              Organizado por la comunidad
+            </Text>
+            <Grid cols={2} movil={1} gap="lg" as="ul">
+              {experiencias.map((e) => (
+                <li key={e.id}>
+                  <TarjetaExperiencia e={e} />
+                </li>
+              ))}
+            </Grid>
+          </Stack>
+        ) : null}
 
         {/* Cómo llegar — imagen estática y enlace, nunca un mapa en JavaScript */}
         <Surface

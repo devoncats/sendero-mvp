@@ -6,7 +6,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Comunidad, Compass } from "@/components/icons";
+import { Comunidad, Compass, Ficha } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
 import { RUTAS_PORTAL } from "./_rutas";
@@ -15,6 +15,8 @@ import { RUTAS_PORTAL } from "./_rutas";
 const ICONO: Record<string, typeof Compass> = {
   "/": Compass,
   "/comunidades": Comunidad,
+  // `Ficha` (Store) ya significa «un negocio» en el panel. No hace falta otro glifo.
+  "/negocios": Ficha,
 };
 
 /**

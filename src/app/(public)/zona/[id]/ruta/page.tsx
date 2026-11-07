@@ -247,8 +247,8 @@ export default async function RutaPage({
     <Container ancho="sm" as="main" className="lg:max-w-page-xl">
       <Stack gap="loose" className="py-stack lg:grid lg:grid-cols-4 lg:items-start">
         <nav aria-label="Migas de pan" className={`hidden items-center gap-inset-xs lg:flex ${CENTRO}`}>
-          <Link href="/" className="text-body-sm text-content-tertiary">
-            Descubrir
+          <Link href="/negocios" className="text-body-sm text-content-tertiary">
+            Negocios
           </Link>
           <ChevronRight className="size-icon-sm text-content-tertiary" aria-hidden />
           <Link href={`/zona/${zonaId}`} className="text-body-sm text-content-tertiary">

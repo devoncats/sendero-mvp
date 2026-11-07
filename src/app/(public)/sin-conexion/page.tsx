@@ -15,8 +15,8 @@ import { Text, clasesDeBoton } from "@/components/ui";
  *
  * Dice **qué sí funciona**, no qué falló. «Error de red» no le sirve de nada a
  * alguien que ya sabe que no tiene señal; saber que lo que guardó sigue en el
- * teléfono, sí. Desde la experiencia comunitaria, lo guardado es la
- * experiencia: el directorio y sus guardados están dormidos.
+ * teléfono, sí: las experiencias que ya abrió, y los negocios y la ruta que
+ * guardó del directorio.
  */
 export const metadata: Metadata = {
   title: "Sin señal",
@@ -30,14 +30,14 @@ export default function SinConexionPage() {
         <EmptyState
           icono={WifiOff}
           titulo="Sin señal"
-          descripcion="Esta página no la tienes descargada. Las experiencias que ya abriste una vez sí siguen en este teléfono."
+          descripcion="Esta página no la tienes descargada. Las experiencias que ya abriste y lo que guardaste sí siguen en este teléfono."
           accion={
             <Stack gap="default" align="center">
               <Link href="/" className={clasesDeBoton({})}>
                 Ver las experiencias
               </Link>
-              <Link href="/" className={clasesDeBoton({ variante: "ghost" })}>
-                Ir al inicio
+              <Link href="/guardados" className={clasesDeBoton({ variante: "ghost" })}>
+                Ver lo que guardé
               </Link>
             </Stack>
           }

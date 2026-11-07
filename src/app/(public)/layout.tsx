@@ -12,6 +12,8 @@ import { RUTAS_PORTAL } from "./_rutas";
 /** Lo que no está en las pestañas y aun así hace falta poder encontrar. */
 const ENLACES_PIE = [
   { href: "/comunidades", etiqueta: "Quién organiza" },
+  { href: "/guardados", etiqueta: "Lo que guardaste" },
+  { href: "/para-tu-negocio", etiqueta: "¿Tienes un negocio?" },
   { href: "/acceso", etiqueta: "Entrar como cooperativa o consorcio" },
 ] as const;
 
@@ -37,8 +39,8 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
             </Link>
 
             {/* A partir de md las pestañas suben aquí y la de abajo se apaga.
-                El atajo de buscar se fue con el directorio: con una sola
-                comunidad no hay nada que buscar. */}
+                Buscar no tiene atajo en el encabezado: es del directorio, que
+                es secundario, y su buscador está en «Negocios». */}
             <Navegacion rutas={RUTAS_PORTAL} />
           </Inline>
         </Container>
@@ -54,7 +56,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         Un pie corto es lo que dice que la página terminó y no que se quedó a
         medio cargar.
 
-        Dos enlaces y una frase, y ni uno más. Repetir aquí las nueve zonas
+        Cuatro enlaces y una frase, y ni uno más. Repetir aquí las nueve zonas
         sería un mapa del sitio, y un mapa del sitio es peso en un Moto G Power
         para decir lo que ya dicen el encabezado y las pestañas.
       */}
