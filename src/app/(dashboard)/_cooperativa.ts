@@ -7,6 +7,7 @@ import {
   INSUMOS,
   PROVEEDORES,
   SOLICITUDES,
+  actividadDe,
   cuentasDe,
   ente as enteDe,
   experiencia,
@@ -127,6 +128,12 @@ export function cooperativaDe(enteId: string) {
       .sort((a, b) => a.fecha.localeCompare(b.fecha) || a.bloque.hora.localeCompare(b.bloque.hora));
   }
 
+  /**
+   * Lo que gastó cada socio en energía y transporte, mes a mes, en el orden de
+   * `socios`. Es actividad, no emisiones: el cálculo vive en `lib/`.
+   */
+  const actividadPorSocio = () => socios.map((negocio) => ({ negocio, meses: actividadDe(negocio.slug) }));
+
   /** El último mes con cuentas cerradas. */
   function ultimoMes(): string {
     return cuentasDe(socios[0].slug).at(-1)?.mes ?? "";
@@ -223,6 +230,7 @@ export function cooperativaDe(enteId: string) {
     insumosBajos,
     proveedores,
     sociosPorSalud,
+    actividadPorSocio,
     porAtender,
     ultimoMes,
     resumenDelMes,
