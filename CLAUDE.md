@@ -567,7 +567,7 @@ lo que dibuja, y prefiere una entrada existente.
 
 Guardar es `Bookmark`, **nunca un corazón**.
 
-Son 39 entradas; la segunda experiencia no añadió ninguna. Seis las trajo el modo experto —`Metricas`, `Ficha`, `Producto`,
+Son 40 entradas; la segunda experiencia no añadió ninguna. Seis las trajo el modo experto —`Metricas`, `Ficha`, `Producto`,
 `Ajustes`, `Idioma`, `CerrarSesion`—, y están renombradas por lo que significan en
 este producto, no por lo que dibuja Lucide.
 
@@ -580,6 +580,9 @@ Las cuatro últimas las trajo la experiencia comunitaria: `Comunidad` (`Handshak
 que se dan la mano, no un grupo de gente), `Solicitud` (una bandeja que llega y se vacía),
 `Visitantes` y `Proveedor`. La alerta de riesgo usa `AlertTriangle`, que ya estaba: no hizo
 falta un glifo de «quiebra», y no debe haberlo.
+
+La última es `Ambiente` (`Leaf`), de la sección «Impacto ambiental» del modo experto:
+emisiones, energía y riesgo climático. Ninguna entrada anterior significaba «ambiente».
 
 ---
 
