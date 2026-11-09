@@ -158,6 +158,8 @@ export type Alcance = 1 | 2 | 3;
 /** Una línea del cálculo: qué se gastó, con qué factor, y cuánto dio. */
 export type Partida = {
   alcance: Alcance;
+  /** De qué sale, sin cantidad: «Gas», «Diésel», «Electricidad», «Bus». Para agrupar. */
+  fuente: string;
   /** «50 kg de gas», «240 km en bus» — lo que se le enseña a una persona. */
   que: string;
   cantidad: number;
@@ -177,6 +179,13 @@ export type Emisiones = {
 
 const NOMBRE: Record<TipoCombustible, string> = { glp: "gas", gasolina: "gasolina", diesel: "diésel" };
 
+const MODO: Record<ModoTransporte, string> = { bus: "Bus", auto: "Auto", lancha: "Lancha" };
+
+/** «gas» → «Gas». Solo la primera letra. */
+function mayuscula(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function cantidadDe(c: Combustible): number {
   return "kg" in c ? c.kg : c.litros;
 }
@@ -190,6 +199,7 @@ export function partidas(m: ActividadMensual): Partida[] {
     const cantidad = cantidadDe(c);
     lista.push({
       alcance: 1,
+      fuente: mayuscula(NOMBRE[c.tipo]),
       que: `${cantidad} ${factor.unidad} de ${NOMBRE[c.tipo]}`,
       cantidad,
       factor,
@@ -200,6 +210,7 @@ export function partidas(m: ActividadMensual): Partida[] {
   if (m.electricidadKWh > 0) {
     lista.push({
       alcance: 2,
+      fuente: "Electricidad",
       que: `${m.electricidadKWh} kWh de la red`,
       cantidad: m.electricidadKWh,
       factor: FACTOR_RED,
@@ -214,6 +225,7 @@ export function partidas(m: ActividadMensual): Partida[] {
     const cantidad = factor.unidad === "pasajero-km" ? t.km * t.pasajeros : t.km;
     lista.push({
       alcance: 3,
+      fuente: MODO[t.modo],
       que: `${t.km} km en ${t.modo}${t.pasajeros > 1 ? `, ${t.pasajeros} personas` : ""}`,
       cantidad,
       factor,
@@ -252,6 +264,17 @@ export function sumar(lista: readonly Emisiones[]): Emisiones {
     }),
     { alcance1: 0, alcance2: 0, alcance3: 0, total: 0, sinFactor: [] },
   );
+}
+
+/**
+ * Las emisiones de varios meses agrupadas por fuente, de mayor a menor. Sirve
+ * para decir qué pesa en la huella de un socio: casi siempre es una sola cosa,
+ * y es la que vale la pena mirar primero.
+ */
+export function porFuente(meses: readonly ActividadMensual[]): { fuente: string; kg: number }[] {
+  const suma = new Map<string, number>();
+  for (const p of meses.flatMap(partidas)) suma.set(p.fuente, (suma.get(p.fuente) ?? 0) + p.kg);
+  return [...suma].map(([fuente, kg]) => ({ fuente, kg })).sort((a, b) => b.kg - a.kg);
 }
 
 /** Todos los factores que usa el cálculo, para enseñarlos con su fuente. */

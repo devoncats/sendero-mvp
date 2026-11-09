@@ -6,12 +6,13 @@ import { Stack } from "@/components/layout";
 import { Text } from "@/components/ui";
 import type { ActividadMensual, Combustible } from "@/data";
 import { cn } from "@/lib/cn";
-import { emisionesDelMes, factoresEnUso, sumar } from "@/lib/emisiones";
-import { kilos, mesLargo } from "@/lib/formato";
+import { emisionesDelMes, factoresEnUso, porFuente, sumar } from "@/lib/emisiones";
+import { kilos, mesCorto, mesLargo } from "@/lib/formato";
 import { modoPanel } from "@/lib/modo-panel";
 
 import { AvisoMvp } from "../../_aviso-mvp";
 import { cooperativa } from "../../_cooperativa";
+import { BarrasApiladas, MuestraCapa } from "../../_graficas";
 import { Cabecera, Cifra, NUM, TD, TH, Tarjeta } from "../../_piezas";
 
 export const metadata: Metadata = { title: "Huella de carbono" };
@@ -58,11 +59,47 @@ export default async function ImpactoPage() {
   const c = await cooperativa();
   const { coop } = c;
   const mes = c.ultimoMes();
-  const filas = c.actividadPorSocio().map(({ negocio, meses }) => {
+  const porSocio = c.actividadPorSocio();
+  const filas = porSocio.map(({ negocio, meses }) => {
     const m = meses.find((x) => x.mes === mes);
     return { negocio, m, e: m ? emisionesDelMes(m) : undefined };
   });
   const total = sumar(filas.flatMap((f) => (f.e ? [f.e] : [])));
+
+  /*
+    Los seis meses, en el orden de los datos. `comprobar()` en data/ambiente.ts
+    garantiza que todos los socios tienen los mismos y que son los de las
+    cuentas, así que basta con los del primero.
+  */
+  const meses = porSocio[0]?.meses.map((m) => m.mes) ?? [];
+  const delMes = (aaaamm: string) =>
+    sumar(porSocio.flatMap(({ meses: ms }) => ms.filter((m) => m.mes === aaaamm).map(emisionesDelMes)));
+  const serie = meses.map(delMes);
+  const seisMeses = sumar(serie);
+  const capas = [
+    { nombre: "Alcance 1", que: "lo que queman", valores: serie.map((e) => e.alcance1), suma: seisMeses.alcance1 },
+    { nombre: "Alcance 2", que: "luz de la red", valores: serie.map((e) => e.alcance2), suma: seisMeses.alcance2 },
+    { nombre: "Alcance 3", que: "trayectos ajenos", valores: serie.map((e) => e.alcance3), suma: seisMeses.alcance3 },
+  ];
+  const minimo = Math.min(...serie.map((e) => e.total));
+  const maximo = Math.max(...serie.map((e) => e.total));
+
+  /*
+    Quién carga la huella, en seis meses, de más a menos. Casi siempre es una
+    sola fuente por socio, y es la que vale la pena mirar primero.
+  */
+  const ranking = porSocio
+    .map(({ negocio, meses: ms }) => {
+      const fuentes = porFuente(ms);
+      const kg = fuentes.reduce((t, f) => t + f.kg, 0);
+      return { negocio, kg, principal: fuentes[0] };
+    })
+    .sort((a, b) => b.kg - a.kg);
+  /** «12 %», o «<1 %» para lo que existe pero no llega a uno: un 0 diría que no emitió nada. */
+  const parte = (kg: number) => {
+    const p = seisMeses.total > 0 ? Math.round((kg / seisMeses.total) * 100) : 0;
+    return p === 0 && kg > 0 ? "<1 %" : `${p} %`;
+  };
   /** «Lo que queman · 66 % del total», o solo la primera parte si no hubo emisiones. */
   const nota = (que: string, v: number) =>
     total.total > 0 ? `${que} · ${Math.round((v / total.total) * 100)} % del total` : que;
@@ -90,27 +127,92 @@ export default async function ImpactoPage() {
           atendiendo la experiencia: una fonda también cocina para su propia clientela.
         </Text>
 
-        {total.sinFactor.length > 0 ? (
+        {seisMeses.sinFactor.length > 0 ? (
           <Text size="body-sm" tone="secondary">
-            Falta en el total, por no tener factor publicado: {total.sinFactor.join("; ")}.
+            Falta en los totales, por no tener factor publicado: {seisMeses.sinFactor.join("; ")}.
           </Text>
         ) : null}
 
-        <div className="grid items-start gap-inset-md lg:grid-cols-2">
-          <Tarjeta titulo="Energía" apunte="consumo y ahorro">
-            <Text size="body-sm" tone="tertiary">
-              Aquí irá la energía que consumen las familias para atender a los grupos, y aparte la que
-              se ahorra al coordinar el reparto desde el portal.
+        {meses.length > 0 ? (
+          <Tarjeta
+            titulo="Seis meses"
+            apunte={`${mesLargo(meses[0])} a ${mesLargo(meses.at(-1)!)} · ${kilos(seisMeses.total)} CO₂e`}
+          >
+            {/* La leyenda va antes que la gráfica: dice qué es cada tono antes de verlo. */}
+            <ul className="mb-inset-md flex flex-wrap gap-x-inset-lg gap-y-inset-xs">
+              {capas.map((capa, i) => (
+                <li key={capa.nombre} className="flex items-center gap-inset-xs text-body-sm">
+                  <MuestraCapa capa={i} />
+                  <span className="text-content-primary">{capa.nombre}</span>
+                  <span className="text-content-tertiary">
+                    {capa.que} · {kilos(capa.suma)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <BarrasApiladas
+              capas={capas}
+              ejes={meses.map(mesCorto)}
+              unidad="kg"
+              etiqueta={`Emisiones de los socios por mes, de ${mesLargo(meses[0])} a ${mesLargo(meses.at(-1)!)}: entre ${kilos(minimo)} y ${kilos(maximo)} de CO₂e. El alcance 1 suma ${kilos(seisMeses.alcance1)}, el 2 ${kilos(seisMeses.alcance2)} y el 3 ${kilos(seisMeses.alcance3)}.`}
+            />
+            <Text size="caption" tone="tertiary" className="mt-inset-sm">
+              El alcance 3 casi no se ve porque pesa muy poco; su cifra está en la leyenda. Al pasar el
+              puntero sobre una barra sale el valor de cada parte.
             </Text>
           </Tarjeta>
+        ) : null}
 
-          <Tarjeta titulo="Riesgo climático" apunte="por emprendimiento">
-            <Text size="body-sm" tone="tertiary">
-              Aquí irá la exposición de cada parada del recorrido a inundaciones, calor y lluvias
-              fuertes.
-            </Text>
-          </Tarjeta>
-        </div>
+        <Tarjeta titulo="Dónde está la huella" apunte="seis meses, de más a menos">
+          {/* En el teléfono se apaga la columna de la parte: quedan tres, que caben. */}
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th scope="col" className={TH}>
+                  Emprendimiento
+                </th>
+                <th scope="col" className={cn(TH, NUM)}>
+                  CO₂e
+                </th>
+                <th scope="col" className={cn(TH, NUM, "hidden md:table-cell")}>
+                  Parte del total
+                </th>
+                <th scope="col" className={TH}>
+                  Lo que más pesa
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {ranking.map(({ negocio, kg, principal }) => (
+                <tr key={negocio.slug}>
+                  <th scope="row" className={cn(TD, "text-left font-normal")}>
+                    <Link
+                      href={`/dashboard/emprendimientos/${negocio.slug}`}
+                      className="font-medium text-brand hover:underline"
+                    >
+                      {negocio.nombre}
+                    </Link>
+                  </th>
+                  <td className={cn(TD, NUM, "font-medium")}>{kg > 0 ? kilos(kg) : "—"}</td>
+                  <td className={cn(TD, NUM, "hidden md:table-cell")}>{kg > 0 ? parte(kg) : "—"}</td>
+                  <td className={TD}>
+                    {principal ? (
+                      <>
+                        {principal.fuente}
+                        <span className="text-content-tertiary">
+                          {" "}
+                          · {Math.round((principal.kg / kg) * 100)}&nbsp;% de lo suyo
+                        </span>
+                      </>
+                    ) : (
+                      "Sin consumo"
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Tarjeta>
 
         <Tarjeta titulo="Lo que gastó cada familia" apunte={mesLargo(mes)}>
           {/* En el teléfono se apaga la columna de trayectos: quedan cuatro, que caben. */}
@@ -180,6 +282,22 @@ export default async function ImpactoPage() {
             planta eléctrica la reporta como combustible, no como electricidad.
           </Text>
         </Tarjeta>
+
+        <div className="grid items-start gap-inset-md lg:grid-cols-2">
+          <Tarjeta titulo="Energía" apunte="consumo y ahorro">
+            <Text size="body-sm" tone="tertiary">
+              Aquí irá la energía que consumen las familias para atender a los grupos, y aparte la que
+              se ahorra al coordinar el reparto desde el portal.
+            </Text>
+          </Tarjeta>
+
+          <Tarjeta titulo="Riesgo climático" apunte="por emprendimiento">
+            <Text size="body-sm" tone="tertiary">
+              Aquí irá la exposición de cada parada del recorrido a inundaciones, calor y lluvias
+              fuertes.
+            </Text>
+          </Tarjeta>
+        </div>
 
         <Tarjeta titulo="Factores de emisión" apunte="de dónde sale cada número">
           <table className="w-full border-collapse">

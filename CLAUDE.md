@@ -148,6 +148,12 @@ Reglas del método, que no se negocian:
 - **El vehículo propio es alcance 1 por su combustible; el ajeno, alcance 3 por el trayecto.**
   Quien no tiene red y usa planta reporta diésel, no kWh (la Posada Isla Drake).
 
+La gráfica de seis meses apila los tres alcances con **un solo tono**, el de marca, a opacidad
+1 · 0,75 · 0,5 (`OPACIDAD_CAPA` en `_graficas.tsx`): los alcances tienen orden, y ámbar ya
+significa «el pico». Esos valores son los que pasan el validador de paletas sobre la tarjeta
+en claro y en oscuro; con 0,3 la capa clara no llegaba a 2:1. El alcance 3 pesa ~1 % y casi
+no se ve: no se agranda, su cifra va en la leyenda.
+
 Abierto: qué parte del consumo de cada socio se atribuye a la experiencia —hoy el total es de
 toda su actividad, y la pantalla lo dice—; si cuenta el viaje del visitante; y el factor de
 red actualizado a 2025, publicado en agosto de 2026 y todavía sin leer.

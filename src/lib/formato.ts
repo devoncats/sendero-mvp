@@ -167,7 +167,8 @@ export function fechaConDia(iso: string): string {
  * decimal aparentaría una precisión que no existe.
  */
 export function kilos(valor: number): string {
-  return `${Math.round(valor)} kg`;
+  // Espacio de no separación: en una columna estrecha «5367» y «kg» no se parten.
+  return `${Math.round(valor)} kg`;
 }
 
 /** "oct." · El mes corto, para el eje de una gráfica. */
