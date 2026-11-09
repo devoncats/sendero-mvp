@@ -171,6 +171,14 @@ export function kilos(valor: number): string {
   return `${Math.round(valor)} kg`;
 }
 
+/**
+ * "4310 kWh" · Kilovatios hora enteros, con la misma razón que `kilos()`: el
+ * consumo de un combustible convertido a energía no tiene precisión de decimal.
+ */
+export function kwh(valor: number): string {
+  return `${Math.round(valor)} kWh`;
+}
+
 /** "oct." · El mes corto, para el eje de una gráfica. */
 export function mesCorto(aaaamm: string): string {
   const m = Number(aaaamm.slice(5, 7)) - 1;

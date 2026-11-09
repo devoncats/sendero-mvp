@@ -148,6 +148,14 @@ Reglas del método, que no se negocian:
 - **El vehículo propio es alcance 1 por su combustible; el ajeno, alcance 3 por el trayecto.**
   Quien no tiene red y usa planta reporta diésel, no kWh (la Posada Isla Drake).
 
+La **energía** (`lib/energia.ts`) es la consumida dentro de los emprendimientos según GRI 302-1:
+combustible quemado en algo propio más electricidad comprada a la red, en kWh —la unidad del
+recibo—. Los trayectos ajenos no cuentan, y la electricidad de una planta propia se cuenta una
+sola vez, como el diésel que quema. Litros y kilos pasan a kWh con el poder calorífico **neto**
+del IPCC 2006 (GLP 47,3, gasolina 44,3, diésel 43,0 MJ/kg) y, para los líquidos, la densidad de
+SEAI (0,741 y 0,845 kg/L). La energía ahorrada gracias al portal no se calcula hasta que esté
+escrito cómo era la logística antes.
+
 La gráfica de seis meses apila los tres alcances con **un solo tono**, el de marca, a opacidad
 1 · 0,75 · 0,5 (`OPACIDAD_CAPA` en `_graficas.tsx`): los alcances tienen orden, y ámbar ya
 significa «el pico». Esos valores son los que pasan el validador de paletas sobre la tarjeta

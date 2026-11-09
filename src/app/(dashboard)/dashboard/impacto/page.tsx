@@ -7,7 +7,8 @@ import { Text } from "@/components/ui";
 import type { ActividadMensual, Combustible } from "@/data";
 import { cn } from "@/lib/cn";
 import { emisionesDelMes, factoresEnUso, porFuente, sumar } from "@/lib/emisiones";
-import { kilos, mesCorto, mesLargo } from "@/lib/formato";
+import { energiaDelMes, PODER_CALORIFICO, sumarEnergia, URL_SEAI } from "@/lib/energia";
+import { kilos, kwh, mesCorto, mesLargo } from "@/lib/formato";
 import { modoPanel } from "@/lib/modo-panel";
 
 import { AvisoMvp } from "../../_aviso-mvp";
@@ -95,6 +96,22 @@ export default async function ImpactoPage() {
       return { negocio, kg, principal: fuentes[0] };
     })
     .sort((a, b) => b.kg - a.kg);
+  /*
+    La energía de los seis meses, de todos los socios. Solo lo que queman en
+    algo propio y lo que compran a la red: los trayectos ajenos no cuentan
+    (GRI 302-1; ver lib/energia.ts). Las filas en cero no se enseñan.
+  */
+  const energia = sumarEnergia(porSocio.flatMap(({ meses: ms }) => ms.map(energiaDelMes)));
+  const filasEnergia = [
+    { fuente: "Diésel", kWh: energia.porCombustible.diesel },
+    { fuente: "Gasolina", kWh: energia.porCombustible.gasolina },
+    { fuente: "Gas (GLP)", kWh: energia.porCombustible.glp },
+    { fuente: "Electricidad de la red", kWh: energia.electricidad },
+  ]
+    .filter((f) => f.kWh > 0)
+    .sort((a, b) => b.kWh - a.kWh);
+  const parteEnergia = (v: number) => (energia.total > 0 ? Math.round((v / energia.total) * 100) : 0);
+
   /** «12 %», o «<1 %» para lo que existe pero no llega a uno: un 0 diría que no emitió nada. */
   const parte = (kg: number) => {
     const p = seisMeses.total > 0 ? Math.round((kg / seisMeses.total) * 100) : 0;
@@ -284,10 +301,60 @@ export default async function ImpactoPage() {
         </Tarjeta>
 
         <div className="grid items-start gap-inset-md lg:grid-cols-2">
-          <Tarjeta titulo="Energía" apunte="consumo y ahorro">
-            <Text size="body-sm" tone="tertiary">
-              Aquí irá la energía que consumen las familias para atender a los grupos, y aparte la que
-              se ahorra al coordinar el reparto desde el portal.
+          <Tarjeta titulo="Energía" apunte="seis meses, de todos los socios">
+            <Text size="heading-lg" weight="semibold" className="tabular-nums">
+              {kwh(energia.total)}
+            </Text>
+            <Text size="body-sm" tone="tertiary" className="mb-inset-md">
+              {energia.total > 0
+                ? `${parteEnergia(energia.combustibles)} % sale de combustible que queman; ${parteEnergia(energia.electricidad)} %, de la red.`
+                : "Ningún socio reportó consumo en estos meses."}
+            </Text>
+
+            {filasEnergia.length > 0 ? (
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    <th scope="col" className={TH}>
+                      De dónde
+                    </th>
+                    <th scope="col" className={cn(TH, NUM)}>
+                      Energía
+                    </th>
+                    <th scope="col" className={cn(TH, NUM)}>
+                      Parte
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filasEnergia.map((f) => (
+                    <tr key={f.fuente}>
+                      <th scope="row" className={cn(TD, "text-left font-normal")}>
+                        {f.fuente}
+                      </th>
+                      <td className={cn(TD, NUM)}>{kwh(f.kWh)}</td>
+                      <td className={cn(TD, NUM)}>{parteEnergia(f.kWh)}&nbsp;%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : null}
+
+            <Text size="caption" tone="tertiary" className="mt-inset-md">
+              Es la energía consumida dentro de los emprendimientos, como la define el estándar GRI
+              302-1: lo que queman en algo propio más lo que compran a la red. Los trayectos en vehículo
+              ajeno no cuentan, y la luz de una planta propia va como el diésel que quema. Los litros y
+              kilos pasan a kWh con el poder calorífico neto del IPCC 2006 ({PODER_CALORIFICO.glp.original}{" "}
+              el gas) y la{" "}
+              <a href={URL_SEAI} className="text-brand hover:underline" rel="noreferrer">
+                densidad de SEAI
+              </a>{" "}
+              para gasolina y diésel.
+            </Text>
+            <Text size="caption" tone="tertiary" className="mt-inset-sm">
+              La energía que se ahorra al coordinar el reparto desde el portal irá aparte, cuando esté
+              escrito cómo se organizaba la logística antes. Sin ese punto de partida, el ahorro sería
+              una cifra inventada.
             </Text>
           </Tarjeta>
 
