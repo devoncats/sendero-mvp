@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { Stack } from "@/components/layout";
+import { Inline, Stack } from "@/components/layout";
 import { Text } from "@/components/ui";
 import type { ActividadMensual, Combustible } from "@/data";
 import { cn } from "@/lib/cn";
@@ -156,17 +156,22 @@ export default async function ImpactoPage() {
             apunte={`${mesLargo(meses[0])} a ${mesLargo(meses.at(-1)!)} · ${kilos(seisMeses.total)} CO₂e`}
           >
             {/* La leyenda va antes que la gráfica: dice qué es cada tono antes de verlo. */}
-            <ul className="mb-inset-md flex flex-wrap gap-x-inset-lg gap-y-inset-xs">
+            {/*
+              `Inline` y no clases de gap sueltas: es la regla del proyecto
+              para todo flujo horizontal, y sus clases ya existen en el CSS.
+              El espacio entre entradas lo pone el contenedor, no el texto.
+            */}
+            <Inline as="ul" gap="lg" className="mb-inset-md">
               {capas.map((capa, i) => (
-                <li key={capa.nombre} className="flex items-center gap-inset-xs text-body-sm">
+                <Inline as="li" gap="xs" wrap={false} key={capa.nombre} className="text-body-sm">
                   <MuestraCapa capa={i} />
                   <span className="text-content-primary">{capa.nombre}</span>
                   <span className="text-content-tertiary">
                     {capa.que} · {kilos(capa.suma)}
                   </span>
-                </li>
+                </Inline>
               ))}
-            </ul>
+            </Inline>
             <BarrasApiladas
               capas={capas}
               ejes={meses.map(mesCorto)}
@@ -174,8 +179,8 @@ export default async function ImpactoPage() {
               etiqueta={`Emisiones de los socios por mes, de ${mesLargo(meses[0])} a ${mesLargo(meses.at(-1)!)}: entre ${kilos(minimo)} y ${kilos(maximo)} de CO₂e. El alcance 1 suma ${kilos(seisMeses.alcance1)}, el 2 ${kilos(seisMeses.alcance2)} y el 3 ${kilos(seisMeses.alcance3)}.`}
             />
             <Text size="caption" tone="tertiary" className="mt-inset-sm">
-              El alcance 3 casi no se ve porque pesa muy poco; su cifra está en la leyenda. Al pasar el
-              puntero sobre una barra sale el valor de cada parte.
+              Sobre cada barra, el total del mes. El alcance 3 casi no se ve porque pesa muy poco; su
+              cifra está en la leyenda. Al pasar el puntero sobre una barra sale el valor de cada parte.
             </Text>
           </Tarjeta>
         ) : null}

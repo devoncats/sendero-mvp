@@ -263,10 +263,13 @@ function barraRedondeada(x: number, y: number, w: number, h: number, r: number):
  * las separa —no un borde—. Solo la capa de arriba lleva las esquinas
  * redondeadas; la base va recta sobre el eje.
  *
- * Se rotulan dos totales, no seis: el más alto y el último. El resto lo dicen
- * el eje, la leyenda de la página y la tabla. Cada capa lleva un `<title>`, que
- * el navegador enseña al pasar el ratón: es la capa de detalle sin una línea de
- * JavaScript.
+ * Se rotula el total de cada columna. Con seis no estorba, y obligar a pasar el
+ * ratón para leer un número que cabe sobre la barra era esconderlo: con solo el
+ * más alto y el último, en El Valle —donde los dos son octubre— salía una cifra
+ * y parecía que los demás meses no tenían. El más alto y el último van en negrita
+ * y en tinta primaria; el resto, en secundaria. Cada capa lleva además un
+ * `<title>`, que el navegador enseña al pasar el ratón: el detalle por alcance
+ * sin una línea de JavaScript.
  *
  * Una capa muy pequeña puede no verse —el alcance 3 suele ser un 1 %—. No se
  * agranda: dibujarla más alta de lo que es mentiría. Su cifra está en la
@@ -291,6 +294,7 @@ export function BarrasApiladas({
   const totales = ejes.map((_, i) => capas.reduce((t, c) => t + (c.valores[i] ?? 0), 0));
   const mayor = Math.max(...totales, 1);
   const pico = totales.indexOf(mayor);
+  const destacadas = new Set([pico, n - 1]);
   /*
     El techo del eje se redondea hacia arriba a un número limpio —1445 kg da
     1500, con 750 a la mitad—. Con el máximo crudo el eje decía «1445» y «722»,
@@ -298,7 +302,6 @@ export function BarrasApiladas({
   */
   const escalon = 5 * 10 ** (Math.floor(Math.log10(mayor)) - 1);
   const max = Math.ceil(mayor / escalon) * escalon;
-  const rotuladas = [...new Set([pico, n - 1])];
 
   // El mismo lienzo que `Barras`, para que dos gráficas de la misma pantalla midan igual.
   const lienzo = 640;
@@ -379,19 +382,21 @@ export function BarrasApiladas({
         );
       })}
 
-      {rotuladas.map((i) => (
-        <text
-          key={i}
-          x={x0 + i * paso + paso / 2}
-          y={y(totales[i]) - 6}
-          textAnchor="middle"
-          fontSize={10}
-          fontWeight={600}
-          className="fill-content-primary"
-        >
-          {Math.round(totales[i])} {unidad}
-        </text>
-      ))}
+      {totales.map((total, i) =>
+        total > 0 ? (
+          <text
+            key={i}
+            x={x0 + i * paso + paso / 2}
+            y={y(total) - 6}
+            textAnchor="middle"
+            fontSize={10}
+            fontWeight={destacadas.has(i) ? 600 : 400}
+            className={destacadas.has(i) ? "fill-content-primary" : "fill-content-secondary"}
+          >
+            {Math.round(total)} {unidad}
+          </text>
+        ) : null,
+      )}
 
       {ejes.map((eje, i) => (
         <text

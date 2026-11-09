@@ -162,6 +162,20 @@ significa «el pico». Esos valores son los que pasan el validador de paletas so
 en claro y en oscuro; con 0,3 la capa clara no llegaba a 2:1. El alcance 3 pesa ~1 % y casi
 no se ve: no se agranda, su cifra va en la leyenda.
 
+**Peso, medido con `pnpm pesar`** (la misma vara que el resto de este archivo; da 229,0 KB
+para el panel experto, donde la medición a mano dio 228,9): **`/dashboard/impacto` 232,4 KB
+con El Valle y 232,2 KB con Portobelo**. Son +3,4 KB sobre el panel experto, todo HTML: el
+JavaScript y el CSS son los mismos, porque la página no añade componentes de cliente. Quedan
+17,6 KB de margen.
+
+**`pnpm medir`, con Chrome:** `/dashboard/impacto` (experto) **LCP 2502 ms · CLS 0 · TBT 22 ms**.
+CLS y TBT cumplen. El LCP se pasa **2 ms** de la meta y es ~700 ms más lento que `/dashboard`
+(1809 ms) en la misma corrida. El elemento LCP es el mismo en las dos páginas —el aviso de
+MVP de arriba—, así que la diferencia no es lo que se pinta primero sino todo lo que viene
+debajo: tres tablas, la gráfica y los factores, que con la CPU a 4x retrasan el primer pintado
+(FCP 909 ms contra 759 ms). **Pendiente antes de dar el PR por listo:** probar
+`content-visibility: auto` en las tarjetas que quedan bajo el pliegue, y volver a medir.
+
 Abierto: qué parte del consumo de cada socio se atribuye a la experiencia —hoy el total es de
 toda su actividad, y la pantalla lo dice—; si cuenta el viaje del visitante; y el factor de
 red actualizado a 2025, publicado en agosto de 2026 y todavía sin leer.
@@ -722,6 +736,17 @@ rm -rf .next && pnpm build && pnpm start
 Esto costó dos diagnósticos equivocados en la Fase 4: un build que no compilaba por tipos
 corruptos, y un ahorro de 49,7 KB que se dio por fallido cuando había funcionado.
 
+Dos scripts, para dos cosas distintas, con el servidor de producción en el 3001:
+
+- `pnpm medir` — Lighthouse móvil: LCP, CLS y TBT. Depende de la máquina (ver arriba).
+- `pnpm pesar` — el **peso** con la vara de este archivo: HTML más todo `/_next/` que la
+  página referencia, brotli 11, las fuentes tal cual. Es determinista: el mismo código da el
+  mismo número en cualquier máquina. Es el que decide el presupuesto de 250 KB.
+
+**Una ruta que solo existe en el modo experto se mide con su cookie** (`sendero-modo=experto`).
+Sin ella, `/dashboard/impacto` redirige a `/dashboard` y se mediría la portada del panel con
+el nombre de otra página. En los dos scripts una ruta puede ir como `{ ruta, cookie }`.
+
 **Grepear el HTML no dice qué se renderiza.** Next serializa el árbol de React dentro de la
 página, incluido el `not-found` de la raíz. Una clase puede aparecer en ese payload sin que
 ningún elemento la lleve: `font-serif` sale en el HTML del dashboard y aun así ahí no hay
@@ -733,3 +758,13 @@ serif. Para saber qué se pinta de verdad, mira el DOM o `document.fonts`.
 
 Corre `pnpm lint && pnpm build`. Si algo falla, arréglalo antes de entregar el trabajo.
 Si añadiste `"use client"`, un icono nuevo o una dependencia, dilo explícitamente.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "medir": "node scripts/medir.mjs"
+    "medir": "node scripts/medir.mjs",
+    "pesar": "node scripts/pesar.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.34.0",
