@@ -237,9 +237,16 @@ cuenta `cuantasParadasPosibles` y no «cuántos tienen punto»: el hospedaje tie
 pero nunca es parada, y contarlo hacía que Volcán se ofreciera y El Valle no teniendo
 las dos exactamente dos paradas. Hacen falta dos sitios para que exista un orden.
 
-Vive en `/zona/[id]/ruta`, y todo su estado está en la URL: `dias`, `intereses`, `ritmo`,
-`desde`, `base` y `dia`. Los filtros son enlaces y los dos selectores un `<form method="get">`
-nativo, así que la pantalla entera funciona sin JavaScript. La misma dirección da siempre el
+Vive en `/zona/[id]/ruta`, y todo su estado está en la URL: `dias`, `paradas`, `ritmo`,
+`desde`, `base` y `dia`. **El visitante elige a dónde ir**: `paradas` son los slugs que
+marcó en una lista con casillas, y sin ninguno no hay plan, solo la lista. El planificador
+ordena lo elegido; no decide por él. El hospedaje no se marca —es la base—, y la ficha de
+un negocio enlaza con él ya marcado. Los enlaces viejos con `intereses` siguen sirviendo:
+se leen como «todos los de esas categorías». Los filtros son enlaces y las casillas y los
+dos selectores, `<form method="get">` nativos, así que la pantalla entera funciona sin
+JavaScript. El formulario de casillas manda `paradas` repetida y no se redirige a la forma
+canónica —con `loading.tsx` la redirección sería un `meta refresh` de un segundo—; lo que
+se guarda y se comparte desde la pantalla sí sale canónico. La misma dirección da siempre el
 mismo itinerario, hoy y dentro de un mes; por eso se puede compartir por WhatsApp y guardar
 sin señal. **El orden de las claves en la URL es fijo a propósito**: dos filtros equivalentes
 tienen que producir la misma cadena o el service worker guarda dos entradas para un solo plan.

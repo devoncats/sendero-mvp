@@ -31,6 +31,7 @@ export function FilterSheet({
   acciones,
   abiertoPorDefecto = false,
   riel = false,
+  pegado = true,
   className,
   children,
 }: {
@@ -43,6 +44,12 @@ export function FilterSheet({
   abiertoPorDefecto?: boolean;
   /** A partir de `lg`, panel permanente en vez de hoja plegable. */
   riel?: boolean;
+  /**
+   * Si el riel se queda fijo al hacer scroll. `false` cuando el riel es largo
+   * —el planificador lleva la lista de negocios—: un riel fijo más alto que la
+   * pantalla deja su final fuera de alcance.
+   */
+  pegado?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -52,7 +59,8 @@ export function FilterSheet({
       className={cn(
         "group border-t border-border-subtle bg-surface-overlay",
         "sm:rounded-surface sm:border",
-        riel && "filtros-riel lg:sticky lg:top-control-md lg:border-none lg:bg-transparent",
+        riel && "filtros-riel lg:border-none lg:bg-transparent",
+        riel && pegado && "lg:sticky lg:top-control-md",
         className,
       )}
     >

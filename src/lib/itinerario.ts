@@ -28,8 +28,12 @@ export type Ritmo = "suave" | "normal" | "intenso";
 export type PlanPedido = {
   zona: ZonaId;
   dias: 1 | 2 | 3;
-  /** Vacío significa «todas». No existe el estado «ninguna». */
-  intereses: readonly CategoriaId[];
+  /**
+   * Los slugs que el visitante marcó, en el orden canónico de la zona. Vacío
+   * significa que todavía no eligió nada, y entonces no hay plan que armar: el
+   * planificador ordena lo que alguien quiere visitar, no decide por él.
+   */
+  paradas: readonly string[];
   ritmo: Ritmo;
   /** "HH:MM" — a qué hora arranca cada día. */
   desde: string;
@@ -261,11 +265,11 @@ export function planear(pedido: PlanPedido, negocios: readonly Negocio[], ahora:
   const base = pedido.base ? negocios.find((n) => n.slug === pedido.base) : undefined;
   const sueltos: Suelta[] = [];
 
-  const interesa = (n: Negocio) =>
-    pedido.intereses.length === 0 || pedido.intereses.includes(n.categoria);
+  const elegidas = new Set(pedido.paradas);
+  const interesa = (n: Negocio) => elegidas.has(n.slug);
 
   // El hospedaje es ancla, no parada: se sale de él y se vuelve a él. Nunca
-  // entra en el orden, por mucho que el visitante lo marque como interés.
+  // entra en el orden, aunque llegue su slug en la URL.
   const candidatas = negocios.filter((n) => interesa(n) && n.categoria !== "hospedaje");
 
   const conPunto = candidatas.filter((n) => n.coordenadas);
@@ -291,10 +295,10 @@ export function planear(pedido: PlanPedido, negocios: readonly Negocio[], ahora:
    */
   const origen: Punto = base?.coordenadas ?? centro(conPunto.map((n) => n.coordenadas!));
 
-  const elegidas = [...conPunto].sort(porInteres(origen));
-  for (const n of elegidas.slice(MAX_PARADAS)) sueltos.push({ negocio: n, razon: "no-cupo" });
+  const priorizadas = [...conPunto].sort(porInteres(origen));
+  for (const n of priorizadas.slice(MAX_PARADAS)) sueltos.push({ negocio: n, razon: "no-cupo" });
 
-  const paraOrdenar = elegidas.slice(0, MAX_PARADAS);
+  const paraOrdenar = priorizadas.slice(0, MAX_PARADAS);
   const puntos = paraOrdenar.map((n) => n.coordenadas!);
   const orden = dosOpt(vecinoCercano(origen, puntos), puntos, origen);
 
