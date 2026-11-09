@@ -119,6 +119,41 @@ Portobelo, la Posada Isla Drake en riesgo y el Taller Diablos y Congos en atenci
 
 ---
 
+## El impacto ambiental
+
+Sección del modo experto, debajo de Resumen (`/dashboard/impacto`). En guiado la página
+redirige a la portada. Los datos de verdad los recoge otro equipo y todavía no han llegado:
+lo que hay está **simulado** en `data/ambiente.ts`, cuadrado con las cuentas —mismos meses,
+el consumo sigue a la ocupación— y una comprobación al importar para el build si dejan de
+cuadrar.
+
+Los datos son de **actividad**, no de emisiones: kilos de gas, litros, kWh, kilómetros. El
+CO₂ lo calcula `lib/emisiones.ts`, actividad × factor, por alcance del GHG Protocol:
+
+| Alcance | Qué | Factor | Fuente |
+|---|---|---|---|
+| 1 | GLP | 2,985 kg CO₂/kg | IPCC 2006, valores por defecto |
+| 1 | Gasolina, diésel | 8,78 y 10,21 kg CO₂/galón | EPA, Emission Factors Hub 2025, tabla 2 |
+| 2 | Electricidad de la red | 0,1501 kg CO₂/kWh (2024) | Secretaría Nacional de Energía, «FE Inventarios» |
+| 3 | Bus, auto ajenos | 0,067 kg/pasajero-milla, 0,299 kg/vehículo-milla | EPA, Emission Factors Hub 2025, tabla 10 |
+
+Reglas del método, que no se negocian:
+
+- **Cada factor dice su fuente, su año y lo que cuenta** (solo CO₂ o CO₂e), y se escribe como
+  lo publica la fuente —por galón, por milla— para poder cotejarlo. La pantalla los enseña.
+- **Lo que no tiene factor no se inventa.** La lancha ajena no tiene: su actividad sale en
+  `sinFactor` y la pantalla dice que el total está incompleto.
+- **Las emisiones evitadas nunca se restan del inventario.** Si algún día se calculan
+  —la logística que el portal ahorró—, van aparte, con el escenario de antes escrito.
+- **El vehículo propio es alcance 1 por su combustible; el ajeno, alcance 3 por el trayecto.**
+  Quien no tiene red y usa planta reporta diésel, no kWh (la Posada Isla Drake).
+
+Abierto: qué parte del consumo de cada socio se atribuye a la experiencia —hoy el total es de
+toda su actividad, y la pantalla lo dice—; si cuenta el viaje del visitante; y el factor de
+red actualizado a 2025, publicado en agosto de 2026 y todavía sin leer.
+
+---
+
 ## Cómo añadir una experiencia
 
 El patrón es que **una experiencia nueva no toca ni una pantalla**. La portada, su página,
@@ -599,10 +634,10 @@ src/
 │  ├─ patterns/         BusinessCard, CategoryChip, EncabezadoSeccion, EmptyState…
 │  └─ icons.ts          el re-export curado de Lucide
 ├─ data/                datos estáticos tipados — zonas, negocios, categorías,
-│                       comunidad, solicitudes, administracion, y experiencias/:
-│                       un archivo por experiencia, el registro y validar()
+│                       comunidad, solicitudes, administracion, ambiente, y
+│                       experiencias/: un archivo por experiencia, el registro y validar()
 ├─ lib/                 utilidades (cn, formatters, marcador) y la lógica pura:
-│                       salud (semáforo), reparto, itinerario, directorio
+│                       salud (semáforo), reparto, itinerario, directorio, emisiones
 └─ styles/
    ├─ tokens.css        GENERADO — no editar
    └─ globals.css       reset + reglas globales
