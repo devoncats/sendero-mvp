@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { AlertCircle, ChevronRight, Compass, ExternalLink, MapPin } from "@/components/icons";
+import { AlertCircle, ChevronRight, Compass, ExternalLink, MapPin, Ruta } from "@/components/icons";
 import { Container, Inline, Stack } from "@/components/layout";
 import {
   BotonGuardarRuta,
@@ -12,24 +12,18 @@ import {
   FilterGroup,
   FilterSheet,
 } from "@/components/patterns";
-import { Surface, Text } from "@/components/ui";
+import { ButtonLink, Surface, Text } from "@/components/ui";
 import type { ZonaId } from "@/data";
 import { CATEGORIAS, ZONAS, negociosDeZona } from "@/data";
-import { enlaceRuta, hora, nombreDia } from "@/lib/formato";
+import { enlaceRuta, hora, nombreDia, textoDia } from "@/lib/formato";
 import type { Itinerario, RazonSuelta } from "@/lib/itinerario";
 import { cuantasParadas, enHHMM, planear, todasLasParadas } from "@/lib/itinerario";
 import { ahoraEnPanama } from "@/lib/reloj";
 
 import { resumir } from "../../../_resumen";
 import { Esquema } from "./_esquema";
-import type { ParamsRuta } from "./_pedido";
-import {
-  HORAS_INICIO,
-  alternarInteres,
-  enlaceCon,
-  leerPedido,
-  normalizar,
-} from "./_pedido";
+import type { ParamsCrudos } from "./_pedido";
+import { HORAS_INICIO, enlaceCon, leerPedido, normalizar } from "./_pedido";
 
 /**
  * El planificador de una zona.
@@ -38,8 +32,12 @@ import {
  * qué orden, y qué va a estar abierto cuando pases — que es la pregunta que
  * queda cuando ya encontraste los negocios.
  *
- * Todo el estado vive en la URL, como en `/buscar`: los filtros son enlaces, los
- * dos selectores son un `<form method="get">` nativo, y no hay un kilobyte de
+ * El visitante **elige** a dónde quiere ir —una casilla por negocio— y el
+ * planificador solo ordena lo elegido. Antes metía todos los de la zona, y eso
+ * era decidir por él.
+ *
+ * Todo el estado vive en la URL, como en `/buscar`: los filtros son enlaces, las
+ * casillas y los dos selectores son `<form method="get">` nativos, y no hay un kilobyte de
  * JavaScript en la pantalla salvo el botón de guardar. A cambio, la ruta se
  * renderiza por petición — es la segunda del portal que lo hace, y está anotado.
  */
@@ -55,7 +53,7 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<ParamsRuta>;
+  searchParams: Promise<ParamsCrudos>;
 }): Promise<Metadata> {
   const { id } = await params;
   const z = buscarZona(id);
@@ -98,7 +96,7 @@ export default async function RutaPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<ParamsRuta>;
+  searchParams: Promise<ParamsCrudos>;
 }) {
   const { id } = await params;
   const z = buscarZona(id);
@@ -113,16 +111,28 @@ export default async function RutaPage({
   // Los params limpios, no los crudos: así un enlace con basura se corrige solo
   // en cuanto se toca cualquier filtro, en vez de arrastrar la basura.
   const p = normalizar(pedido);
+
+  // El formulario de casillas manda `paradas` repetida (`?paradas=a&paradas=b`),
+  // y los enlaces de antes traen `intereses`. No se redirige a la forma
+  // canónica: con `loading.tsx` la redirección sale como un `meta refresh` de
+  // un segundo, un viaje más en 3G. Las dos formas dan el mismo plan, y lo que
+  // se guarda y se comparte desde esta pantalla ya sale de `p`, canónico.
+
   const it: Itinerario = planear(pedido, negocios, ahora);
+  const elegidos = new Set(pedido.paradas);
+  const hayEleccion = pedido.paradas.length > 0;
 
   const paradas = todasLasParadas(it);
   const cuantas = cuantasParadas(it);
   const hospedajes = negocios.filter((n) => n.categoria === "hospedaje");
-  const activos =
-    pedido.intereses.length + (pedido.dias > 1 ? 1 : 0) + (pedido.ritmo !== "normal" ? 1 : 0);
+  const activos = (pedido.dias > 1 ? 1 : 0) + (pedido.ritmo !== "normal" ? 1 : 0);
 
-  const soloHospedaje =
-    pedido.intereses.length === 1 && pedido.intereses[0] === "hospedaje";
+  // Lo que se puede elegir, agrupado por categoría en el orden de siempre. El
+  // hospedaje no: es la base, y se elige en «Dónde duermes».
+  const grupos = CATEGORIAS.filter((c) => c.id !== "hospedaje")
+    .map((c) => ({ categoria: c, lista: negocios.filter((n) => n.categoria === c.id) }))
+    .filter((g) => g.lista.length > 0);
+  const seleccionables = grupos.flatMap((g) => g.lista);
 
   const puntosDeRuta = [
     ...(it.base?.coordenadas ? [it.base.coordenadas] : []),
@@ -135,10 +145,13 @@ export default async function RutaPage({
       resumen={
         cuantas > 0
           ? `${cuantas} ${cuantas === 1 ? "parada" : "paradas"} · ${km(it.kmTotal)} km`
-          : "Ajusta y vuelve a ver"
+          : hayEleccion
+            ? "Ajusta y vuelve a ver"
+            : "Antes, elige a dónde ir"
       }
-      abiertoPorDefecto={activos === 0}
+      abiertoPorDefecto={!hayEleccion}
       riel
+      pegado={false}
       className={`-mx-gutter sm:mx-0 lg:col-start-1 lg:row-start-1 lg:row-span-6`}
     >
       <FilterGroup etiqueta="Cuánto tiempo tienes">
@@ -149,18 +162,6 @@ export default async function RutaPage({
             activo={pedido.dias === d}
           >
             {CUANTOS_DIAS[d]}
-          </CategoryChip>
-        ))}
-      </FilterGroup>
-
-      <FilterGroup etiqueta="Qué te interesa">
-        {CATEGORIAS.map((c) => (
-          <CategoryChip
-            key={c.id}
-            href={enlaceCon(zonaId, p, { intereses: alternarInteres(p.intereses, c.id) })}
-            activo={pedido.intereses.includes(c.id)}
-          >
-            {c.nombre.es}
           </CategoryChip>
         ))}
       </FilterGroup>
@@ -184,17 +185,83 @@ export default async function RutaPage({
       </FilterGroup>
 
       {/*
-        Los dos selectores comparten un formulario GET nativo. Los filtros de
-        chip viajan como campos ocultos, si no se perderían al enviar — el mismo
-        truco que usa el buscador.
+        Las casillas y los dos selectores comparten un formulario GET nativo.
+        Los filtros de chip viajan como campos ocultos, si no se perderían al
+        enviar — el mismo truco que usa el buscador. Las casillas van aquí, al
+        lado de los filtros, porque elegir a dónde ir es el primer filtro: en el
+        teléfono el panel arranca abierto mientras no haya nada marcado, y en
+        escritorio son el riel.
       */}
       <form action={`/zona/${zonaId}/ruta`} method="get">
         {p.dias ? <input type="hidden" name="dias" value={p.dias} /> : null}
-        {p.intereses ? <input type="hidden" name="intereses" value={p.intereses} /> : null}
         {p.ritmo ? <input type="hidden" name="ritmo" value={p.ritmo} /> : null}
         {p.dia ? <input type="hidden" name="dia" value={p.dia} /> : null}
 
         <Stack gap="default">
+          {seleccionables.length > 0 ? (
+            <fieldset className="flex flex-col gap-inset-md">
+              <legend className="mb-inset-sm text-label font-medium text-content-primary">
+                A dónde quieres ir
+              </legend>
+              <Inline gap="sm" justify="between" align="baseline">
+                <Text size="caption" tone="tertiary">
+                  Horario del {nombreDia(pedido.diaInicio).toLowerCase()}, el día en que empieza.
+                </Text>
+                <Link
+                  href={enlaceCon(zonaId, p, {
+                    paradas:
+                      elegidos.size === seleccionables.length
+                        ? undefined
+                        : seleccionables.map((n) => n.slug).join(","),
+                  })}
+                  className="inline-flex min-h-touch-min items-center text-body-sm font-medium text-brand underline"
+                >
+                  {elegidos.size === seleccionables.length
+                    ? "Quitar todos"
+                    : `Marcar los ${seleccionables.length}`}
+                </Link>
+              </Inline>
+
+              {grupos.map((g) => (
+                <div key={g.categoria.id} role="group" aria-labelledby={`grupo-${g.categoria.id}`} className="flex flex-col gap-inset-sm">
+                  <span
+                    id={`grupo-${g.categoria.id}`}
+                    className="text-overline uppercase text-content-tertiary"
+                  >
+                    {g.categoria.nombre.es}
+                  </span>
+                  {g.lista.map((n) => (
+                    <label
+                      key={n.slug}
+                      className="flex min-h-touch-min cursor-pointer items-start gap-inset-sm rounded-control border border-border-default bg-surface p-inset-sm has-checked:border-brand has-checked:bg-brand-surface"
+                    >
+                      <input
+                        type="checkbox"
+                        name="paradas"
+                        value={n.slug}
+                        defaultChecked={elegidos.has(n.slug)}
+                        className="mt-inset-xs size-icon-md shrink-0 accent-brand"
+                      />
+                      <span className="flex min-w-0 flex-1 flex-col">
+                        <span className="text-body-md font-medium text-content-primary">
+                          {n.nombre}
+                        </span>
+                        <span className="text-body-sm text-content-secondary">
+                          {n.persona.nombre} · {textoDia(n.horario[pedido.diaInicio]).toLowerCase()}
+                        </span>
+                        {!n.coordenadas ? (
+                          <span className="text-caption text-content-tertiary">
+                            Sin punto en el mapa: sale en la lista, pero no en el orden.
+                          </span>
+                        ) : null}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              ))}
+            </fieldset>
+          ) : null}
+
           <Stack gap="tight">
             <Text as="label" htmlFor="desde" size="label" weight="medium">
               Empiezas a las
@@ -229,9 +296,13 @@ export default async function RutaPage({
 
           <button
             type="submit"
-            className="inline-flex h-control-md items-center justify-center rounded-control border border-border-default bg-action-secondary px-inset-lg text-body-md font-semibold text-action-secondary-content"
+            className={
+              hayEleccion
+                ? "inline-flex h-control-md items-center justify-center rounded-control border border-border-default bg-action-secondary px-inset-lg text-body-md font-semibold text-action-secondary-content hover:bg-action-secondary-hover active:bg-action-secondary-active"
+                : "inline-flex h-control-md items-center justify-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content hover:bg-action-primary-hover active:bg-action-primary-active"
+            }
           >
-            Aplicar
+            {hayEleccion ? "Volver a armar la ruta" : "Armar mi ruta"}
           </button>
         </Stack>
       </form>
@@ -276,6 +347,11 @@ export default async function RutaPage({
               {it.dias.length < pedido.dias
                 ? ` · te sobra tiempo, todo cabe en ${it.dias.length === 1 ? "un día" : `${it.dias.length} días`}`
                 : ""}
+            </Text>
+          ) : !hayEleccion ? (
+            <Text size="body-md" tone="secondary" className="lg:hidden">
+              Marca los sitios a los que quieres ir y te los ponemos en orden, con la hora a la que
+              llegas a cada uno.
             </Text>
           ) : null}
         </Stack>
@@ -358,19 +434,31 @@ export default async function RutaPage({
               </Stack>
             ))}
           </Stack>
-        ) : soloHospedaje ? (
+        ) : !hayEleccion ? (
+          /*
+            El vacío de quien acaba de llegar. No es un error ni un plan
+            fallido: es el sitio donde va a aparecer su ruta. Dice dónde se
+            elige sin decir «a la izquierda» ni «arriba», porque la lista está
+            en un sitio distinto según el ancho. Y ofrece la salida de antes
+            —todos los de la zona— como secundaria: el botón principal es el de
+            la lista, y no debe haber dos.
+          */
           <div className={CENTRO}>
             <EmptyState
-              icono={MapPin}
-              titulo="Un hospedaje no es una parada"
-              descripcion={`Es donde duermes, y de ahí sale la ruta. Elige uno abajo en «Dónde duermes» y marca qué más te interesa: hay ${hospedajes.length} en ${z.nombre}.`}
+              icono={Ruta}
+              titulo="Aquí va a salir tu ruta"
+              descripcion={`Todavía no has marcado ningún sitio. Elige en «A dónde quieres ir» los que quieras visitar —uno solo también vale— y te decimos en qué orden ir y a qué hora llegas a cada uno.`}
               accion={
-                <Link
-                  href={enlaceCon(zonaId, {}, {})}
-                  className="inline-flex h-control-md items-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content"
-                >
-                  Ver todo lo que hay en {z.nombre}
-                </Link>
+                seleccionables.length >= 2 ? (
+                  <ButtonLink
+                    variante="secondary"
+                    href={enlaceCon(zonaId, p, {
+                      paradas: seleccionables.map((n) => n.slug).join(","),
+                    })}
+                  >
+                    Ver la ruta con los {seleccionables.length}
+                  </ButtonLink>
+                ) : undefined
               }
             />
           </div>
@@ -378,32 +466,20 @@ export default async function RutaPage({
           <div className={CENTRO}>
             <EmptyState
               icono={MapPin}
-              titulo={`Todavía nadie en ${z.nombre} ha puesto su punto en el mapa`}
-              descripcion="Sin puntos no se puede ordenar un recorrido. Los negocios siguen aquí abajo, con su horario y su teléfono."
-              accion={
-                <Link
-                  href={`/zona/${zonaId}`}
-                  className="inline-flex h-control-md items-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content"
-                >
-                  Ver los {negocios.length} negocios de {z.nombre}
-                </Link>
+              titulo={
+                pedido.paradas.length === 1
+                  ? "Ese sitio todavía no ha puesto su punto en el mapa"
+                  : "Los que elegiste todavía no han puesto su punto en el mapa"
               }
+              descripcion="Sin puntos no se puede ordenar un recorrido. Marca algún otro en la lista de sitios para armar la ruta."
             />
           </div>
         ) : (
           <div className={CENTRO}>
             <EmptyState
               icono={Compass}
-              titulo="Con esos filtros no sale una ruta"
-              descripcion={`Prueba con más días, con otro ritmo, o quitando algún interés. En ${z.nombre} hay ${negocios.length} negocios en total.`}
-              accion={
-                <Link
-                  href={`/zona/${zonaId}/ruta`}
-                  className="inline-flex h-control-md items-center rounded-control bg-action-primary px-inset-lg text-body-md font-semibold text-action-primary-content"
-                >
-                  Empezar de nuevo
-                </Link>
-              }
+              titulo="Con lo que elegiste no sale una ruta"
+              descripcion="Ninguno abre a la hora en que te tocaría pasar. Prueba con más días, con otro ritmo o empezando a otra hora, o marca otros sitios en la lista."
             />
           </div>
         )}

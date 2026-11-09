@@ -1,5 +1,4 @@
-import type { CategoriaId, Dia, Negocio, ZonaId } from "@/data";
-import { CATEGORIAS } from "@/data";
+import type { Dia, Negocio, ZonaId } from "@/data";
 import type { PlanPedido, Ritmo } from "@/lib/itinerario";
 
 /**
@@ -15,14 +14,25 @@ import type { PlanPedido, Ritmo } from "@/lib/itinerario";
  * después de `/buscar`. Sin backend detrás, son milisegundos.
  */
 
-/** Lo que llega crudo de la URL. Todo string, todo sospechoso. */
+/** El estado del plan ya limpio, listo para volver a la URL. Todo string. */
 export type ParamsRuta = {
   dias?: string;
-  intereses?: string;
+  paradas?: string;
   ritmo?: string;
   desde?: string;
   base?: string;
   dia?: string;
+};
+
+/**
+ * Lo que llega crudo. `paradas` puede venir repetida —es lo que manda un
+ * formulario GET con varias casillas del mismo nombre— y `intereses` es la
+ * clave de antes: los enlaces y las rutas guardadas que la llevan siguen
+ * sirviendo, convertidas en una selección por categoría.
+ */
+export type ParamsCrudos = Omit<ParamsRuta, "paradas"> & {
+  paradas?: string | string[];
+  intereses?: string;
 };
 
 export const DIAS_VALIDOS: readonly Dia[] = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
@@ -46,15 +56,23 @@ function leerDias(v: string | undefined): 1 | 2 | 3 {
 }
 
 /**
- * Se filtra contra las categorías reales, se deduplica y **se reordena al orden
- * canónico**. Lo último no es cosmético: `comida,artesania` y `artesania,comida`
- * tienen que producir la misma cadena, o el service worker acaba guardando dos
- * entradas de caché para el mismo plan y compartir el enlace deja de ser exacto.
+ * Se filtra contra los negocios reales de la zona, se deduplica y **se reordena
+ * al orden canónico de la zona**. Lo último no es cosmético: marcar `a,b` o
+ * `b,a` tiene que producir la misma cadena, o el service worker acaba guardando
+ * dos entradas de caché para el mismo plan y compartir el enlace deja de ser
+ * exacto. Los hospedajes no entran: son la base, no una parada.
  */
-function leerIntereses(v: string | undefined): CategoriaId[] {
+function leerParadas(v: string | string[] | undefined, negocios: readonly Negocio[]): string[] {
   if (!v) return [];
-  const pedidos = new Set(v.split(","));
-  return CATEGORIAS.filter((c) => pedidos.has(c.id)).map((c) => c.id);
+  const pedidos = new Set((Array.isArray(v) ? v : [v]).flatMap((x) => x.split(",")));
+  return negocios.filter((n) => n.categoria !== "hospedaje" && pedidos.has(n.slug)).map((n) => n.slug);
+}
+
+/** `?intereses=comida,artesania`, de antes de poder elegir: todos los de esas categorías. */
+function desdeIntereses(v: string | undefined, negocios: readonly Negocio[]): string[] {
+  if (!v) return [];
+  const categorias = new Set(v.split(","));
+  return negocios.filter((n) => n.categoria !== "hospedaje" && categorias.has(n.categoria)).map((n) => n.slug);
 }
 
 function leerDesde(v: string | undefined): string {
@@ -74,7 +92,7 @@ function leerDesde(v: string | undefined): string {
  */
 export function leerPedido(
   zona: ZonaId,
-  p: ParamsRuta,
+  p: ParamsCrudos,
   negociosDeLaZona: readonly Negocio[],
   ahora: Date,
 ): PlanPedido {
@@ -86,7 +104,10 @@ export function leerPedido(
   return {
     zona,
     dias: leerDias(p.dias),
-    intereses: leerIntereses(p.intereses),
+    paradas:
+      p.paradas !== undefined
+        ? leerParadas(p.paradas, negociosDeLaZona)
+        : desdeIntereses(p.intereses, negociosDeLaZona),
     ritmo: RITMOS.find((r) => r === p.ritmo) ?? "normal",
     desde: leerDesde(p.desde),
     diaInicio: diaPedido ?? POR_INDICE[ahora.getDay()],
@@ -101,7 +122,7 @@ export function leerPedido(
  * la misma cadena, carácter por carácter. De eso depende que la URL precacheada
  * y la URL compartida sean la misma.
  */
-const ORDEN: readonly (keyof ParamsRuta)[] = ["dias", "intereses", "ritmo", "desde", "base", "dia"];
+const ORDEN: readonly (keyof ParamsRuta)[] = ["dias", "paradas", "ritmo", "desde", "base", "dia"];
 
 export function enlaceCon(zona: ZonaId, actual: ParamsRuta, cambio: Partial<ParamsRuta>): string {
   const final = { ...actual, ...cambio };
@@ -114,19 +135,11 @@ export function enlaceCon(zona: ZonaId, actual: ParamsRuta, cambio: Partial<Para
   return s ? `/zona/${zona}/ruta?${s}` : `/zona/${zona}/ruta`;
 }
 
-/** Añade o quita una categoría del csv, manteniendo el orden canónico. */
-export function alternarInteres(csv: string | undefined, id: CategoriaId): string | undefined {
-  const actuales = leerIntereses(csv);
-  const siguientes = actuales.includes(id) ? actuales.filter((c) => c !== id) : [...actuales, id];
-  const ordenadas = CATEGORIAS.filter((c) => siguientes.includes(c.id)).map((c) => c.id);
-  return ordenadas.length > 0 ? ordenadas.join(",") : undefined;
-}
-
 /** Los params tal como vinieron, ya limpios, para volver a serializarlos. */
 export function normalizar(pedido: PlanPedido): ParamsRuta {
   return {
     dias: pedido.dias === 1 ? undefined : String(pedido.dias),
-    intereses: pedido.intereses.length > 0 ? pedido.intereses.join(",") : undefined,
+    paradas: pedido.paradas.length > 0 ? pedido.paradas.join(",") : undefined,
     ritmo: pedido.ritmo === "normal" ? undefined : pedido.ritmo,
     desde: pedido.desde === DESDE_POR_DEFECTO ? undefined : pedido.desde,
     base: pedido.base,

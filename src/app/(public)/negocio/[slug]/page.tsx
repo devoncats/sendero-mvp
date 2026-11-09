@@ -360,10 +360,16 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
                   {/* Discreto a propósito: la acción de esta ficha es
                       escribirle a la persona, y nada compite con eso. */}
                   <Link
-                    href={`/zona/${z.id}/ruta?intereses=${negocio.categoria}`}
+                    href={
+                      negocio.categoria === "hospedaje"
+                        ? `/zona/${z.id}/ruta?base=${negocio.slug}`
+                        : `/zona/${z.id}/ruta?paradas=${negocio.slug}`
+                    }
                     className="inline-flex min-h-touch-min items-center gap-icon-gap text-body-sm font-medium text-brand"
                   >
-                    Ver una ruta que pase por aquí
+                    {negocio.categoria === "hospedaje"
+                      ? "Armar una ruta que salga de aquí"
+                      : "Armar una ruta que pase por aquí"}
                   </Link>
                 </Stack>
               </Inline>
