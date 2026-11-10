@@ -264,3 +264,58 @@ export type MesFinanciero = {
   /** Plazas ocupadas sobre plazas ofrecidas en el mes, 0–1. */
   ocupacion: number;
 };
+
+/* ------------------------------------------------------------------------ */
+/*  Impacto ambiental                                                        */
+/* ------------------------------------------------------------------------ */
+
+/**
+ * Un combustible quemado en el mes, en la unidad en que se pesa o se mide de
+ * verdad. El gas de cocina va en kilos porque se compra en tanques de 25 lb y
+ * sus factores de emisión se publican por kilo; la gasolina y el diésel van en
+ * litros. Lo que la familia reporte en galones o en tanques se convierte al
+ * capturarlo, no al calcular: aquí ya llega en la unidad del factor.
+ *
+ * Es el alcance 1: lo que se quema en algo que la familia tiene o maneja —su
+ * estufa, su planta eléctrica, su busito, su lancha—.
+ */
+export type Combustible =
+  | { tipo: "glp"; kg: number }
+  | { tipo: "gasolina"; litros: number }
+  | { tipo: "diesel"; litros: number };
+
+export type TipoCombustible = Combustible["tipo"];
+
+/**
+ * Cómo se movió alguien en un vehículo que **no** es del emprendimiento. Si el
+ * vehículo es suyo, lo que cuenta es el combustible, no el trayecto, y va en
+ * `combustibles`. Es el alcance 3.
+ */
+export type ModoTransporte = "bus" | "auto" | "lancha";
+
+export type Trayecto = {
+  modo: ModoTransporte;
+  /** Kilómetros recorridos en el mes, sumando ida y vuelta. */
+  km: number;
+  /** Cuántas personas iban. Con bus se cuenta por pasajero; con auto, por vehículo. */
+  pasajeros: number;
+  /** Para qué: «comprar pescado en San Carlos». Sin esto un número no se puede revisar. */
+  motivo: string;
+};
+
+/**
+ * Lo que un emprendimiento gastó en energía y transporte en un mes. Son datos de
+ * **actividad**, no emisiones: los kilos de CO₂ los calcula `lib/` con factores
+ * que dicen de dónde salen. Así, cuando lleguen los datos de verdad, entran en
+ * esta misma forma y ninguna pantalla se entera.
+ */
+export type ActividadMensual = {
+  /** "2026-10", los mismos meses que las cuentas. */
+  mes: string;
+  /** Alcance 1. Vacío si no quemó nada. */
+  combustibles: readonly Combustible[];
+  /** Alcance 2: lo que marca el medidor de la red. 0 si no tiene, o si no está conectado. */
+  electricidadKWh: number;
+  /** Alcance 3. Vacío si no se movió en vehículo ajeno. */
+  transporte: readonly Trayecto[];
+};

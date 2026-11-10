@@ -9,6 +9,7 @@ export { ENTES, delEnte, elEnte, ente } from "./comunidad";
 export { EXPERIENCIAS, experiencia, experienciasDe, precioPorPersona, repartoDelPrecio } from "./experiencias";
 export { SOLICITUDES, personas, plazasOcupadas } from "./solicitudes";
 export { FINANZAS, INSUMOS, PROVEEDORES, cuentasDe, proveedor } from "./administracion";
+export { ACTIVIDAD, actividadDe } from "./ambiente";
 
 /**
  * Los emprendimientos de una experiencia, sin repetir y en el orden en que

@@ -1,4 +1,4 @@
-import { Ajustes, Ficha, Metricas, Proveedor, Solicitud, Visitantes } from "@/components/icons";
+import { Ajustes, Ambiente, Ficha, Metricas, Proveedor, Solicitud, Visitantes } from "@/components/icons";
 import type { GrupoLateral, RutaNav } from "@/components/patterns";
 
 /**
@@ -40,6 +40,18 @@ export function gruposLaterales(cuenta: Cuenta): readonly GrupoLateral[] {
     {
       titulo: "Resumen",
       rutas: [{ href: "/dashboard", etiqueta: "Métricas", icono: <Metricas className={ICONO} aria-hidden /> }],
+    },
+    {
+      // Solo existe en el experto: el guiado no tiene barra lateral, y la
+      // página redirige a la portada si alguien llega a ella en guiado.
+      titulo: "Impacto ambiental",
+      rutas: [
+        {
+          href: "/dashboard/impacto",
+          etiqueta: "Huella de carbono",
+          icono: <Ambiente className={ICONO} aria-hidden />,
+        },
+      ],
     },
     {
       titulo: "Visitantes",

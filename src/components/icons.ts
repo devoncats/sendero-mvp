@@ -86,4 +86,10 @@ export {
   Users as Visitantes,
   // A quién le compra cada familia. El camión es lo que trae el insumo.
   Truck as Proveedor,
+
+  // Impacto ambiental — la sección del modo experto
+  // Lo que la experiencia le cuesta al entorno: emisiones, energía, riesgo
+  // climático. La hoja se reconoce antes que una nube con CO₂, y ninguna
+  // entrada anterior significa «ambiente».
+  Leaf as Ambiente,
 } from "lucide-react";

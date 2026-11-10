@@ -233,3 +233,192 @@ export function MapaHoras({ franjas }: { franjas: readonly FranjaHoraria[] }) {
     </svg>
   );
 }
+
+/**
+ * La opacidad de cada capa de `BarrasApiladas`, de abajo arriba. Es un solo
+ * tono —el de marca— que se aclara: las capas tienen un orden (el alcance 1 es
+ * lo que se quema, el 3 lo más lejano) y un orden se dice con claridad, no con
+ * colores distintos. Además, ámbar ya significa «el pico» en `Barras`.
+ *
+ * No son números de estilo: son los que pasan el validador de paletas en los
+ * dos temas, mezclados sobre la superficie de la tarjeta. Con 1 · 0,6 · 0,3 la
+ * capa más clara quedaba en 1,55:1 sobre blanco, por debajo del mínimo de 2:1.
+ * Con estos, 2,13:1 en claro y 2,88:1 en oscuro, y un salto de luminosidad
+ * visible entre capas vecinas.
+ */
+export const OPACIDAD_CAPA = [1, 0.75, 0.5] as const;
+
+/** Un rectángulo con las dos esquinas de arriba redondeadas y la base recta, apoyada en el eje. */
+function barraRedondeada(x: number, y: number, w: number, h: number, r: number): string {
+  const rr = Math.min(r, w / 2, h);
+  return `M ${x} ${y + h} V ${y + rr} Q ${x} ${y} ${x + rr} ${y} H ${x + w - rr} Q ${x + w} ${y} ${x + w} ${y + rr} V ${y + h} Z`;
+}
+
+/**
+ * Barras apiladas: un total por columna, partido en hasta tres capas que suman
+ * ese total. Es la forma correcta solo porque las capas son partes de un todo;
+ * para comparar series que no suman, van barras lado a lado.
+ *
+ * Entre capas queda un hueco de 2 px del color de la superficie, que es lo que
+ * las separa —no un borde—. Solo la capa de arriba lleva las esquinas
+ * redondeadas; la base va recta sobre el eje.
+ *
+ * Se rotula el total de cada columna. Con seis no estorba, y obligar a pasar el
+ * ratón para leer un número que cabe sobre la barra era esconderlo: con solo el
+ * más alto y el último, en El Valle —donde los dos son octubre— salía una cifra
+ * y parecía que los demás meses no tenían. El más alto y el último van en negrita
+ * y en tinta primaria; el resto, en secundaria. Cada capa lleva además un
+ * `<title>`, que el navegador enseña al pasar el ratón: el detalle por alcance
+ * sin una línea de JavaScript.
+ *
+ * Una capa muy pequeña puede no verse —el alcance 3 suele ser un 1 %—. No se
+ * agranda: dibujarla más alta de lo que es mentiría. Su cifra está en la
+ * leyenda y en la tabla.
+ */
+export function BarrasApiladas({
+  capas,
+  ejes,
+  etiqueta,
+  unidad,
+}: {
+  /** De abajo arriba. Cada una con un valor por columna. Tres como mucho. */
+  capas: readonly { nombre: string; valores: readonly number[] }[];
+  /** El nombre de cada columna: «may.», «jun.»… */
+  ejes: readonly string[];
+  /** Lo que la gráfica dice en palabras, para quien no la ve. */
+  etiqueta: string;
+  /** Lo que va detrás de cada cifra: «kg». */
+  unidad: string;
+}) {
+  const n = ejes.length;
+  const totales = ejes.map((_, i) => capas.reduce((t, c) => t + (c.valores[i] ?? 0), 0));
+  const mayor = Math.max(...totales, 1);
+  const pico = totales.indexOf(mayor);
+  const destacadas = new Set([pico, n - 1]);
+  /*
+    El techo del eje se redondea hacia arriba a un número limpio —1445 kg da
+    1500, con 750 a la mitad—. Con el máximo crudo el eje decía «1445» y «722»,
+    que no se leen de un vistazo, y repetía la cifra rotulada sobre la barra.
+  */
+  const escalon = 5 * 10 ** (Math.floor(Math.log10(mayor)) - 1);
+  const max = Math.ceil(mayor / escalon) * escalon;
+
+  // El mismo lienzo que `Barras`, para que dos gráficas de la misma pantalla midan igual.
+  const lienzo = 640;
+  const x0 = 44;
+  const util = lienzo - x0 - 4;
+  const paso = util / n;
+  const ancho = Math.min(paso * 0.5, 40);
+  const base = 130;
+  const alto = 104;
+  const hueco = 2;
+
+  const y = (v: number) => base - (v / max) * alto;
+  const medio = Math.round(max / 2);
+
+  return (
+    <svg viewBox={`0 0 ${lienzo} 158`} role="img" aria-label={etiqueta} className="w-full">
+      {[0, medio, max].map((v) => (
+        <line
+          key={v}
+          x1={x0}
+          y1={y(v)}
+          x2={lienzo - 4}
+          y2={y(v)}
+          className="stroke-border-subtle"
+          strokeWidth={1}
+          strokeDasharray={v === 0 ? undefined : "2 3"}
+        />
+      ))}
+      {[0, medio, max].map((v) => (
+        <text key={v} x={x0 - 6} y={y(v) + 3} textAnchor="end" fontSize={10} className="fill-content-tertiary">
+          {Math.round(v)}
+        </text>
+      ))}
+
+      {ejes.map((eje, i) => {
+        const x = x0 + i * paso + (paso - ancho) / 2;
+        const visibles = capas
+          .map((c, k) => ({ nombre: c.nombre, v: c.valores[i] ?? 0, k }))
+          .filter((s) => s.v > 0);
+        let acumulado = 0;
+
+        return (
+          <g key={eje}>
+            {visibles.map((s, j) => {
+              const abajo = y(acumulado);
+              acumulado += s.v;
+              const arriba = y(acumulado);
+              // El hueco se le quita a la capa de encima, no a la de abajo:
+              // la primera siempre toca el eje.
+              const h = abajo - arriba - (j > 0 ? hueco : 0);
+              if (h <= 0) return null;
+              const esUltima = j === visibles.length - 1;
+              const titulo = `${s.nombre}, ${eje}: ${Math.round(s.v)} ${unidad}`;
+              return esUltima ? (
+                <path
+                  key={s.k}
+                  d={barraRedondeada(x, arriba, ancho, h, 4)}
+                  className="fill-brand"
+                  fillOpacity={OPACIDAD_CAPA[s.k]}
+                >
+                  <title>{titulo}</title>
+                </path>
+              ) : (
+                <rect
+                  key={s.k}
+                  x={x}
+                  y={arriba}
+                  width={ancho}
+                  height={h}
+                  className="fill-brand"
+                  fillOpacity={OPACIDAD_CAPA[s.k]}
+                >
+                  <title>{titulo}</title>
+                </rect>
+              );
+            })}
+          </g>
+        );
+      })}
+
+      {totales.map((total, i) =>
+        total > 0 ? (
+          <text
+            key={i}
+            x={x0 + i * paso + paso / 2}
+            y={y(total) - 6}
+            textAnchor="middle"
+            fontSize={10}
+            fontWeight={destacadas.has(i) ? 600 : 400}
+            className={destacadas.has(i) ? "fill-content-primary" : "fill-content-secondary"}
+          >
+            {Math.round(total)} {unidad}
+          </text>
+        ) : null,
+      )}
+
+      {ejes.map((eje, i) => (
+        <text
+          key={eje}
+          x={x0 + i * paso + paso / 2}
+          y={147}
+          textAnchor="middle"
+          fontSize={10}
+          className="fill-content-tertiary"
+        >
+          {eje}
+        </text>
+      ))}
+    </svg>
+  );
+}
+
+/** La muestra de color de una capa, para la leyenda. Del mismo tono y opacidad que la barra. */
+export function MuestraCapa({ capa }: { capa: number }) {
+  return (
+    <svg viewBox="0 0 12 12" aria-hidden className="size-icon-sm shrink-0">
+      <rect width={12} height={12} rx={2} className="fill-brand" fillOpacity={OPACIDAD_CAPA[capa]} />
+    </svg>
+  );
+}

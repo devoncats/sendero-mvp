@@ -161,6 +161,24 @@ export function fechaConDia(iso: string): string {
   return `${DIA_SEMANA[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`;
 }
 
+/**
+ * "984 kg" · Kilos enteros. Las emisiones salen de factores con tres o cuatro
+ * cifras significativas y de consumos que reporta una familia de memoria: un
+ * decimal aparentaría una precisión que no existe.
+ */
+export function kilos(valor: number): string {
+  // Espacio de no separación: en una columna estrecha «5367» y «kg» no se parten.
+  return `${Math.round(valor)} kg`;
+}
+
+/**
+ * "4310 kWh" · Kilovatios hora enteros, con la misma razón que `kilos()`: el
+ * consumo de un combustible convertido a energía no tiene precisión de decimal.
+ */
+export function kwh(valor: number): string {
+  return `${Math.round(valor)} kWh`;
+}
+
 /** "oct." · El mes corto, para el eje de una gráfica. */
 export function mesCorto(aaaamm: string): string {
   const m = Number(aaaamm.slice(5, 7)) - 1;

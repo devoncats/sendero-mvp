@@ -16,6 +16,14 @@ import lighthouse from "lighthouse";
 const PUERTO = process.argv[2] ?? "3001";
 const BASE = `http://localhost:${PUERTO}`;
 
+/*
+ * El modo del panel vive en una cookie. Sin ella todo se mide en guiado, y una
+ * ruta que solo existe en el experto redirige a la portada del panel: se
+ * mediría la portada con el nombre de otra página. Por eso una ruta puede ir
+ * como objeto, con la cookie que tiene que llevar.
+ */
+const EXPERTO = "sendero-modo=experto";
+
 const RUTAS = [
   "/",
   "/comunidades",
@@ -36,6 +44,9 @@ const RUTAS = [
   "/dashboard/solicitudes",
   // La ficha administrativa más cargada: alerta, serie, insumos y proveedores.
   "/dashboard/emprendimientos/cocina-de-yolanda",
+  // El impacto ambiental es solo del experto. El Valle es el ente con más socios:
+  // más filas en las tres tablas, el HTML máximo de la página.
+  { ruta: "/dashboard/impacto", cookie: EXPERTO },
 ];
 
 /** Umbrales de las Core Web Vitals, en «bueno». */
@@ -50,10 +61,18 @@ const chrome = await launch({
 const filas = [];
 const detalles = new Map();
 try {
-  for (const ruta of RUTAS) {
+  for (const entrada of RUTAS) {
+    const { ruta: camino, cookie } = typeof entrada === "string" ? { ruta: entrada } : entrada;
+    // En la tabla se ve con qué modo se midió, para no confundirla con la guiada.
+    const ruta = cookie ? `${camino} (experto)` : camino;
     const { lhr } = await lighthouse(
-      BASE + ruta,
-      { port: chrome.port, output: "json", logLevel: "error" },
+      BASE + camino,
+      {
+        port: chrome.port,
+        output: "json",
+        logLevel: "error",
+        ...(cookie ? { extraHeaders: { Cookie: cookie } } : {}),
+      },
       // Preset móvil por defecto: 4G lenta + CPU 4x.
       undefined,
     );
